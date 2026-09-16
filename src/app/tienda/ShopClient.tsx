@@ -18,6 +18,10 @@ import {
   Store,
   HelpCircle,
   ChevronDown,
+  X,
+  Plus,
+  Minus,
+  Eye,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,6 +52,64 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
   const [isFaqOpen, setIsFaqOpen] = useState(false);
+
+  // Modal de Producto Ampliado y Carrusel de 3 segundos
+  const [selectedProduct, setSelectedProduct] = useState<ShopProduct | null>(null);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [modalQuantity, setModalQuantity] = useState(1);
+  const [modalJustAdded, setModalJustAdded] = useState(false);
+
+  const activeProductImages = useMemo(() => {
+    if (!selectedProduct) return [];
+    if (selectedProduct.images && selectedProduct.images.length > 0) {
+      return selectedProduct.images;
+    }
+    return [selectedProduct.imageUrl || "/images/placeholder-product.webp"];
+  }, [selectedProduct]);
+
+  // Rotación automática cada 3 segundos (pausable por hover)
+  useEffect(() => {
+    if (!selectedProduct || activeProductImages.length <= 1 || isCarouselPaused) return;
+
+    const timer = setInterval(() => {
+      setCurrentImgIndex((prev) => (prev + 1) % activeProductImages.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [selectedProduct, activeProductImages.length, isCarouselPaused]);
+
+  // Navegación por teclado (Esc para cerrar, flechas para navegar fotos)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedProduct) return;
+      if (e.key === "Escape") {
+        setSelectedProduct(null);
+      } else if (e.key === "ArrowLeft" && activeProductImages.length > 1) {
+        setCurrentImgIndex((prev) => (prev - 1 + activeProductImages.length) % activeProductImages.length);
+      } else if (e.key === "ArrowRight" && activeProductImages.length > 1) {
+        setCurrentImgIndex((prev) => (prev + 1) % activeProductImages.length);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProduct, activeProductImages.length]);
+
+  const handleOpenProduct = (product: ShopProduct) => {
+    setSelectedProduct(product);
+    setCurrentImgIndex(0);
+    setIsCarouselPaused(false);
+    setModalQuantity(1);
+    setModalJustAdded(false);
+  };
+
+  const handleModalAddToCart = () => {
+    if (!selectedProduct) return;
+    addToCart(selectedProduct, modalQuantity);
+    setModalJustAdded(true);
+    setTimeout(() => setModalJustAdded(false), 2000);
+  };
 
   // Generación de categorías dinámicas con conteos reales
   const categories = useMemo(() => {
@@ -398,9 +460,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                 return (
                   <article
                     key={product.id}
-                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#ece4d8] shadow-2xs hover:shadow-md hover:border-[#cbdbd0] transition-all duration-300"
+                    onClick={() => handleOpenProduct(product)}
+                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#ece4d8] shadow-2xs hover:shadow-md hover:border-[#cbdbd0] transition-all duration-300 cursor-pointer"
                   >
-                    {/* Imagen del producto con badge */}
+                    {/* Imagen del producto con badge y overlay de clic */}
                     <div className="relative aspect-4/3 overflow-hidden bg-[#f4efe5]">
                       <Image
                         src={product.imageUrl || "/images/placeholder-product.webp"}
@@ -409,7 +472,12 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-[#212924] text-xs font-semibold shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                          <Eye className="w-3.5 h-3.5 text-[#3d5a4c]" />
+                          Ver fotos y detalles
+                        </span>
+                      </div>
 
                       {/* Badges superiores */}
                       <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
@@ -482,7 +550,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
 
                         {product.esServicio ? (
                           <button
-                            onClick={() => setIsBookingOpen(true)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsBookingOpen(true);
+                            }}
                             className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#f4efe5] hover:bg-[#eae3d5] text-[#3d5a4c] font-semibold text-xs transition-all cursor-pointer border border-[#e5dcce]"
                           >
                             <Calendar className="w-3.5 h-3.5" />
@@ -490,7 +561,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                           </button>
                         ) : (
                           <button
-                            onClick={() => handleAddToCart(product)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddToCart(product);
+                            }}
                             disabled={isOutOfStock}
                             className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl text-xs font-semibold shadow-2xs transition-all cursor-pointer ${
                               isOutOfStock
@@ -690,6 +764,263 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
 
       {/* Pie de página */}
       <Footer config={config} />
+
+      {/* Modal Grande de Detalle de Producto con Carrusel 3s */}
+      {selectedProduct && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn"
+          onClick={() => setSelectedProduct(null)}
+        >
+          <div
+            className="relative bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#ece4d8] flex flex-col md:flex-row overflow-hidden my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Botón Cerrar */}
+            <button
+              type="button"
+              onClick={() => setSelectedProduct(null)}
+              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#212924] shadow-md flex items-center justify-center cursor-pointer transition"
+              title="Cerrar (Esc)"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Columna Izquierda: Carrusel de Fotos */}
+            <div className="md:w-1/2 bg-[#f4efe5]/60 p-6 flex flex-col justify-between items-center border-b md:border-b-0 md:border-r border-[#ece4d8]">
+              <div
+                className="relative w-full aspect-square max-h-[380px] rounded-2xl overflow-hidden bg-white shadow-inner flex items-center justify-center group select-none"
+                onMouseEnter={() => setIsCarouselPaused(true)}
+                onMouseLeave={() => setIsCarouselPaused(false)}
+              >
+                {activeProductImages[currentImgIndex] ? (
+                  <Image
+                    src={activeProductImages[currentImgIndex]}
+                    alt={selectedProduct.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 500px"
+                    className="object-contain p-2 transition-all duration-500"
+                    priority
+                  />
+                ) : null}
+
+                {/* Flecha Izquierda */}
+                {activeProductImages.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImgIndex((prev) => (prev - 1 + activeProductImages.length) % activeProductImages.length);
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-[#212924] shadow-md flex items-center justify-center cursor-pointer transition opacity-80 group-hover:opacity-100 hover:scale-105"
+                    title="Foto anterior"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                )}
+
+                {/* Flecha Derecha */}
+                {activeProductImages.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImgIndex((prev) => (prev + 1) % activeProductImages.length);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-[#212924] shadow-md flex items-center justify-center cursor-pointer transition opacity-80 group-hover:opacity-100 hover:scale-105"
+                    title="Foto siguiente"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                )}
+
+                {/* Indicador de foto actual */}
+                {activeProductImages.length > 1 && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-xs text-white text-[11px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                    <span>{currentImgIndex + 1} / {activeProductImages.length}</span>
+                    {!isCarouselPaused && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" title="Auto-avance activo (3s)" />
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Tira de Miniaturas */}
+              {activeProductImages.length > 1 && (
+                <div className="w-full mt-4 flex items-center justify-center gap-2 overflow-x-auto py-1">
+                  {activeProductImages.map((img, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setCurrentImgIndex(idx)}
+                      className={`relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all cursor-pointer flex-shrink-0 bg-white ${
+                        currentImgIndex === idx
+                          ? "border-[#3d5a4c] shadow-md scale-105 ring-2 ring-[#3d5a4c]/30"
+                          : "border-transparent opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      <Image
+                        src={img}
+                        alt={`Miniatura ${idx + 1}`}
+                        fill
+                        sizes="60px"
+                        className="object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <p className="text-[11px] text-[#718276] mt-2 text-center">
+                {activeProductImages.length > 1
+                  ? "Rotación automática cada 3s • Pasa el ratón para pausar"
+                  : "Foto en alta resolución"}
+              </p>
+            </div>
+
+            {/* Columna Derecha: Información y Acciones */}
+            <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-3 py-1 rounded-full bg-[#f4efe5] text-[#3d5a4c] text-xs font-semibold">
+                    {selectedProduct.categoryLabel || "Bienestar"}
+                  </span>
+
+                  {selectedProduct.badge && (
+                    <span className="px-3 py-1 rounded-full bg-[#3d5a4c] text-[#dfc89f] text-xs font-bold shadow-xs">
+                      {selectedProduct.badge}
+                    </span>
+                  )}
+
+                  {selectedProduct.inStock || selectedProduct.esServicio ? (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      {selectedProduct.esServicio
+                        ? "Citas Disponibles"
+                        : selectedProduct.stockActual
+                        ? `En stock (${selectedProduct.stockActual} disp.)`
+                        : "En stock"}
+                    </span>
+                  ) : (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      Agotado
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#212924] leading-tight">
+                  {selectedProduct.name}
+                </h2>
+
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-serif font-bold text-[#3d5a4c]">
+                    {selectedProduct.price.toFixed(2)}€
+                  </span>
+                  {selectedProduct.originalPrice && selectedProduct.originalPrice > selectedProduct.price && (
+                    <span className="text-base text-gray-400 line-through">
+                      {selectedProduct.originalPrice.toFixed(2)}€
+                    </span>
+                  )}
+                  <span className="text-xs text-[#718276]">
+                    {selectedProduct.esServicio ? "Por sesión presencial" : "IVA incluido"}
+                  </span>
+                </div>
+
+                <p className="text-sm text-[#4a584f] leading-relaxed">
+                  {selectedProduct.shortDescription}
+                </p>
+
+                {selectedProduct.fullDescription && selectedProduct.fullDescription !== selectedProduct.shortDescription && (
+                  <p className="text-xs text-[#6e7d73] leading-relaxed whitespace-pre-line border-t border-[#f4efe5] pt-3">
+                    {selectedProduct.fullDescription}
+                  </p>
+                )}
+
+                {selectedProduct.benefits && selectedProduct.benefits.length > 0 && (
+                  <div className="space-y-1.5 pt-2">
+                    <span className="text-xs font-bold text-[#212924] uppercase tracking-wider block">
+                      Propiedades & Beneficios:
+                    </span>
+                    {selectedProduct.benefits.map((benefit, i) => (
+                      <div key={i} className="flex items-start gap-2 text-xs text-[#4a584f]">
+                        <Sparkles className="w-3.5 h-3.5 text-[#dfc89f] flex-shrink-0 mt-0.5" />
+                        <span>{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Acciones de Compra / Reserva */}
+              <div className="pt-4 border-t border-[#ece4d8] space-y-3">
+                {selectedProduct.esServicio ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedProduct(null);
+                      setIsBookingOpen(true);
+                    }}
+                    className="w-full py-3.5 rounded-2xl bg-[#3d5a4c] hover:bg-[#2d473b] text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Calendar className="w-4 h-4 text-[#dfc89f]" />
+                    <span>Reservar Cita Presencial</span>
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    {/* Selector de cantidad */}
+                    <div className="flex items-center border border-[#d8cfc0] rounded-2xl bg-[#faf7f2] p-1">
+                      <button
+                        type="button"
+                        onClick={() => setModalQuantity((q) => Math.max(1, q - 1))}
+                        className="w-8 h-8 rounded-xl bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 shadow-2xs cursor-pointer"
+                        title="Menos"
+                      >
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="w-10 text-center font-bold text-sm text-[#212924]">
+                        {modalQuantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setModalQuantity((q) => q + 1)}
+                        className="w-8 h-8 rounded-xl bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 shadow-2xs cursor-pointer"
+                        title="Más"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Botón Añadir */}
+                    <button
+                      type="button"
+                      onClick={handleModalAddToCart}
+                      disabled={!selectedProduct.inStock}
+                      className={`flex-1 py-3.5 rounded-2xl font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                        !selectedProduct.inStock
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : modalJustAdded
+                          ? "bg-[#25D366] text-white scale-102"
+                          : "bg-[#3d5a4c] hover:bg-[#2d473b] text-white"
+                      }`}
+                    >
+                      {modalJustAdded ? (
+                        <>
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>¡Añadido a la cesta ({modalQuantity})!</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBag className="w-4 h-4 text-[#dfc89f]" />
+                          <span>Añadir a la cesta • {(selectedProduct.price * modalQuantity).toFixed(2)}€</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal interactivo de reservas */}
       <BookingModal

@@ -27,6 +27,23 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       }
     }
 
+    let parsedImages: string[] = [];
+    if (Array.isArray(p.imagenes)) {
+      parsedImages = p.imagenes;
+    } else if (typeof p.imagenes === "string" && p.imagenes.trim()) {
+      try {
+        const json = JSON.parse(p.imagenes);
+        if (Array.isArray(json)) parsedImages = json;
+      } catch {}
+    }
+
+    const defaultFallback = "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80";
+    const mainImgUrl = formatImageUrl(rawImg || parsedImages[0] || "", defaultFallback);
+
+    const formattedImages = parsedImages.length > 0
+      ? parsedImages.map((img: string) => formatImageUrl(img, defaultFallback))
+      : [mainImgUrl];
+
     return {
       id: p.id || p.ref || `prod-${idx + 1}`,
       name: p.nombre || "Artículo Holístico",
@@ -38,7 +55,8 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       originalPrice: origPriceNum,
       badge: p.destacado || undefined,
       benefits: parsedBenefits,
-      imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80"),
+      imageUrl: mainImgUrl,
+      images: formattedImages,
       inStock,
       stockActual: stockNum,
       accionAgotado: accion,

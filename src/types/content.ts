@@ -88,6 +88,7 @@ export interface ShopProduct {
   badge?: string;
   benefits: string[];
   imageUrl: string;
+  images?: string[];
   inStock: boolean;
   stockActual?: number;
   accionAgotado?: "ocultar" | "mostrar_agotado" | "bajo_encargo";

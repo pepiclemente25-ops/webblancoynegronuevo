@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       const arrayBuffer = await file.arrayBuffer();
       buffer = Buffer.from(arrayBuffer);
       filename = file.name || `foto_${Date.now()}.webp`;
-    } else {
+    } else if (contentType.includes("application/json")) {
       const body = await req.json();
       if (!body.base64) {
         return NextResponse.json({ error: "Campo base64 requerido." }, { status: 400 });
@@ -38,6 +38,16 @@ export async function POST(req: NextRequest) {
       const dataStr = match ? match[2] : body.base64;
       buffer = Buffer.from(dataStr, "base64");
       filename = body.filename || `foto_${Date.now()}.webp`;
+    } else {
+      // Flujo binario directo (fetch(..., { body: blob }))
+      const arrayBuffer = await req.arrayBuffer();
+      if (!arrayBuffer || arrayBuffer.byteLength === 0) {
+        return NextResponse.json({ error: "Cuerpo de archivo vacío." }, { status: 400 });
+      }
+      buffer = Buffer.from(arrayBuffer);
+      const urlFilename = req.nextUrl.searchParams.get("filename");
+      const headerFilename = req.headers.get("x-filename");
+      filename = urlFilename || headerFilename || `foto_${Date.now()}.webp`;
     }
 
     // Asegurar extensión .webp
