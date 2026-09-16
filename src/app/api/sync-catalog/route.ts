@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     try {
       revalidatePath("/");
       revalidatePath("/tienda");
-      revalidateTag("google-sheet-data", "default");
+      revalidateTag("web-catalog-data", "default");
     } catch (revErr) {
       console.warn("Aviso en revalidación Next.js:", revErr);
     }

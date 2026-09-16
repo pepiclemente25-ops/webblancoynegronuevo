@@ -1,54 +1,76 @@
-import { WebData, Therapy, Workshop, HarmonizationItem, Review, ShopProduct } from "@/types/content";
+﻿import { WebData, Therapy, Workshop, HarmonizationItem, Review, ShopProduct, WebSectionItem } from "@/types/content";
 import { defaultWebData } from "@/data/defaultContent";
 import { formatImageUrl } from "@/lib/drive";
+import { getDb } from "@/lib/db";
 
 /**
- * Función sencilla para parsear CSV proveniente del endpoint público de Google Sheets:
- * https://docs.google.com/spreadsheets/d/{ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}
+ * Convierte filas de la tabla "productos" de Neon a ShopProduct[]
  */
-function parseCsvRows(csvText: string): Record<string, string>[] {
-  const lines = csvText.split(/\r?\n/).filter((line) => line.trim().length > 0);
-  if (lines.length < 2) return [];
+function mapNeonProducts(rows: any[]): ShopProduct[] {
+  return rows.map((p, idx) => {
+    const rawImg = p.imagen_url || p.imagenUrl || p.foto || "";
+    const priceNum = typeof p.precio_venta === "number" ? p.precio_venta : (parseFloat(String(p.precio_venta || "0")) || 0);
+    const origPriceNum = p.precio_anterior ? parseFloat(String(p.precio_anterior)) : undefined;
+    const stockNum = typeof p.stock_actual === "number" ? p.stock_actual : (parseInt(String(p.stock_actual || "0"), 10) || 0);
+    const inStock = stockNum > 0;
+    const accion = (p.accion_agotado || "mostrar_agotado") as ShopProduct["accionAgotado"];
 
-  const headers = parseCsvLine(lines[0]);
-  const rows: Record<string, string>[] = [];
+    let parsedBenefits: string[] = [];
+    if (Array.isArray(p.beneficios)) {
+      parsedBenefits = p.beneficios;
+    } else if (typeof p.beneficios === "string") {
+      try {
+        const json = JSON.parse(p.beneficios);
+        parsedBenefits = Array.isArray(json) ? json : [p.beneficios];
+      } catch {
+        parsedBenefits = p.beneficios.split(";").map((b: string) => b.trim()).filter(Boolean);
+      }
+    }
 
-  for (let i = 1; i < lines.length; i++) {
-    const values = parseCsvLine(lines[i]);
-    const row: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      const cleanKey = header.trim().toLowerCase().replace(/[\s_-]+/g, "");
-      row[cleanKey] = values[index] ? values[index].trim() : "";
-    });
-    rows.push(row);
-  }
-
-  return rows;
+    return {
+      id: p.id || p.ref || `prod-${idx + 1}`,
+      name: p.nombre || "Artículo Holístico",
+      category: p.categoria || "aromaterapia",
+      categoryLabel: p.categoria_label || "Holístico",
+      shortDescription: p.descripcion_corta || "",
+      fullDescription: p.descripcion_completa || "",
+      price: priceNum,
+      originalPrice: origPriceNum,
+      badge: p.destacado || undefined,
+      benefits: parsedBenefits,
+      imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80"),
+      inStock,
+      stockActual: stockNum,
+      accionAgotado: accion,
+      publicadoWeb: p.publicado_web !== false,
+    };
+  }).filter((p) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
 }
 
-function parseCsvLine(line: string): string[] {
-  const result: string[] = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
+/**
+ * Convierte filas de la tabla "secciones_web" de Neon a WebSectionItem[]
+ */
+function mapNeonSections(rows: any[]): WebSectionItem[] {
+  return rows
+    .map((s, idx) => {
+      let content = s.contenido || {};
+      if (typeof content === "string") {
+        try {
+          content = JSON.parse(content);
+        } catch {}
       }
-    } else if (char === "," && !inQuotes) {
-      result.push(current);
-      current = "";
-    } else {
-      current += char;
-    }
-  }
-  result.push(current);
-  return result;
+      return {
+        id: s.id || `sec-${idx + 1}`,
+        orden: typeof s.orden === "number" ? s.orden : idx + 1,
+        tipoPlantilla: s.tipo_plantilla || "texto_foto",
+        titulo: s.titulo || "Sección",
+        subtitulo: s.subtitulo || "",
+        activo: s.activo !== false,
+        contenido: content,
+      };
+    })
+    .filter((s) => s.activo)
+    .sort((a, b) => a.orden - b.orden);
 }
 
 /**
@@ -111,16 +133,63 @@ function buildWebDataFromPayload(payload: any): WebData {
 }
 
 /**
- * Carga los datos de la web con redundancia triple:
- * 1. Catálogo instantáneo en Vercel Blob (directo desde el TPV al sincronizar).
- * 2. Hojas de Google Sheets vía CSV (si GOOGLE_SHEET_ID es un ID válido de hoja).
- * 3. Fallback transparente a datos por defecto.
+ * Carga los datos de la web directamente desde Neon Serverless Postgres.
+ * Respaldo automático mediante Vercel Blob y datos por defecto.
  */
 export async function getWebData(): Promise<WebData> {
-  // ESTRATEGIA 1: Vercel Blob (Almacén instantáneo de catálogo sincronizado desde el TPV)
+  const sql = getDb();
+
+  // 1. INTENTO PRINCIPAL: Neon Serverless Postgres
+  if (sql) {
+    try {
+      const [prodsRes, secsRes, cfgRes] = await Promise.all([
+        sql.query("SELECT * FROM productos WHERE publicado_web = true ORDER BY categoria, nombre ASC"),
+        sql.query("SELECT * FROM secciones_web WHERE activo = true ORDER BY orden ASC"),
+        sql.query("SELECT clave, valor FROM configuracion_web"),
+      ]);
+
+      const neonProducts = mapNeonProducts(prodsRes);
+      const neonSections = mapNeonSections(secsRes);
+
+      const customConfig = { ...defaultWebData.config };
+      if (cfgRes && cfgRes.length > 0) {
+        cfgRes.forEach((row: any) => {
+          const k = String(row.clave || "").toLowerCase();
+          const v = String(row.valor || "");
+          if (!k || !v) return;
+          if (k === "nombrecomercial" || k === "nombre") customConfig.name = v;
+          if (k === "tagline" || k === "lema") customConfig.tagline = v;
+          if (k === "descripcion" || k === "description") customConfig.description = v;
+          if (k === "biografia" || k === "bio") customConfig.therapistBio = v;
+          if (k === "telefono" || k === "phone") {
+            customConfig.phone = v;
+            customConfig.phoneDisplay = v;
+          }
+          if (k === "whatsapp") customConfig.whatsapp = v.replace(/[^0-9]/g, "");
+          if (k === "email") customConfig.email = v;
+          if (k === "direccion" || k === "address") customConfig.address = v;
+          if (k === "horario" || k === "schedule") customConfig.schedule = v;
+        });
+      }
+
+      // Si Neon tiene productos o secciones, devolvemos los datos de Neon
+      if (neonProducts.length > 0 || neonSections.length > 0) {
+        return {
+          ...defaultWebData,
+          config: customConfig,
+          products: neonProducts.length > 0 ? neonProducts : defaultWebData.products,
+          sections: neonSections.length > 0 ? neonSections : defaultWebData.sections,
+        };
+      }
+    } catch (neonErr) {
+      console.warn("[Neon] Aviso consultando base de datos, usando fallback:", neonErr);
+    }
+  }
+
+  // 2. RESPALDO SECUNDARIO: Vercel Blob (CDN instantáneo)
   try {
     const directRes = await fetch("https://8jpivd50e95ayxtx.public.blob.vercel-storage.com/data/catalog.json", {
-      next: { revalidate: 30, tags: ["google-sheet-data"] },
+      next: { revalidate: 30, tags: ["web-catalog-data"] },
     });
     if (directRes.ok) {
       const directJson = await directRes.json();
@@ -128,9 +197,7 @@ export async function getWebData(): Promise<WebData> {
         return buildWebDataFromPayload(directJson);
       }
     }
-  } catch (err) {
-    // Fallback a list() de Blob o Google Sheets
-  }
+  } catch {}
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
@@ -139,7 +206,7 @@ export async function getWebData(): Promise<WebData> {
       if (result.blobs && result.blobs.length > 0) {
         const catalogBlob = result.blobs[0];
         const res = await fetch(catalogBlob.url, {
-          next: { revalidate: 30, tags: ["google-sheet-data"] },
+          next: { revalidate: 30, tags: ["web-catalog-data"] },
         });
         if (res.ok) {
           const blobJson = await res.json();
@@ -148,253 +215,9 @@ export async function getWebData(): Promise<WebData> {
           }
         }
       }
-    } catch (blobErr) {
-      console.warn("Aviso: no se pudo leer catálogo desde Vercel Blob:", blobErr);
-    }
+    } catch {}
   }
 
-  // ESTRATEGIA 2: Google Sheets CSV o Webhook
-  const rawTarget = (process.env.GOOGLE_SHEET_ID || process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID || process.env.APPS_SCRIPT_URL || "").trim();
-
-  if (!rawTarget) {
-    return defaultWebData;
-  }
-
-  const isAppsScript = rawTarget.includes("script.google.com") || rawTarget.startsWith("AKfycb");
-  const appsScriptUrl = isAppsScript
-    ? (rawTarget.startsWith("http") ? rawTarget : `https://script.google.com/macros/s/${rawTarget}/exec`)
-    : null;
-
-  try {
-    // Si es Webhook Apps Script con soporte get_data
-    if (appsScriptUrl) {
-      try {
-        const res = await fetch(`${appsScriptUrl}?action=get_data`, {
-          next: { revalidate: 60, tags: ["google-sheet-data"] },
-        });
-        if (res.ok) {
-          const json = await res.json();
-          if (json && (json.productos || json.products || json.data)) {
-            return buildWebDataFromPayload(json.data || json);
-          }
-        }
-      } catch (scriptErr) {
-        console.warn("Aviso Webhook Apps Script:", scriptErr);
-      }
-    }
-
-    // Si es un ID real de Google Sheet (no un ID de script)
-    const sheetId = isAppsScript ? "" : rawTarget;
-    if (!sheetId) {
-      return defaultWebData;
-    }
-
-    const fetchSheetTab = async (tabName: string) => {
-      const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
-      const res = await fetch(url, {
-        next: { revalidate: 60, tags: ["google-sheet-data"] },
-      });
-      if (!res.ok) throw new Error(`Error al leer pestaña ${tabName}: ${res.statusText}`);
-      const text = await res.text();
-      return parseCsvRows(text);
-    };
-
-    const [terapiasRows, talleresRows, armonizacionRows, resenasRows, productosRows, seccionesRows, configRows] = await Promise.allSettled([
-      fetchSheetTab("Terapias"),
-      fetchSheetTab("Talleres"),
-      fetchSheetTab("Armonizacion"),
-      fetchSheetTab("Reseñas"),
-      fetchSheetTab("Productos"),
-      fetchSheetTab("SeccionesWeb"),
-      fetchSheetTab("Configuracion"),
-    ]);
-
-    const updatedData: WebData = {
-      ...defaultWebData,
-      config: { ...defaultWebData.config },
-      chakras: defaultWebData.chakras,
-    };
-
-    // 0. Configuración Dinámica (Clave / Valor)
-    if (configRows.status === "fulfilled" && configRows.value.length > 0) {
-      configRows.value.forEach((row) => {
-        const key = row["clave"] || row["key"] || "";
-        const val = row["valor"] || row["val"] || row["value"] || "";
-        if (key && val) {
-          if (key === "nombrecomercial" || key === "nombre") updatedData.config.name = val;
-          if (key === "tagline" || key === "lema") updatedData.config.tagline = val;
-          if (key === "descripcion" || key === "description") updatedData.config.description = val;
-          if (key === "biografia" || key === "bio") updatedData.config.therapistBio = val;
-          if (key === "telefono" || key === "phone") {
-            updatedData.config.phone = val;
-            updatedData.config.phoneDisplay = val;
-          }
-          if (key === "whatsapp") updatedData.config.whatsapp = val.replace(/[^0-9]/g, "");
-          if (key === "email") updatedData.config.email = val;
-          if (key === "direccion" || key === "address") updatedData.config.address = val;
-          if (key === "horario" || key === "schedule") updatedData.config.schedule = val;
-        }
-      });
-    }
-
-    // 1. Terapias
-    if (terapiasRows.status === "fulfilled" && terapiasRows.value.length > 0) {
-      const customTherapies: Therapy[] = [];
-      for (let idx = 0; idx < terapiasRows.value.length; idx++) {
-        const row = terapiasRows.value[idx];
-        const rawImg = row["imagen"] || row["foto"] || "";
-        customTherapies.push({
-          id: row["id"] || `terapia-${idx + 1}`,
-          title: row["titulo"] || "Terapia Holística",
-          subtitle: row["subtitulo"] || "",
-          category: (row["categoria"] as Therapy["category"]) || "quiromasaje",
-          categoryLabel: row["etiqueta"] || "Bienestar",
-          shortDescription: row["descripcioncorta"] || row["descripcion"] || "",
-          fullDescription: row["descripcioncompleta"] || row["descripcion"] || "",
-          benefits: (row["beneficios"] || "").split(";").map((b) => b.trim()).filter(Boolean),
-          duration: row["duracion"] || "60 min",
-          priceNote: row["precio"] ? `${row["precio"]} €` : undefined,
-          badge: row["destacado"] || undefined,
-          imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80"),
-        });
-      }
-      if (customTherapies.length > 0) {
-        updatedData.therapies = customTherapies;
-      }
-    }
-
-    // 2. Talleres
-    if (talleresRows.status === "fulfilled" && talleresRows.value.length > 0) {
-      const customWorkshops: Workshop[] = [];
-      for (let idx = 0; idx < talleresRows.value.length; idx++) {
-        const row = talleresRows.value[idx];
-        const rawImg = row["imagen"] || row["foto"] || "";
-        customWorkshops.push({
-          id: row["id"] || `taller-${idx + 1}`,
-          title: row["titulo"] || "Taller Vivencial",
-          subtitle: row["subtitulo"] || "",
-          date: row["fecha"] || "Próximamente",
-          time: row["hora"] || "17:00 - 20:00",
-          modality: (row["modalidad"] as Workshop["modality"]) || "Presencial",
-          spots: row["plazas"] || "Plazas reducidas",
-          description: row["descripcion"] || "",
-          includes: (row["incluye"] || "").split(";").map((i) => i.trim()).filter(Boolean),
-          imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80"),
-        });
-      }
-      if (customWorkshops.length > 0) {
-        updatedData.workshops = customWorkshops;
-      }
-    }
-
-    // 3. Armonización
-    if (armonizacionRows.status === "fulfilled" && armonizacionRows.value.length > 0) {
-      const customHarm: HarmonizationItem[] = [];
-      for (let idx = 0; idx < armonizacionRows.value.length; idx++) {
-        const row = armonizacionRows.value[idx];
-        const rawImg = row["imagen"] || row["foto"] || "";
-        customHarm.push({
-          id: row["id"] || `armonizacion-${idx + 1}`,
-          title: row["titulo"] || "Elemento Sagrado",
-          category: (row["categoria"] as HarmonizationItem["category"]) || "aromaterapia",
-          categoryLabel: row["etiqueta"] || "Armonía",
-          description: row["descripcion"] || "",
-          properties: (row["propiedades"] || "").split(";").map((p) => p.trim()).filter(Boolean),
-          usageTip: row["consejouso"] || row["consejo"] || "",
-          imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80"),
-        });
-      }
-      if (customHarm.length > 0) {
-        updatedData.harmonization = customHarm;
-      }
-    }
-
-    // 4. Reseñas
-    if (resenasRows.status === "fulfilled" && resenasRows.value.length > 0) {
-      const customReviews: Review[] = [];
-      for (let idx = 0; idx < resenasRows.value.length; idx++) {
-        const row = resenasRows.value[idx];
-        customReviews.push({
-          id: row["id"] || `review-${idx + 1}`,
-          author: row["autor"] || "Cliente",
-          service: row["servicio"] || "Sesión de Bienestar",
-          rating: parseInt(row["estrellas"] || row["rating"] || "5", 10) || 5,
-          text: row["comentario"] || row["texto"] || "",
-          date: row["fecha"] || "Reciente",
-          verified: row["verificado"]?.toLowerCase() !== "false" && row["verificado"]?.toLowerCase() !== "no",
-        });
-      }
-      if (customReviews.length > 0) {
-        updatedData.reviews = customReviews;
-      }
-    }
-
-    // 5. Productos con Estados de Agotado y soporte total a columnas TPV
-    if (productosRows.status === "fulfilled" && productosRows.value.length > 0) {
-      const parsedProducts: ShopProduct[] = [];
-      for (let idx = 0; idx < productosRows.value.length; idx++) {
-        const row = productosRows.value[idx];
-        const rawImg = row["imagenurl"] || row["imagen"] || row["foto"] || "";
-        const priceNum = parseFloat(row["precioventa"]?.replace(",", ".") || row["precio"]?.replace(",", ".") || "0") || 0;
-        const origPriceNum = row["precioanterior"] ? parseFloat(row["precioanterior"]?.replace(",", ".")) : undefined;
-        const stockNum = parseInt(row["stockactual"] || row["stock"] || "0", 10);
-        const accion = (row["accionagotado"] || row["agotado"] || "mostrar_agotado") as ShopProduct["accionAgotado"];
-        const isPublicado = row["publicadoweb"] ? (row["publicadoweb"].toLowerCase() === "true" || row["publicadoweb"] === "1" || row["publicadoweb"].toLowerCase() === "si") : true;
-
-        if (!isPublicado) continue;
-
-        const isExplicitNo = row["disponible"]?.toLowerCase() === "no" || row["stock"]?.toLowerCase() === "no";
-        const inStock = !isExplicitNo && stockNum > 0;
-
-        if (accion === "ocultar" && !inStock) {
-          continue;
-        }
-
-        parsedProducts.push({
-          id: row["id"] || row["ref"] || `producto-${idx + 1}`,
-          name: row["nombre"] || row["titulo"] || "Producto Holístico",
-          category: (row["categoria"] as ShopProduct["category"]) || "aromaterapia",
-          categoryLabel: row["categorialabel"] || row["etiqueta"] || "Holístico",
-          shortDescription: row["descripcioncorta"] || "",
-          fullDescription: row["descripcioncompleta"] || row["descripcion"] || "",
-          price: priceNum,
-          originalPrice: origPriceNum,
-          badge: row["destacado"] || undefined,
-          benefits: (row["beneficios"] || "").split(";").map((b) => b.trim()).filter(Boolean),
-          imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80"),
-          inStock,
-          stockActual: stockNum,
-          accionAgotado: accion,
-        });
-      }
-
-      if (parsedProducts.length > 0) {
-        updatedData.products = parsedProducts;
-      }
-    }
-
-    // 6. Secciones Web Dinámicas
-    if (seccionesRows.status === "fulfilled" && seccionesRows.value.length > 0) {
-      const dynamicSections = seccionesRows.value
-        .map((row, idx) => ({
-          id: row["id"] || `sec-${idx + 1}`,
-          orden: parseInt(row["orden"] || String(idx + 1), 10) || idx + 1,
-          tipoPlantilla: row["tipoplantilla"] || row["tipo"] || "texto_foto",
-          titulo: row["titulo"] || "Sección",
-          subtitulo: row["subtitulo"] || "",
-          activo: row["activo"]?.toLowerCase() !== "false" && row["activo"]?.toLowerCase() !== "no",
-        }))
-        .filter((s) => s.activo)
-        .sort((a, b) => a.orden - b.orden);
-
-      if (dynamicSections.length > 0) {
-        updatedData.sections = dynamicSections;
-      }
-    }
-
-    return updatedData;
-  } catch (error) {
-    console.warn("No se pudo sincronizar con Google Sheets, usando datos por defecto:", error);
-    return defaultWebData;
-  }
+  // 3. RESPALDO FINAL: Datos locales por defecto
+  return defaultWebData;
 }

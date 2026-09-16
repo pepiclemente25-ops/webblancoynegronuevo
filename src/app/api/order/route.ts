@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
+import { getDb } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -41,24 +42,38 @@ export async function POST(request: Request) {
       timeStyle: "short",
     });
 
-    console.log("=== NUEVO PEDIDO RECIBIDO (Opción 2) ===", {
-      orderId,
-      orderDate,
-      clientName,
-      clientEmail,
-      clientPhone,
-      deliveryType,
-      paymentMethod,
-      clientAddress,
-      clientCity,
-      clientPostalCode,
-      notes,
-      total,
-      itemsCount: items.length,
-    });
-
-    // En el futuro, si se configura RESEND_API_KEY o similar, se puede enviar el email aquí:
-    // if (process.env.RESEND_API_KEY) { await resend.emails.send(...) }
+    // Guardar pedido en Neon Postgres si está configurado
+    const sql = getDb();
+    if (sql) {
+      try {
+        await sql.query(
+          `INSERT INTO pedidos_web (
+            id, numero_pedido, cliente_nombre, cliente_email, cliente_telefono,
+            entrega_tipo, direccion, ciudad, codigo_postal, metodo_pago,
+            total, items, estado, notas
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+          [
+            `ped-${Date.now()}-${randomSuffix}`,
+            orderId,
+            clientName,
+            clientEmail,
+            clientPhone,
+            deliveryType || 'recogida_tienda',
+            clientAddress || '',
+            clientCity || '',
+            clientPostalCode || '',
+            paymentMethod || 'bizum',
+            Number(total) || 0,
+            JSON.stringify(items),
+            'pendiente',
+            notes || ''
+          ]
+        );
+        console.log(`[Neon] Pedido ${orderId} registrado exitosamente en la base de datos.`);
+      } catch (dbErr) {
+        console.warn("[Neon] Aviso al registrar pedido en base de datos:", dbErr);
+      }
+    }
 
     return NextResponse.json({
       success: true,
