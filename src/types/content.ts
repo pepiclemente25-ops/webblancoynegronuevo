@@ -91,6 +91,9 @@ export interface ShopProduct {
   inStock: boolean;
   stockActual?: number;
   accionAgotado?: "ocultar" | "mostrar_agotado" | "bajo_encargo";
+  esServicio?: boolean;
+  duracionMinutos?: number;
+  publicadoWeb?: boolean;
 }
 
 export interface CartItem {

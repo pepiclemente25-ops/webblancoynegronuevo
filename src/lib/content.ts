@@ -1,4 +1,4 @@
-﻿import { WebData, Therapy, Workshop, HarmonizationItem, Review, ShopProduct, WebSectionItem } from "@/types/content";
+import { WebData, Therapy, Workshop, HarmonizationItem, Review, ShopProduct, WebSectionItem } from "@/types/content";
 import { defaultWebData } from "@/data/defaultContent";
 import { formatImageUrl } from "@/lib/drive";
 import { getDb } from "@/lib/db";
@@ -109,6 +109,8 @@ function buildWebDataFromPayload(payload: any): WebData {
       stockActual: stockNum,
       accionAgotado: accion,
       publicadoWeb: isPublicado,
+      esServicio: Boolean(p.es_servicio || p.esServicio),
+      duracionMinutos: p.duracion_minutos || p.duracionMinutos || undefined,
     };
   }).filter((p: any) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
 
