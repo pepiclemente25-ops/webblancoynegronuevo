@@ -28,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, onOpenBooking }) => {
   }, []);
 
   const navLinks = [
+    { name: "Inicio", href: "/" },
     { name: "Terapias", href: "#terapias" },
     { name: "Sobre el Espacio", href: "#sobre-mi" },
     { name: "Chakras", href: "#chakras" },
