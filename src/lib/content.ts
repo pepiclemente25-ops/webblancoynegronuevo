@@ -48,6 +48,58 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
 }
 
 /**
+ * Convierte filas de servicios/terapias de Neon a Therapy[]
+ */
+function mapNeonTherapies(rows: any[]): Therapy[] {
+  const serviceRows = rows.filter((p) => p.publicado_web !== false && (p.es_servicio || p.categoria === "terapias"));
+  if (serviceRows.length === 0) return defaultWebData.therapies;
+
+  return serviceRows.map((p, idx) => {
+    const rawImg = p.imagen_url || p.imagenUrl || p.foto || "";
+    let cat: Therapy["category"] = "reiki";
+    const nameLower = (p.nombre || "").toLowerCase();
+    if (nameLower.includes("quiro") || nameLower.includes("masaje")) cat = "quiromasaje";
+    else if (nameLower.includes("akash") || nameLower.includes("registro")) cat = "registros_akashicos";
+    else if (nameLower.includes("respira") || nameLower.includes("prana")) cat = "respiracion";
+    else if (nameLower.includes("reiki") || nameLower.includes("chakra")) cat = "reiki";
+
+    let benefits: string[] = [];
+    if (Array.isArray(p.beneficios)) benefits = p.beneficios;
+    else if (typeof p.beneficios === "string" && p.beneficios.trim()) {
+      try {
+        const j = JSON.parse(p.beneficios);
+        benefits = Array.isArray(j) ? j : [p.beneficios];
+      } catch {
+        benefits = p.beneficios.split(";").map((b: string) => b.trim()).filter(Boolean);
+      }
+    }
+    if (benefits.length === 0) {
+      benefits = [
+        "Sesión personalizada de armonización y bienestar",
+        "Disolución de bloqueos y recarga de vitalidad natural",
+      ];
+    }
+
+    const price = typeof p.precio_venta === "number" ? p.precio_venta : parseFloat(String(p.precio_venta || "0")) || 0;
+
+    return {
+      id: p.id || p.ref || `therapy-${idx + 1}`,
+      title: p.nombre || "Sesión Terapéutica",
+      subtitle: p.descripcion_corta || "Cuidado integral y equilibrio consciente",
+      category: cat,
+      categoryLabel: p.categoria_label || "Terapias & Masajes",
+      shortDescription: p.descripcion_corta || "Tratamiento personalizado para devolver la calma y bienestar a tu cuerpo y alma.",
+      fullDescription: p.descripcion_completa || p.descripcion_corta || "Sesión individual realizada con técnicas tradicionales en nuestro espacio en Boiro.",
+      benefits,
+      duration: p.duracion_minutos ? `${p.duracion_minutos} minutos` : "60 minutos",
+      priceNote: price > 0 ? `${price.toFixed(2)} € por sesión` : "Consultar sesión",
+      imageUrl: formatImageUrl(rawImg, "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80"),
+      badge: p.destacado || (p.es_servicio ? "Sesión Presencial" : undefined),
+    };
+  });
+}
+
+/**
  * Convierte filas de la tabla "secciones_web" de Neon a WebSectionItem[]
  */
 function mapNeonSections(rows: any[]): WebSectionItem[] {
@@ -152,6 +204,7 @@ export async function getWebData(): Promise<WebData> {
 
       const neonProducts = mapNeonProducts(prodsRes);
       const neonSections = mapNeonSections(secsRes);
+      const neonTherapies = mapNeonTherapies(prodsRes);
 
       const customConfig = { ...defaultWebData.config };
       if (cfgRes && cfgRes.length > 0) {
@@ -181,6 +234,7 @@ export async function getWebData(): Promise<WebData> {
           config: customConfig,
           products: neonProducts.length > 0 ? neonProducts : defaultWebData.products,
           sections: neonSections.length > 0 ? neonSections : defaultWebData.sections,
+          therapies: neonTherapies.length > 0 ? neonTherapies : defaultWebData.therapies,
         };
       }
     } catch (neonErr) {
