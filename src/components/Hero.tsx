@@ -13,13 +13,13 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) => {
   const contenido = section?.contenido || {};
-  const lema = section?.subtitulo || contenido.lema || contenido.badge || "Armonía Yin-Yang & Bienestar Holístico · Boiro";
-  const titulo = section?.titulo || contenido.titulo || "Reconecta con tu equilibrio vital y la calma profunda.";
-  const descripcion = contenido.descripcion || config.description;
-  const boton1Texto = contenido.boton1Texto || "Reservar Cita";
-  const boton2Texto = contenido.boton2Texto || "Explorar Terapias";
+  const lema = contenido.lemaSuperior || section?.subtitulo || contenido.lema || contenido.badge || "Armonía Yin-Yang & Bienestar Holístico · Boiro";
+  const titulo = contenido.tituloGrande || section?.titulo || contenido.titulo || "Reconecta con tu equilibrio vital y la calma profunda.";
+  const descripcion = contenido.fraseBienvenida || contenido.descripcion || config.description;
+  const boton1Texto = contenido.botonTexto || contenido.boton1Texto || "Reservar Cita";
+  const boton2Texto = contenido.botonSecundario || contenido.boton2Texto || "Explorar Terapias";
   const boton2Link = contenido.boton2Link || "#terapias";
-  const heroImg = contenido.imagenUrl || contenido.imagen || "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80";
+  const heroImg = contenido.heroImg || contenido.imagenUrl || contenido.imagen || "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80";
 
   const chips = Array.isArray(contenido.chips) && contenido.chips.length > 0 ? contenido.chips : [
     { titulo: "100% Natural", desc: "Aceites puros ecológicos" },

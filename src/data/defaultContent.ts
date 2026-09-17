@@ -6,7 +6,7 @@ export const defaultWebData: WebData = {
     name: "Blanco y Negro",
     tagline: "Terapias Holísticas y Bienestar",
     description:
-      "Un santuario de calma y equilibrio en el que reconectar con tu esencia natural a través del quiromasaje, la energía Reiki, las lecturas de Registros Akáshicos y la respiración consciente.",
+      "Unos santuarios de calma y equilibrio en el que reconectar con tu esencia natural a través del quiromasaje, la energía Reiki, las lecturas de Registros Akáshicos y la respiración consciente.",
     therapistName: "Pepi",
     therapistBio:
       "Terapeuta holística y quiromasajista titulada con más de una década acompañando procesos de sanación física, emocional y espiritual. Concibo el cuerpo y el alma como un todo inseparable: a través del tacto consciente, la canalización energética y la presencia serena, facilito que tu propio sistema recupere su armonía vital original.",

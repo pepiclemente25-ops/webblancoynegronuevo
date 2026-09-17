@@ -13,7 +13,7 @@ interface AboutSectionProps {
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ config, section, onOpenBooking }) => {
   const contenido = section?.contenido || {};
-  const therapistImg = contenido.imagenUrl || contenido.imagen || "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80";
+  const therapistImg = contenido.therapistImg || contenido.imagenUrl || contenido.imagen || "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80";
   const therapistName = contenido.nombreTerapeuta || config.therapistName;
   const therapistRole = contenido.titulacion || "Quiromasajista & Terapeuta Holística";
   const tactoTitulo = contenido.lema || "Tacto Consciente";
