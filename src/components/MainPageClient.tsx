@@ -83,8 +83,8 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         />
       </div>
 
-      {/* Barra de navegación */}
-      <Navbar config={data.config} onOpenBooking={handleOpenBooking} />
+      {/* Barra de navegación con soporte para ocultar links de secciones inactivas */}
+      <Navbar config={data.config} sections={data.sections} onOpenBooking={handleOpenBooking} />
 
       {/* Contenido Principal */}
       <main className="flex-1 relative z-10">

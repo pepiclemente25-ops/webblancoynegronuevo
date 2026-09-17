@@ -25,6 +25,7 @@ export default async function TiendaPage() {
       config={data.config}
       products={products}
       therapies={data.therapies}
+      sections={data.sections}
     />
   );
 }

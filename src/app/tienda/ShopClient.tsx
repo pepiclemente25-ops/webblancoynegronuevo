@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { SiteConfig, ShopProduct, Therapy } from "@/types/content";
+import { SiteConfig, ShopProduct, Therapy, WebSectionItem } from "@/types/content";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BookingModal } from "@/components/BookingModal";
@@ -30,12 +30,13 @@ interface ShopClientProps {
   config: SiteConfig;
   products: ShopProduct[];
   therapies: Therapy[];
+  sections?: WebSectionItem[];
 }
 
 type SortOption = "featured" | "price-asc" | "price-desc" | "name-asc" | "name-desc";
 type FilterType = "all" | "products" | "services";
 
-export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therapies }) => {
+export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therapies, sections }) => {
   const { addToCart } = useCart();
   
   // Filtros y búsqueda
@@ -245,8 +246,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
         />
       </div>
 
-      {/* Barra de navegación */}
-      <Navbar config={config} onOpenBooking={() => setIsBookingOpen(true)} />
+      {/* Navbar con control de secciones activas */}
+      <Navbar config={config} sections={sections} onOpenBooking={() => setIsBookingOpen(true)} />
 
       <main className="flex-1 relative z-10 pt-28 pb-20">
         {/* Cabecera / Hero Limpio y Compacto */}
@@ -765,30 +766,30 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
       {/* Pie de página */}
       <Footer config={config} />
 
-      {/* Modal Grande de Detalle de Producto con Carrusel 3s */}
+      {/* Modal Grande de Detalle de Producto con Carrusel 3s (Foto Arriba, Textos Abajo) */}
       {selectedProduct && (
         <div
           className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn"
           onClick={() => setSelectedProduct(null)}
         >
           <div
-            className="relative bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#ece4d8] flex flex-col md:flex-row overflow-hidden my-auto"
+            className="relative bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#ece4d8] flex flex-col overflow-hidden my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Botón Cerrar */}
             <button
               type="button"
               onClick={() => setSelectedProduct(null)}
-              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#212924] shadow-md flex items-center justify-center cursor-pointer transition"
+              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#212924] shadow-md flex items-center justify-center cursor-pointer transition hover:scale-105"
               title="Cerrar (Esc)"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* Columna Izquierda: Carrusel de Fotos */}
-            <div className="md:w-1/2 bg-[#f4efe5]/60 p-6 flex flex-col justify-between items-center border-b md:border-b-0 md:border-r border-[#ece4d8]">
+            {/* SECCIÓN SUPERIOR: Galería y Carrusel de Fotos */}
+            <div className="w-full bg-[#f4efe5]/60 p-5 sm:p-8 flex flex-col items-center border-b border-[#ece4d8]">
               <div
-                className="relative w-full aspect-square max-h-[380px] rounded-2xl overflow-hidden bg-white shadow-inner flex items-center justify-center group select-none"
+                className="relative w-full max-w-md sm:max-w-lg aspect-4/3 max-h-[380px] rounded-2xl overflow-hidden bg-white shadow-sm flex items-center justify-center group select-none"
                 onMouseEnter={() => setIsCarouselPaused(true)}
                 onMouseLeave={() => setIsCarouselPaused(false)}
               >
@@ -797,8 +798,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                     src={activeProductImages[currentImgIndex]}
                     alt={selectedProduct.name}
                     fill
-                    sizes="(max-width: 768px) 100vw, 500px"
-                    className="object-contain p-2 transition-all duration-500"
+                    sizes="(max-width: 768px) 100vw, 600px"
+                    className="object-contain p-3 transition-all duration-500"
                     priority
                   />
                 ) : null}
@@ -870,15 +871,15 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                 </div>
               )}
 
-              <p className="text-[11px] text-[#718276] mt-2 text-center">
-                {activeProductImages.length > 1
-                  ? "Rotación automática cada 3s • Pasa el ratón para pausar"
-                  : "Foto en alta resolución"}
-              </p>
+              {activeProductImages.length > 1 && (
+                <p className="text-[11px] text-[#718276] mt-2.5 text-center">
+                  Rotación automática cada 3s • Pasa el ratón para pausar
+                </p>
+              )}
             </div>
 
-            {/* Columna Derecha: Información y Acciones */}
-            <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+            {/* SECCIÓN INFERIOR: Información y Acciones */}
+            <div className="w-full p-6 sm:p-8 space-y-6 bg-white">
               <div className="space-y-4">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="px-3 py-1 rounded-full bg-[#f4efe5] text-[#3d5a4c] text-xs font-semibold">
