@@ -1,16 +1,42 @@
 "use client";
 
 import React from "react";
-import { Workshop, SiteConfig } from "@/types/content";
+import { Workshop, SiteConfig, WebSectionItem } from "@/types/content";
 import { Calendar, Clock, MapPin, Users, Sparkles, Check, MessageCircle } from "lucide-react";
 import Image from "next/image";
 
 interface WorkshopsSectionProps {
   workshops: Workshop[];
   config: SiteConfig;
+  section?: WebSectionItem;
 }
 
-export const WorkshopsSection: React.FC<WorkshopsSectionProps> = ({ workshops, config }) => {
+export const WorkshopsSection: React.FC<WorkshopsSectionProps> = ({ workshops, config, section }) => {
+  const lema = section?.contenido?.badge || section?.contenido?.lema || "Encuentros & Aprendizaje Compartido";
+  const titulo = section?.contenido?.tituloSeccion || section?.contenido?.titulo || section?.titulo || "Talleres, Círculos y Charlas";
+  const descripcion = section?.contenido?.descripcion || section?.subtitulo || "Espacios comunitarios donde profundizar en tu auto-sanación, aprender a canalizar energía y compartir con personas afines en un entorno seguro y amoroso.";
+  const botonTexto = section?.contenido?.botonTexto || "Reservar Plaza por WhatsApp";
+  const notaInscripcion = section?.contenido?.notaInscripcion || "Inscripción abierta hasta completar aforo.";
+
+  const rawWorkshops = (section?.contenido?.items && Array.isArray(section.contenido.items) && section.contenido.items.length > 0)
+    ? section.contenido.items
+    : workshops;
+
+  const displayWorkshops: Workshop[] = rawWorkshops.map((w: any, idx: number) => ({
+    id: w.id || `ws-${idx}`,
+    title: w.title || w.titulo || "Taller Vivencial",
+    subtitle: w.subtitle || w.subtitulo || "",
+    date: w.date || w.fecha || "Próximamente",
+    time: w.time || w.hora || "Horario a convenir",
+    modality: w.modality || w.modalidad || "Presencial",
+    spots: w.spots || w.plazas || "Plazas limitadas",
+    description: w.description || w.descripcion || "",
+    includes: Array.isArray(w.includes)
+      ? w.includes
+      : (typeof w.includes === "string" ? w.includes.split("\n").map((s: string) => s.trim()).filter(Boolean) : []),
+    imageUrl: w.imageUrl || w.imagenUrl || "/brand/taller-placeholder.webp"
+  }));
+
   return (
     <section id="talleres" className="py-24 bg-[#fbf9f5] border-t border-[#ece4d8] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,19 +45,19 @@ export const WorkshopsSection: React.FC<WorkshopsSectionProps> = ({ workshops, c
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eaf0ec] text-[#345041] text-xs font-semibold mb-4">
             <Sparkles className="w-3.5 h-3.5 text-[#b5935b]" />
-            <span>Encuentros & Aprendizaje Compartido</span>
+            <span>{lema}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1e2621] font-normal tracking-tight mb-4">
-            Talleres, Círculos y Charlas
+            {titulo}
           </h2>
           <p className="text-base text-[#5a6a60] leading-relaxed">
-            Espacios comunitarios donde profundizar en tu auto-sanación, aprender a canalizar energía y compartir con personas afines en un entorno seguro y amoroso.
+            {descripcion}
           </p>
         </div>
 
         {/* Lista de Talleres */}
         <div className="space-y-8">
-          {workshops.map((workshop) => (
+          {displayWorkshops.map((workshop) => (
             <div
               key={workshop.id}
               className="bg-white rounded-3xl border border-[#e8e1d5] shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden grid grid-cols-1 lg:grid-cols-12"
@@ -101,7 +127,7 @@ export const WorkshopsSection: React.FC<WorkshopsSectionProps> = ({ workshops, c
                 {/* Botón de inscripción */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#f0ebe1]">
                   <span className="text-xs text-[#6e7d73]">
-                    Inscripción abierta hasta completar aforo.
+                    {notaInscripcion}
                   </span>
                   <a
                     href={`https://wa.me/${config.whatsapp}?text=Hola%20${encodeURIComponent(
@@ -114,7 +140,7 @@ export const WorkshopsSection: React.FC<WorkshopsSectionProps> = ({ workshops, c
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs sm:text-sm font-medium hover:bg-[#2c4238] transition-colors shadow-sm"
                   >
                     <MessageCircle className="w-4 h-4 text-[#dfc89f]" />
-                    <span>Reservar Plaza por WhatsApp</span>
+                    <span>{botonTexto}</span>
                   </a>
                 </div>
 

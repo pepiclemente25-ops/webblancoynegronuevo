@@ -1,18 +1,31 @@
 "use client";
 
 import React, { useState } from "react";
-import { SiteConfig } from "@/types/content";
+import { SiteConfig, WebSectionItem } from "@/types/content";
 import { MapPin, Phone, Mail, Clock, ChevronDown, MessageCircle, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 interface LocationSectionProps {
   config: SiteConfig;
+  section?: WebSectionItem;
 }
 
-export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
+export const LocationSection: React.FC<LocationSectionProps> = ({ config, section }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const faqs = [
+  const lema = section?.contenido?.badge || section?.contenido?.lema || "Contacto y Preguntas Frecuentes";
+  const titulo = section?.contenido?.tituloSeccion || section?.contenido?.titulo || section?.titulo || "Estamos Aquí para Acompañarte";
+  const descripcion = section?.contenido?.descripcion || section?.subtitulo || "Resuelve cualquier duda sobre cómo llegar, las terapias o cómo preparar tu visita a nuestro centro.";
+
+  const address = section?.contenido?.direccion || config.address;
+  const city = section?.contenido?.ciudad || config.city;
+  const googleMapsUrl = section?.contenido?.googleMapsUrl || config.googleMapsUrl;
+  const schedule = section?.contenido?.horario || config.schedule;
+  const phoneDisplay = section?.contenido?.telefono || config.phoneDisplay;
+  const whatsapp = section?.contenido?.whatsapp || config.whatsapp;
+  const email = section?.contenido?.email || config.email;
+
+  const defaultFaqs = [
     {
       q: "¿Qué debo tener en cuenta antes de mi primera sesión de Quiromasaje?",
       a: "Te recomendamos acudir con ropa cómoda y no haber realizado una comida copiosa en la hora previa. Realizaremos una breve entrevista confidencial para conocer tu historial de lesiones o zonas de molestia antes de comenzar.",
@@ -35,6 +48,17 @@ export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
     },
   ];
 
+  const rawFaqs = (section?.contenido?.faqs && Array.isArray(section.contenido.faqs) && section.contenido.faqs.length > 0)
+    ? section.contenido.faqs
+    : (section?.contenido?.preguntas && Array.isArray(section.contenido.preguntas) && section.contenido.preguntas.length > 0)
+    ? section.contenido.preguntas
+    : defaultFaqs;
+
+  const faqs = rawFaqs.map((f: any) => ({
+    q: f.q || f.pregunta || f.p || "¿Consulta frecuente?",
+    a: f.a || f.respuesta || f.r || "Información detallada...",
+  }));
+
   return (
     <section id="contacto" className="py-24 bg-[#fbf9f5] border-t border-[#ece4d8] relative overflow-hidden">
       {/* Rama de hojas de bambú decorativa en esquina superior */}
@@ -53,13 +77,13 @@ export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eaf0ec] text-[#345041] text-xs font-semibold mb-4">
             <MapPin className="w-3.5 h-3.5 text-[#b5935b]" />
-            <span>Contacto y Preguntas Frecuentes</span>
+            <span>{lema}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1e2621] font-normal tracking-tight mb-4">
-            Estamos Aquí para Acompañarte
+            {titulo}
           </h2>
           <p className="text-base text-[#5a6a60] leading-relaxed">
-            Resuelve cualquier duda sobre cómo llegar, las terapias o cómo preparar tu visita a nuestro centro.
+            {descripcion}
           </p>
         </div>
 
@@ -77,10 +101,10 @@ export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] mb-1">
                     Dirección
                   </h4>
-                  <p className="text-sm font-semibold text-[#212924]">{config.address}</p>
-                  <p className="text-xs text-[#627367] mt-0.5">{config.city}</p>
+                  <p className="text-sm font-semibold text-[#212924]">{address}</p>
+                  <p className="text-xs text-[#627367] mt-0.5">{city}</p>
                   <a
-                    href={config.googleMapsUrl}
+                    href={googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block text-xs text-[#b5935b] font-semibold hover:underline mt-2"
@@ -98,7 +122,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] mb-1">
                     Horario de Citas
                   </h4>
-                  <p className="text-sm text-[#35433a] leading-relaxed">{config.schedule}</p>
+                  <p className="text-sm text-[#35433a] leading-relaxed">{schedule}</p>
                 </div>
               </div>
 
@@ -110,9 +134,9 @@ export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] mb-1">
                     Teléfono & WhatsApp
                   </h4>
-                  <p className="text-sm font-semibold text-[#212924]">{config.phoneDisplay}</p>
+                  <p className="text-sm font-semibold text-[#212924]">{phoneDisplay}</p>
                   <a
-                    href={`https://wa.me/${config.whatsapp}`}
+                    href={`https://wa.me/${whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs text-[#25D366] font-semibold hover:underline mt-1"
@@ -132,10 +156,10 @@ export const LocationSection: React.FC<LocationSectionProps> = ({ config }) => {
                     Correo Electrónico
                   </h4>
                   <a
-                    href={`mailto:${config.email}`}
+                    href={`mailto:${email}`}
                     className="text-sm text-[#212924] hover:text-[#3d5a4c] font-medium"
                   >
-                    {config.email}
+                    {email}
                   </a>
                 </div>
               </div>

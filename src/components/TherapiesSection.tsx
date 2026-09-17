@@ -1,17 +1,43 @@
 "use client";
 
 import React, { useState } from "react";
-import { Therapy } from "@/types/content";
+import { Therapy, WebSectionItem } from "@/types/content";
 import { Sparkles, Clock, CheckCircle2, ArrowRight, Tag } from "lucide-react";
 import Image from "next/image";
 
 interface TherapiesSectionProps {
   therapies: Therapy[];
   onOpenBooking: (preselectedService?: string) => void;
+  section?: WebSectionItem;
 }
 
-export const TherapiesSection: React.FC<TherapiesSectionProps> = ({ therapies, onOpenBooking }) => {
+export const TherapiesSection: React.FC<TherapiesSectionProps> = ({ therapies, onOpenBooking, section }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>("todas");
+
+  const lema = section?.contenido?.badge || section?.contenido?.lema || "Carta de Terapias & Cuidados";
+  const titulo = section?.contenido?.tituloSeccion || section?.contenido?.titulo || section?.titulo || "Tratamientos para el Cuerpo y el Alma";
+  const descripcion = section?.contenido?.mensajeCabecera || section?.contenido?.descripcion || section?.subtitulo || "Cada sesión se diseña de manera artesanal y consciente. Selecciona la terapia que tu cuerpo o tu momento vital te esté pidiendo.";
+
+  const rawTherapies = (section?.contenido?.items && Array.isArray(section.contenido.items) && section.contenido.items.length > 0)
+    ? section.contenido.items
+    : therapies;
+
+  const displayTherapies: Therapy[] = rawTherapies.map((t: any, idx: number) => ({
+    id: t.id || `th-${idx}`,
+    title: t.title || t.titulo || "Terapia Holística",
+    subtitle: t.subtitle || t.subtitulo || "",
+    category: t.category || t.categoria || "quiromasaje",
+    categoryLabel: t.categoryLabel || t.categoriaEtiqueta || "Terapia Especial",
+    shortDescription: t.shortDescription || t.descripcionCorta || "",
+    fullDescription: t.fullDescription || t.descripcion || "",
+    benefits: Array.isArray(t.benefits)
+      ? t.benefits
+      : (typeof t.benefits === "string" ? t.benefits.split("\n").map((s: string) => s.trim()).filter(Boolean) : []),
+    duration: t.duration || t.duracion || "60 min",
+    priceNote: t.priceNote || t.precioNota || "",
+    imageUrl: t.imageUrl || t.imagenUrl || "/brand/terapia-placeholder.webp",
+    badge: t.badge || undefined,
+  }));
 
   const categories = [
     { id: "todas", label: "Todas las Terapias" },
@@ -23,8 +49,8 @@ export const TherapiesSection: React.FC<TherapiesSectionProps> = ({ therapies, o
 
   const filteredTherapies =
     selectedFilter === "todas"
-      ? therapies
-      : therapies.filter((t) => t.category === selectedFilter);
+      ? displayTherapies
+      : displayTherapies.filter((t) => t.category === selectedFilter);
 
   return (
     <section id="terapias" className="py-24 bg-[#f4f0e8]/50 border-t border-[#ece4d8] relative overflow-hidden">
@@ -52,13 +78,13 @@ export const TherapiesSection: React.FC<TherapiesSectionProps> = ({ therapies, o
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#cbdbd0] text-[#345041] text-xs font-semibold mb-4">
             <Sparkles className="w-3.5 h-3.5 text-[#b5935b]" />
-            <span>Carta de Terapias & Cuidados</span>
+            <span>{lema}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1e2621] font-normal tracking-tight mb-4">
-            Tratamientos para el Cuerpo y el Alma
+            {titulo}
           </h2>
           <p className="text-base text-[#5a6a60] leading-relaxed">
-            Cada sesión se diseña de manera artesanal y consciente. Selecciona la terapia que tu cuerpo o tu momento vital te esté pidiendo.
+            {descripcion}
           </p>
 
           {/* Filtros de categoría */}

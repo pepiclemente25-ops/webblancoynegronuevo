@@ -1,15 +1,39 @@
 "use client";
 
 import React from "react";
-import { SiteConfig } from "@/types/content";
+import { SiteConfig, WebSectionItem } from "@/types/content";
 import { Calendar, Clock, MessageCircle, Sparkles, CheckCircle2, ShieldCheck, MapPin } from "lucide-react";
 
 interface BookingSectionProps {
   config: SiteConfig;
   onOpenBooking: () => void;
+  section?: WebSectionItem;
 }
 
-export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBooking }) => {
+export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBooking, section }) => {
+  const lema = section?.contenido?.badge || section?.contenido?.lema || "Agenda y Citas Online";
+  const titulo = section?.contenido?.titulo || section?.contenido?.tituloSeccion || section?.titulo || "Tu momento de paz comienza con un solo paso.";
+  const descripcion = section?.contenido?.descripcion || section?.subtitulo || "Atendemos siempre de manera individualizada y con margen suficiente entre sesiones para que disfrutes de tu cita sin prisas, con tiempo para respirar y recuperar sensaciones.";
+
+  const defaultGarantias = [
+    "Confirmación inmediata de tu día y franja horaria preferida.",
+    "Cancelación o cambio de cita flexible avisando con 24h de antelación.",
+    "Posibilidad de sesiones a domicilio o en fines de semana bajo consulta."
+  ];
+  const garantias = (section?.contenido?.garantias && Array.isArray(section.contenido.garantias) && section.contenido.garantias.length > 0)
+    ? section.contenido.garantias
+    : (typeof section?.contenido?.garantias === "string"
+        ? (section.contenido.garantias as string).split("\n").map((s: string) => s.trim()).filter(Boolean)
+        : defaultGarantias);
+
+  const boton1Texto = section?.contenido?.botonPrincipal || section?.contenido?.boton1Texto || "Abrir Asistente de Citas";
+  const boton2Texto = section?.contenido?.botonSecundario || section?.contenido?.boton2Texto || "Escribir por WhatsApp";
+
+  const schedule = section?.contenido?.horario || config.schedule;
+  const address = section?.contenido?.direccion || config.address;
+  const city = section?.contenido?.ciudad || config.city;
+  const googleCalendarUrl = section?.contenido?.googleCalendarUrl || config.googleCalendarUrl;
+
   return (
     <section id="citas" className="py-24 bg-[#3d5a4c] text-white relative overflow-hidden">
       {/* Elementos de aura sutil */}
@@ -23,36 +47,26 @@ export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBo
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-[#dfc89f] text-xs font-semibold mb-4">
               <Calendar className="w-3.5 h-3.5" />
-              <span>Agenda y Citas Online</span>
+              <span>{lema}</span>
             </div>
 
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight leading-tight mb-6">
-              Tu momento de paz comienza con un solo paso.
+              {titulo}
             </h2>
 
             <p className="text-base sm:text-lg text-white/85 leading-relaxed mb-8">
-              Atendemos siempre de manera individualizada y con margen suficiente entre sesiones para que disfrutes de tu cita sin prisas, con tiempo para respirar y recuperar sensaciones.
+              {descripcion}
             </p>
 
             <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#dfc89f] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-white/90">
-                  Confirmación inmediata de tu día y franja horaria preferida.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#dfc89f] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-white/90">
-                  Cancelación o cambio de cita flexible avisando con 24h de antelación.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#dfc89f] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-white/90">
-                  Posibilidad de sesiones a domicilio o en fines de semana bajo consulta.
-                </span>
-              </div>
+              {garantias.map((g: string, idx: number) => (
+                <div key={idx} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-[#dfc89f] flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-white/90">
+                    {g}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -61,7 +75,7 @@ export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBo
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-white text-[#212924] font-semibold text-sm hover:bg-[#dfc89f] transition-all shadow-lg cursor-pointer"
               >
                 <Calendar className="w-4 h-4 text-[#3d5a4c]" />
-                <span>Abrir Asistente de Citas</span>
+                <span>{boton1Texto}</span>
               </button>
 
               <a
@@ -73,7 +87,7 @@ export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBo
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white/10 border border-white/20 text-white font-medium text-sm hover:bg-white/20 transition-all"
               >
                 <MessageCircle className="w-4 h-4 text-[#25D366]" />
-                <span>Escribir por WhatsApp</span>
+                <span>{boton2Texto}</span>
               </a>
             </div>
           </div>
@@ -85,15 +99,15 @@ export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBo
                 <span className="text-xs uppercase tracking-wider text-[#dfc89f] font-semibold block mb-1">
                   Horario de Atención
                 </span>
-                <p className="text-lg font-serif font-medium">{config.schedule}</p>
+                <p className="text-lg font-serif font-medium">{schedule}</p>
               </div>
 
               <div className="border-b border-white/15 pb-5">
                 <span className="text-xs uppercase tracking-wider text-[#dfc89f] font-semibold block mb-1">
                   Ubicación del Espacio y Tienda
                 </span>
-                <p className="text-base font-medium">{config.address}</p>
-                <p className="text-xs text-white/80 mt-0.5">{config.city}</p>
+                <p className="text-base font-medium">{address}</p>
+                <p className="text-xs text-white/80 mt-0.5">{city}</p>
               </div>
 
               <div>
@@ -104,7 +118,7 @@ export const BookingSection: React.FC<BookingSectionProps> = ({ config, onOpenBo
                   Sincronizado en tiempo real con nuestra agenda para evitar esperas y solapamientos.
                 </p>
                 <a
-                  href={config.googleCalendarUrl}
+                  href={googleCalendarUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs text-[#dfc89f] font-semibold hover:underline"

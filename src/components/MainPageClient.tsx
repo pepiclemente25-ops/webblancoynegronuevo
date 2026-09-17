@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { WebData } from "@/types/content";
+import { WebData, WebSectionItem } from "@/types/content";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { ChakraStrip } from "@/components/ChakraStrip";
@@ -12,6 +12,7 @@ import { HarmonizationSection } from "@/components/HarmonizationSection";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { BookingSection } from "@/components/BookingSection";
 import { LocationSection } from "@/components/LocationSection";
+import { GenericSection } from "@/components/GenericSection";
 import { Footer } from "@/components/Footer";
 import { BookingModal } from "@/components/BookingModal";
 import Image from "next/image";
@@ -34,30 +35,35 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
     setPreselectedService(undefined);
   };
 
-  const renderSectionComponent = (tipoPlantilla: string, key: string) => {
+  const renderSectionComponent = (tipoPlantilla: string, key: string, section?: WebSectionItem) => {
     switch (tipoPlantilla) {
       case "hero":
-        return <Hero key={key} config={data.config} onOpenBooking={() => handleOpenBooking()} />;
+        return <Hero key={key} config={data.config} onOpenBooking={() => handleOpenBooking()} section={section} />;
       case "chakras":
-        return <ChakraStrip key={key} chakras={data.chakras} />;
+        return <ChakraStrip key={key} chakras={data.chakras} section={section} />;
       case "sobre_mi":
-        return <AboutSection key={key} config={data.config} onOpenBooking={() => handleOpenBooking()} />;
+        return <AboutSection key={key} config={data.config} onOpenBooking={() => handleOpenBooking()} section={section} />;
       case "terapias":
-        return <TherapiesSection key={key} therapies={data.therapies} onOpenBooking={handleOpenBooking} />;
+        return <TherapiesSection key={key} therapies={data.therapies} onOpenBooking={handleOpenBooking} section={section} />;
       case "talleres":
-        return <WorkshopsSection key={key} workshops={data.workshops} config={data.config} />;
+        return <WorkshopsSection key={key} workshops={data.workshops} config={data.config} section={section} />;
       case "armonizacion":
-        return <HarmonizationSection key={key} items={data.harmonization} config={data.config} />;
+        return <HarmonizationSection key={key} items={data.harmonization} config={data.config} section={section} />;
       case "resenas":
-        return <ReviewsSection key={key} reviews={data.reviews} config={data.config} />;
+        return <ReviewsSection key={key} reviews={data.reviews} config={data.config} section={section} />;
       case "reservas":
       case "booking":
-        return <BookingSection key={key} config={data.config} onOpenBooking={() => handleOpenBooking()} />;
+        return <BookingSection key={key} config={data.config} onOpenBooking={() => handleOpenBooking()} section={section} />;
       case "contacto":
       case "ubicacion":
-        return <LocationSection key={key} config={data.config} />;
+        return <LocationSection key={key} config={data.config} section={section} />;
+      case "texto_foto":
+      case "tarjetas":
+      case "banner":
+      case "faq":
+        return section ? <GenericSection key={key} section={section} config={data.config} onOpenBooking={() => handleOpenBooking()} /> : null;
       default:
-        return null;
+        return section ? <GenericSection key={key} section={section} config={data.config} onOpenBooking={() => handleOpenBooking()} /> : null;
     }
   };
 
@@ -92,7 +98,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           data.sections
             .filter((s) => s.activo)
             .sort((a, b) => a.orden - b.orden)
-            .map((s, idx) => renderSectionComponent(s.tipoPlantilla, s.id || `sec-${idx}`))
+            .map((s, idx) => renderSectionComponent(s.tipoPlantilla, s.id || `sec-${idx}`, s))
         ) : (
           <>
             <Hero config={data.config} onOpenBooking={() => handleOpenBooking()} />

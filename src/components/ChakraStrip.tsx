@@ -1,16 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChakraItem } from "@/types/content";
+import { ChakraItem, WebSectionItem } from "@/types/content";
 import { Sparkles, Info } from "lucide-react";
 import Image from "next/image";
 
 interface ChakraStripProps {
   chakras: ChakraItem[];
+  section?: WebSectionItem;
 }
 
-export const ChakraStrip: React.FC<ChakraStripProps> = ({ chakras }) => {
-  const [selectedChakra, setSelectedChakra] = useState<ChakraItem>(chakras[3]); // Por defecto el Anahata (Corazón)
+export const ChakraStrip: React.FC<ChakraStripProps> = ({ chakras, section }) => {
+  const lema = section?.contenido?.badge || section?.contenido?.lema || "Los 7 Centros Energéticos";
+  const titulo = section?.contenido?.tituloSeccion || section?.contenido?.titulo || section?.titulo || "Alineación y Equilibrio de los Chakras";
+  const descripcion = section?.contenido?.descripcion || section?.subtitulo || "Cuando la energía fluye libremente a través de nuestros centros vitales, experimentamos salud física, paz mental y serenidad emocional. A través del Reiki y la respiración consciente, desbloqueamos y armonizamos cada uno de ellos.";
+
+  const rawChakras = (section?.contenido?.chakras && Array.isArray(section.contenido.chakras) && section.contenido.chakras.length > 0)
+    ? section.contenido.chakras
+    : (section?.contenido?.items && Array.isArray(section.contenido.items) && section.contenido.items.length > 0)
+    ? section.contenido.items
+    : chakras;
+
+  const displayChakras: ChakraItem[] = rawChakras.map((ch: any, idx: number) => ({
+    number: ch.number || idx + 1,
+    name: ch.name || ch.nombre || `Chakra ${idx + 1}`,
+    sanskritName: ch.sanskritName || ch.nombreSanscrito || "",
+    color: ch.color || "#3d5a4c",
+    badgeColor: ch.badgeColor || "bg-[#eaf0ec] text-[#345041]",
+    glowColor: ch.glowColor || "rgba(61,90,76,0.3)",
+    meaning: ch.meaning || ch.significado || "",
+    symptoms: ch.symptoms || ch.sintomas || "",
+  }));
+
+  const [selectedChakra, setSelectedChakra] = useState<ChakraItem>(displayChakras[3] || displayChakras[0]);
 
   return (
     <section id="chakras" className="py-20 bg-[#f4f0e8]/70 border-y border-[#ece4d8] relative overflow-hidden">
@@ -30,19 +52,19 @@ export const ChakraStrip: React.FC<ChakraStripProps> = ({ chakras }) => {
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#cbdbd0] text-[#385345] text-xs font-semibold mb-4">
             <Sparkles className="w-3.5 h-3.5 text-[#b5935b]" />
-            <span>Los 7 Centros Energéticos</span>
+            <span>{lema}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#1e2621] font-normal tracking-tight mb-4">
-            Alineación y Equilibrio de los Chakras
+            {titulo}
           </h2>
           <p className="text-base text-[#5a6a60] leading-relaxed">
-            Cuando la energía fluye libremente a través de nuestros centros vitales, experimentamos salud física, paz mental y serenidad emocional. A través del Reiki y la respiración consciente, desbloqueamos y armonizamos cada uno de ellos.
+            {descripcion}
           </p>
         </div>
 
         {/* Fila interactiva de los 7 chakras */}
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-10">
-          {chakras.map((chakra) => {
+          {displayChakras.map((chakra) => {
             const isSelected = selectedChakra.number === chakra.number;
             return (
               <button

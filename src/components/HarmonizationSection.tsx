@@ -1,17 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
-import { HarmonizationItem, SiteConfig } from "@/types/content";
+import { HarmonizationItem, SiteConfig, WebSectionItem } from "@/types/content";
 import { Sparkles, Leaf, Compass, MessageCircle, HelpCircle, Flame } from "lucide-react";
 import Image from "next/image";
 
 interface HarmonizationSectionProps {
   items: HarmonizationItem[];
   config: SiteConfig;
+  section?: WebSectionItem;
 }
 
-export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ items, config }) => {
+export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ items, config, section }) => {
   const [activeCategory, setActiveCategory] = useState<string>("todos");
+
+  const contenido = section?.contenido || {};
+  const lema = section?.subtitulo || contenido.lema || contenido.badge || "Espacio Botánico & Energético";
+  const titulo = section?.titulo || contenido.titulo || "Herramientas para Armonizar tu Vida y tu Hogar";
+  const descripcion = contenido.descripcion || "Una cuidada selección de botánica sagrada, minerales intencionados y utensilios de tacto consciente que utilizamos en consulta y que ponemos a tu disposición para mantener alta tu vibración en casa.";
+
+  const rawItems = Array.isArray(contenido.items) && contenido.items.length > 0 ? contenido.items : items;
+  const displayItems = rawItems.map((item: any, idx: number) => {
+    const defaultFallback = items[idx]?.imageUrl || "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80";
+    return {
+      id: item.id || `armonizacion-${idx + 1}`,
+      title: item.title || item.titulo || `Bloque ${idx + 1}`,
+      category: item.category || item.categoria || "aromaterapia",
+      categoryLabel: item.categoryLabel || item.category || "Armonización",
+      description: item.description || item.descripcion || "",
+      properties: Array.isArray(item.properties) ? item.properties : (Array.isArray(item.propiedades) ? item.propiedades : []),
+      usageTip: item.usageTip || item.consejo || "",
+      imageUrl: item.imageUrl || item.imagenUrl || item.imagen || defaultFallback,
+    };
+  });
 
   const categories = [
     { id: "todos", label: "Todo el Espacio" },
@@ -23,8 +44,14 @@ export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ item
 
   const filteredItems =
     activeCategory === "todos"
-      ? items
-      : items.filter((item) => item.category === activeCategory);
+      ? displayItems
+      : displayItems.filter((item: any) => item.category === activeCategory);
+
+  const banner = contenido.banner || {};
+  const bannerLema = banner.lema || "Servicio Especializado a Domicilio y Negocios";
+  const bannerTitulo = banner.titulo || "¿Sientes la energía de tu hogar o lugar de trabajo pesada o estancada?";
+  const bannerTexto = banner.texto || "Realizamos limpiezas energéticas profundas en viviendas, locales comerciales y oficinas mediante sahumerio ancestral con salvia blanca, frecuencias de sonido y sellado de portales áuricos. Solicita una valoración previa sin compromiso.";
+  const bannerBoton = banner.botonTexto || "Solicitar Valoración para mi Espacio";
 
   return (
     <section id="armonizacion" className="py-24 bg-[#f4f0e8]/70 border-t border-[#ece4d8] relative overflow-hidden">
@@ -52,13 +79,13 @@ export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ item
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#cbdbd0] text-[#345041] text-xs font-semibold mb-4">
             <Leaf className="w-3.5 h-3.5 text-[#b5935b]" />
-            <span>Espacio Botánico & Energético</span>
+            <span>{lema}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1e2621] font-normal tracking-tight mb-4">
-            Herramientas para Armonizar tu Vida y tu Hogar
+            {titulo}
           </h2>
           <p className="text-base text-[#5a6a60] leading-relaxed">
-            Una cuidada selección de botánica sagrada, minerales intencionados y utensilios de tacto consciente que utilizamos en consulta y que ponemos a tu disposición para mantener alta tu vibración en casa.
+            {descripcion}
           </p>
 
           {/* Filtros */}
@@ -119,7 +146,7 @@ export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ item
                       Propiedades y Selección:
                     </h4>
                     <ul className="space-y-1.5">
-                      {item.properties.map((prop, idx) => (
+                      {item.properties.map((prop: string, idx: number) => (
                         <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-[#445248]">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#b5935b] mt-1.5 flex-shrink-0" />
                           <span>{prop}</span>
@@ -167,13 +194,13 @@ export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ item
           <div className="max-w-3xl relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-[#dfc89f] text-xs font-semibold mb-3">
               <Flame className="w-3.5 h-3.5" />
-              <span>Servicio Especializado a Domicilio y Negocios</span>
+              <span>{bannerLema}</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight mb-3">
-              ¿Sientes la energía de tu hogar o lugar de trabajo pesada o estancada?
+              {bannerTitulo}
             </h3>
             <p className="text-sm sm:text-base text-white/90 leading-relaxed mb-6">
-              Realizamos limpiezas energéticas profundas en viviendas, locales comerciales y oficinas mediante sahumerio ancestral con salvia blanca, frecuencias de sonido y sellado de portales áuricos. Solicita una valoración previa sin compromiso.
+              {bannerTexto}
             </p>
             <a
               href={`https://wa.me/${config.whatsapp}?text=Hola%20${encodeURIComponent(
@@ -184,7 +211,7 @@ export const HarmonizationSection: React.FC<HarmonizationSectionProps> = ({ item
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#212924] font-semibold text-xs sm:text-sm hover:bg-[#dfc89f] transition-colors shadow"
             >
               <MessageCircle className="w-4 h-4 text-[#25D366]" />
-              <span>Solicitar Valoración para mi Espacio</span>
+              <span>{bannerBoton}</span>
             </a>
           </div>
         </div>

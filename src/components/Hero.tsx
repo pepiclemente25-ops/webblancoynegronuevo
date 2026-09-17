@@ -1,16 +1,35 @@
 "use client";
 
 import React from "react";
-import { SiteConfig } from "@/types/content";
+import { SiteConfig, WebSectionItem } from "@/types/content";
 import { Sparkles, ArrowRight, ShieldCheck, Heart, Leaf, Sun } from "lucide-react";
 import Image from "next/image";
 
 interface HeroProps {
   config: SiteConfig;
+  section?: WebSectionItem;
   onOpenBooking: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ config, onOpenBooking }) => {
+export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) => {
+  const contenido = section?.contenido || {};
+  const lema = section?.subtitulo || contenido.lema || contenido.badge || "Armonía Yin-Yang & Bienestar Holístico · Boiro";
+  const titulo = section?.titulo || contenido.titulo || "Reconecta con tu equilibrio vital y la calma profunda.";
+  const descripcion = contenido.descripcion || config.description;
+  const boton1Texto = contenido.boton1Texto || "Reservar Cita";
+  const boton2Texto = contenido.boton2Texto || "Explorar Terapias";
+  const boton2Link = contenido.boton2Link || "#terapias";
+  const heroImg = contenido.imagenUrl || contenido.imagen || "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80";
+
+  const chips = Array.isArray(contenido.chips) && contenido.chips.length > 0 ? contenido.chips : [
+    { titulo: "100% Natural", desc: "Aceites puros ecológicos" },
+    { titulo: "Atención Personal", desc: "Sin prisas ni esperas" },
+    { titulo: "Cuerpo y Alma", desc: "Enfoque holístico integral" },
+  ];
+
+  const tarjeta1Cifra = contenido.tarjeta1Cifra || "10+";
+  const tarjeta1Texto = contenido.tarjeta1Texto || "Años de Experiencia Terapéutica";
+  const tarjeta2Texto = contenido.tarjeta2Texto || "5.0 en Reseñas";
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden aura-gradient-subtle">
       {/* Cañas de bambú laterales extraídas del logotipo oficial */}
@@ -54,20 +73,15 @@ export const Hero: React.FC<HeroProps> = ({ config, onOpenBooking }) => {
               <div className="w-5 h-5 rounded-full overflow-hidden border border-[#3d5a4c]/30 flex-shrink-0 bg-white">
                 <Image src="/brand/yinyang.webp" alt="Yin Yang" width={20} height={20} className="w-full h-full object-cover" />
               </div>
-              <span>Armonía Yin-Yang & Bienestar Holístico · Boiro</span>
+              <span>{lema}</span>
             </div>
 
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-normal text-[#1e2621] tracking-tight leading-[1.15] mb-6">
-              Reconecta con tu{" "}
-              <span className="italic font-medium text-[#385345] relative inline-block">
-                equilibrio vital
-                <span className="absolute bottom-1 left-0 w-full h-[6px] bg-[#dfc89f]/40 -z-10 rounded-full"></span>
-              </span>{" "}
-              y la calma profunda.
+              {titulo}
             </h1>
 
             <p className="text-base sm:text-lg text-[#55645a] leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8">
-              {config.description}
+              {descripcion}
             </p>
 
             {/* Acciones principales */}
@@ -76,49 +90,35 @@ export const Hero: React.FC<HeroProps> = ({ config, onOpenBooking }) => {
                 onClick={onOpenBooking}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#3d5a4c] text-white font-medium text-base shadow-md hover:bg-[#2c4238] hover:shadow-lg transition-all duration-200 cursor-pointer group"
               >
-                <span>Reservar Cita</span>
+                <span>{boton1Texto}</span>
                 <ArrowRight className="w-4 h-4 text-[#dfc89f] transition-transform group-hover:translate-x-1" />
               </button>
 
               <a
-                href="#terapias"
+                href={boton2Link}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white/80 border border-[#cbdbd0] text-[#2d473b] font-medium text-base hover:bg-[#f3f7f4] transition-colors"
               >
-                <span>Explorar Terapias</span>
+                <span>{boton2Texto}</span>
               </a>
             </div>
 
             {/* Micro-garantías de confianza */}
             <div className="pt-6 border-t border-[#e2dad0] grid grid-cols-3 gap-4 text-center lg:text-left">
-              <div className="flex flex-col sm:flex-row items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#eaf0ec] flex items-center justify-center text-[#3d5a4c]">
-                  <Leaf className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-[#212924]">100% Natural</h4>
-                  <p className="text-[11px] text-[#6a7a70]">Aceites puros ecológicos</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#eaf0ec] flex items-center justify-center text-[#3d5a4c]">
-                  <Heart className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-[#212924]">Atención Personal</h4>
-                  <p className="text-[11px] text-[#6a7a70]">Sin prisas ni esperas</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#eaf0ec] flex items-center justify-center text-[#3d5a4c]">
-                  <Sun className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-[#212924]">Cuerpo y Alma</h4>
-                  <p className="text-[11px] text-[#6a7a70]">Enfoque holístico integral</p>
-                </div>
-              </div>
+              {chips.map((chip: any, cIdx: number) => {
+                const icons = [Leaf, Heart, Sun];
+                const IconComponent = icons[cIdx % icons.length] || Sparkles;
+                return (
+                  <div key={cIdx} className="flex flex-col sm:flex-row items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-[#eaf0ec] flex items-center justify-center text-[#3d5a4c]">
+                      <IconComponent className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs sm:text-sm font-semibold text-[#212924]">{chip.titulo || chip.title}</h4>
+                      <p className="text-[11px] text-[#6a7a70]">{chip.desc || chip.subtitulo}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -129,8 +129,8 @@ export const Hero: React.FC<HeroProps> = ({ config, onOpenBooking }) => {
               {/* Marco fotográfico elegante */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/5] bg-[#ece4d8]">
                 <Image
-                  src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80"
-                  alt="Sesión de masaje terapéutico y bienestar en Blanco y Negro - Terapias Holísticas y Bienestar"
+                  src={heroImg}
+                  alt={titulo}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
@@ -142,11 +142,11 @@ export const Hero: React.FC<HeroProps> = ({ config, onOpenBooking }) => {
               {/* Tarjeta flotante 1: Experiencia */}
               <div className="absolute -bottom-6 -left-4 sm:-left-8 bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-xl border border-[#ece4d8] flex items-center gap-3.5 max-w-[260px] animate-float-gentle">
                 <div className="w-12 h-12 rounded-xl bg-[#3d5a4c] flex items-center justify-center text-[#dfc89f] font-serif text-xl font-bold shadow-inner">
-                  10+
+                  {tarjeta1Cifra}
                 </div>
                 <div>
                   <p className="text-xs font-medium text-[#65766b] uppercase tracking-wider">Años de</p>
-                  <p className="text-sm font-bold text-[#212924]">Experiencia Terapéutica</p>
+                  <p className="text-sm font-bold text-[#212924]">{tarjeta1Texto}</p>
                 </div>
               </div>
 
@@ -155,7 +155,7 @@ export const Hero: React.FC<HeroProps> = ({ config, onOpenBooking }) => {
                 <div className="flex text-amber-400">
                   {"★".repeat(5)}
                 </div>
-                <span className="text-xs font-semibold text-[#212924]">5.0 en Reseñas</span>
+                <span className="text-xs font-semibold text-[#212924]">{tarjeta2Texto}</span>
               </div>
 
               {/* Tarjeta flotante 3: Sello Yin-Yang & Bambú */}
