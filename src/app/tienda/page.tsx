@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default async function TiendaPage() {
   const data = await getWebData();
-  const products = data.products && data.products.length > 0 ? data.products : defaultShopProducts;
+  const products = data.products ?? [];
 
   return (
     <ShopClient

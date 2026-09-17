@@ -597,6 +597,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
           )}
 
           {/* Paginación Profesional */}
+          {/* Paginación Profesional Responsiva con Elipsis */}
           {totalPages > 1 && (
             <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#ece4d8]">
               <span className="text-xs text-[#6e7d73]">
@@ -604,7 +605,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                 <strong className="text-[#212924]">{totalPages}</strong>
               </span>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap justify-center">
                 {/* Botón Anterior */}
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
@@ -615,20 +616,44 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {/* Números de Página */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                  <button
-                    key={pageNum}
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`w-8 h-8 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                      currentPage === pageNum
-                        ? "bg-[#3d5a4c] text-white shadow-2xs"
-                        : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                ))}
+                {/* Números de Página con Elipsis */}
+                {(() => {
+                  const pages: (number | string)[] = [];
+                  if (totalPages <= 7) {
+                    for (let i = 1; i <= totalPages; i++) pages.push(i);
+                  } else {
+                    if (currentPage <= 3) {
+                      pages.push(1, 2, 3, 4, '...', totalPages);
+                    } else if (currentPage >= totalPages - 2) {
+                      pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+                    } else {
+                      pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+                    }
+                  }
+
+                  return pages.map((p, idx) => {
+                    if (typeof p === 'string') {
+                      return (
+                        <span key={`ellipsis-${idx}`} className="w-8 h-8 flex items-center justify-center text-xs text-[#8c9c91] font-bold select-none">
+                          ...
+                        </span>
+                      );
+                    }
+                    return (
+                      <button
+                        key={`page-${p}`}
+                        onClick={() => setCurrentPage(p)}
+                        className={`w-8 h-8 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                          currentPage === p
+                            ? "bg-[#3d5a4c] text-white shadow-2xs"
+                            : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  });
+                })()}
 
                 {/* Botón Siguiente */}
                 <button

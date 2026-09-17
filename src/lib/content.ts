@@ -245,16 +245,14 @@ export async function getWebData(): Promise<WebData> {
         });
       }
 
-      // Si Neon tiene productos o secciones, devolvemos los datos de Neon
-      if (neonProducts.length > 0 || neonSections.length > 0) {
-        return {
-          ...defaultWebData,
-          config: customConfig,
-          products: neonProducts.length > 0 ? neonProducts : defaultWebData.products,
-          sections: neonSections.length > 0 ? neonSections : defaultWebData.sections,
-          therapies: neonTherapies.length > 0 ? neonTherapies : defaultWebData.therapies,
-        };
-      }
+      // Si la consulta a Neon tuvo éxito, devolvemos fielmente los datos de Neon (incluso si el catálogo está vacío)
+      return {
+        ...defaultWebData,
+        config: customConfig,
+        products: neonProducts,
+        sections: neonSections.length > 0 ? neonSections : defaultWebData.sections,
+        therapies: neonTherapies.length > 0 ? neonTherapies : defaultWebData.therapies,
+      };
     } catch (neonErr) {
       console.warn("[Neon] Aviso consultando base de datos, usando fallback:", neonErr);
     }

@@ -3,6 +3,7 @@ import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { CartDrawer } from "@/components/CartDrawer";
+import { FloatingContactButtons } from "@/components/FloatingContactButtons";
 
 const playfair = Playfair_Display({
   variable: "--font-serif",
@@ -56,6 +57,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
           <CartDrawer />
+          <FloatingContactButtons />
         </CartProvider>
       </body>
     </html>
