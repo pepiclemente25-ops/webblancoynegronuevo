@@ -215,7 +215,7 @@ export async function getWebData(): Promise<WebData> {
   if (sql) {
     try {
       const [prodsRes, secsRes, cfgRes] = await Promise.all([
-        sql.query("SELECT * FROM productos WHERE publicado_web = true ORDER BY categoria, nombre ASC"),
+        sql.query("SELECT * FROM productos WHERE publicado_web = true AND (archivado IS NOT TRUE) ORDER BY categoria, nombre ASC"),
         sql.query("SELECT * FROM secciones_web WHERE activo = true ORDER BY orden ASC"),
         sql.query("SELECT clave, valor FROM configuracion_web"),
       ]);
