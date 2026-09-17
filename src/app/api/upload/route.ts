@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import fs from "fs";
 import path from "path";
 
@@ -90,3 +90,55 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || "Error al procesar la subida" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const authHeader = req.headers.get("x-sync-secret") || req.headers.get("authorization");
+    const expectedSecret = process.env.REVALIDATE_SECRET || "aura-pepi-secret-key";
+
+    if (authHeader && authHeader.replace("Bearer ", "") !== expectedSecret) {
+      return NextResponse.json(
+        { error: "No autorizado. Token de sincronización inválido." },
+        { status: 401 }
+      );
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const urls: string[] = Array.isArray(body.urls) ? body.urls : (body.url ? [body.url] : []);
+
+    if (urls.length === 0) {
+      return NextResponse.json({ success: true, count: 0, message: "No se enviaron URLs para eliminar." });
+    }
+
+    // Filtrar URLs de Vercel Blob
+    const vercelBlobUrls = urls.filter(
+      (u) => typeof u === "string" && (u.includes("public.blob.vercel-storage.com") || u.startsWith("https://"))
+    );
+
+    if (vercelBlobUrls.length > 0 && process.env.BLOB_READ_WRITE_TOKEN) {
+      await del(vercelBlobUrls);
+    }
+
+    // Eliminar también archivos locales en public/uploads si corresponde
+    for (const u of urls) {
+      if (typeof u === "string" && u.startsWith("/uploads/")) {
+        const localPath = path.join(process.cwd(), "public", u);
+        if (fs.existsSync(localPath)) {
+          try {
+            fs.unlinkSync(localPath);
+          } catch {}
+        }
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      deletedCount: vercelBlobUrls.length,
+      urls: vercelBlobUrls,
+    });
+  } catch (err: any) {
+    console.error("Error al eliminar imágenes:", err);
+    return NextResponse.json({ error: err.message || "Error al eliminar imágenes" }, { status: 500 });
+  }
+}
+
