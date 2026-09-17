@@ -13,6 +13,7 @@ import { ReviewsSection } from "@/components/ReviewsSection";
 import { BookingSection } from "@/components/BookingSection";
 import { LocationSection } from "@/components/LocationSection";
 import { GenericSection } from "@/components/GenericSection";
+import { ShopPreviewSection } from "@/components/ShopPreviewSection";
 import { Footer } from "@/components/Footer";
 import { BookingModal } from "@/components/BookingModal";
 import Image from "next/image";
@@ -49,6 +50,8 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         return <WorkshopsSection key={key} workshops={data.workshops} config={data.config} section={section} />;
       case "armonizacion":
         return <HarmonizationSection key={key} items={data.harmonization} config={data.config} section={section} />;
+      case "productos":
+        return <ShopPreviewSection key={key} products={data.products} config={data.config} section={section} onOpenBooking={handleOpenBooking} />;
       case "resenas":
         return <ReviewsSection key={key} reviews={data.reviews} config={data.config} section={section} />;
       case "reservas":
