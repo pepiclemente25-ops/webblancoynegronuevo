@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     }
 
     const payload = await req.json();
-    if (!payload || (!payload.productos && !payload.products)) {
+    if (!payload || (!Array.isArray(payload.productos) && !Array.isArray(payload.products))) {
       return NextResponse.json(
         { error: "Payload inválido. Se requiere el array de productos." },
         { status: 400 }

@@ -55,7 +55,25 @@ export function formatImageUrl(url: string, fallbackUrl: string): string {
     }
   }
 
-  // Si ya es una URL HTTP(S) directa (por ejemplo Unsplash o CDN externo)
+  // Si es un data URL de imagen en base64 válido
+  if (trimmed.startsWith("data:image/")) {
+    return trimmed;
+  }
+
+  // Si es una ruta local del TPV (/imagenes/art_...) o localhost que no existe en el servidor web público
+  if (trimmed.includes("localhost") || trimmed.includes("127.0.0.1") || trimmed.startsWith("/imagenes/")) {
+    // Si estamos en el navegador en un dominio público de producción, no intentamos resolver localhost
+    if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+      return fallbackUrl;
+    }
+    // En SSR en Vercel tampoco existe localhost:3742
+    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+      return fallbackUrl;
+    }
+    return trimmed;
+  }
+
+  // Si ya es una URL HTTP(S) directa (Unsplash, Vercel Blob, CDN externo, etc.)
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("/")) {
     return trimmed;
   }

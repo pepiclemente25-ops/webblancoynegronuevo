@@ -195,7 +195,7 @@ function buildWebDataFromPayload(payload: any): WebData {
       ...defaultWebData.config,
       ...(payload.config || {}),
     },
-    products: parsedProducts.length > 0 ? parsedProducts : defaultWebData.products,
+    products: parsedProducts,
     sections: sections.length > 0 ? sections : defaultWebData.sections,
     therapies: payload.terapias || payload.therapies || defaultWebData.therapies,
     workshops: payload.talleres || payload.workshops || defaultWebData.workshops,
@@ -265,7 +265,7 @@ export async function getWebData(): Promise<WebData> {
     });
     if (directRes.ok) {
       const directJson = await directRes.json();
-      if (directJson && (directJson.productos || directJson.products)) {
+      if (directJson && (Array.isArray(directJson.productos) || Array.isArray(directJson.products))) {
         return buildWebDataFromPayload(directJson);
       }
     }
@@ -282,7 +282,7 @@ export async function getWebData(): Promise<WebData> {
         });
         if (res.ok) {
           const blobJson = await res.json();
-          if (blobJson && (blobJson.productos || blobJson.products)) {
+          if (blobJson && (Array.isArray(blobJson.productos) || Array.isArray(blobJson.products))) {
             return buildWebDataFromPayload(blobJson);
           }
         }
@@ -290,6 +290,9 @@ export async function getWebData(): Promise<WebData> {
     } catch {}
   }
 
-  // 3. RESPALDO FINAL: Datos locales por defecto
-  return defaultWebData;
+  // 3. RESPALDO FINAL: Datos locales por defecto (con catálogo vacío si no hay sincronización)
+  return {
+    ...defaultWebData,
+    products: [],
+  };
 }

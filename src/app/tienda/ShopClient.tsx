@@ -14,6 +14,8 @@ import {
   Calendar,
   ChevronRight,
   ChevronLeft,
+  ChevronsRight,
+  ChevronsLeft,
   ArrowUpDown,
   Store,
   HelpCircle,
@@ -61,13 +63,25 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
   const [modalQuantity, setModalQuantity] = useState(1);
   const [modalJustAdded, setModalJustAdded] = useState(false);
 
+  // Manejo a prueba de fallos de imágenes
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+  const DEFAULT_FALLBACK_IMG = "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80";
+
   const activeProductImages = useMemo(() => {
     if (!selectedProduct) return [];
+    let list: string[] = [];
     if (selectedProduct.images && selectedProduct.images.length > 0) {
-      return selectedProduct.images;
+      list = selectedProduct.images;
+    } else if (selectedProduct.imageUrl) {
+      list = [selectedProduct.imageUrl];
+    } else {
+      list = [DEFAULT_FALLBACK_IMG];
     }
-    return [selectedProduct.imageUrl || "/images/placeholder-product.webp"];
-  }, [selectedProduct]);
+    return list.map((img, idx) => {
+      const key = `${selectedProduct.id}-modal-${idx}`;
+      return failedImages[key] ? DEFAULT_FALLBACK_IMG : img;
+    });
+  }, [selectedProduct, failedImages]);
 
   // Rotación automática cada 3 segundos (pausable por hover)
   useEffect(() => {
@@ -434,7 +448,38 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
 
         {/* Rejilla de Productos */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          {totalItems === 0 ? (
+          {products.length === 0 ? (
+            <div className="text-center py-20 bg-white rounded-3xl border border-[#ece4d8] p-8 sm:p-12 max-w-lg mx-auto space-y-4 shadow-2xs">
+              <div className="w-16 h-16 rounded-3xl bg-[#f4efe5] text-[#3d5a4c] mx-auto flex items-center justify-center shadow-inner">
+                <Sparkles className="w-8 h-8 text-[#3d5a4c]" />
+              </div>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#212924]">
+                Catálogo en Actualización
+              </h3>
+              <p className="text-xs sm:text-sm text-[#6e7d73] leading-relaxed max-w-sm mx-auto">
+                Actualmente estamos renovando y preparando nuestros productos botánicos y herramientas de bienestar.
+              </p>
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  href="/terapias"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-2xl bg-[#3d5a4c] text-white text-xs font-semibold shadow-xs hover:bg-[#2d473b] transition-all"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>Ver Terapias y Citas</span>
+                </Link>
+                {config.whatsapp && (
+                  <a
+                    href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent("Hola Pepi, me gustaría consultar la disponibilidad de productos en tienda.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-2xl bg-[#25D366] text-white text-xs font-semibold shadow-xs hover:bg-[#20ba5a] transition-all"
+                  >
+                    <span>Consultar por WhatsApp</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : totalItems === 0 ? (
             <div className="text-center py-20 bg-white rounded-3xl border border-[#ece4d8] p-8 max-w-md mx-auto space-y-3">
               <div className="w-14 h-14 rounded-full bg-[#f4efe5] text-[#3d5a4c] mx-auto flex items-center justify-center">
                 <Search className="w-6 h-6 opacity-60" />
@@ -457,6 +502,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
               {currentPaginatedProducts.map((product) => {
                 const isJustAdded = addedProductId === product.id;
                 const isOutOfStock = !product.inStock && !product.esServicio;
+                const cardImgSrc = failedImages[product.id] || !product.imageUrl
+                  ? DEFAULT_FALLBACK_IMG
+                  : product.imageUrl;
 
                 return (
                   <article
@@ -467,11 +515,15 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                     {/* Imagen del producto con badge y overlay de clic */}
                     <div className="relative aspect-4/3 overflow-hidden bg-[#f4efe5]">
                       <Image
-                        src={product.imageUrl || "/images/placeholder-product.webp"}
+                        src={cardImgSrc}
                         alt={product.name}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={() => {
+                          setFailedImages((prev) => ({ ...prev, [product.id]: true }));
+                        }}
+                        unoptimized={cardImgSrc.startsWith('data:')}
                       />
                       <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-[#212924] text-xs font-semibold shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -596,19 +648,42 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
             </div>
           )}
 
-          {/* Paginación Profesional */}
-          {/* Paginación Profesional Responsiva con Elipsis */}
+          {/* Paginación Profesional Responsiva con Ventana Deslizante y Salto Rápido */}
           {totalPages > 1 && (
-            <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#ece4d8]">
-              <span className="text-xs text-[#6e7d73]">
-                Página <strong className="text-[#212924]">{currentPage}</strong> de{" "}
-                <strong className="text-[#212924]">{totalPages}</strong>
-              </span>
+            <div className="mt-12 pt-6 border-t border-[#ece4d8] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-xs text-[#6e7d73] flex items-center gap-2">
+                <span>
+                  Página <strong className="text-[#212924] font-bold">{currentPage}</strong> de{" "}
+                  <strong className="text-[#212924] font-bold">{totalPages}</strong>
+                </span>
+                <span className="hidden md:inline text-gray-300">•</span>
+                <span className="hidden md:inline text-[11px] text-[#8c9c91]">
+                  ({totalItems} productos)
+                </span>
+              </div>
 
-              <div className="flex items-center gap-1.5 flex-wrap justify-center">
-                {/* Botón Anterior */}
+              {/* Botones de navegación con elipsis inteligente */}
+              <div className="flex items-center gap-1.5 max-w-full overflow-x-auto py-1">
+                {/* Primera página */}
+                {totalPages > 5 && currentPage > 3 && (
+                  <button
+                    onClick={() => {
+                      setCurrentPage(1);
+                      window.scrollTo({ top: 350, behavior: 'smooth' });
+                    }}
+                    className="hidden sm:flex p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] transition-colors cursor-pointer"
+                    title="Primera página"
+                  >
+                    <ChevronsLeft className="w-4 h-4" />
+                  </button>
+                )}
+
+                {/* Anterior */}
                 <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  onClick={() => {
+                    setCurrentPage((p) => Math.max(1, p - 1));
+                    window.scrollTo({ top: 350, behavior: 'smooth' });
+                  }}
                   disabled={currentPage === 1}
                   className="p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   title="Página anterior"
@@ -616,10 +691,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {/* Números de Página con Elipsis */}
+                {/* Números de página con ventana deslizante (máximo 5-7 botones visibles) */}
                 {(() => {
                   const pages: (number | string)[] = [];
-                  if (totalPages <= 7) {
+                  if (totalPages <= 5) {
                     for (let i = 1; i <= totalPages; i++) pages.push(i);
                   } else {
                     if (currentPage <= 3) {
@@ -634,18 +709,22 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                   return pages.map((p, idx) => {
                     if (typeof p === 'string') {
                       return (
-                        <span key={`ellipsis-${idx}`} className="w-8 h-8 flex items-center justify-center text-xs text-[#8c9c91] font-bold select-none">
+                        <span key={`ellipsis-${idx}`} className="w-7 sm:w-8 h-8 flex items-center justify-center text-xs text-[#8c9c91] font-bold select-none">
                           ...
                         </span>
                       );
                     }
+                    const isCur = currentPage === p;
                     return (
                       <button
                         key={`page-${p}`}
-                        onClick={() => setCurrentPage(p)}
-                        className={`w-8 h-8 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                          currentPage === p
-                            ? "bg-[#3d5a4c] text-white shadow-2xs"
+                        onClick={() => {
+                          setCurrentPage(p);
+                          window.scrollTo({ top: 350, behavior: 'smooth' });
+                        }}
+                        className={`w-7 sm:w-8 h-8 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                          isCur
+                            ? "bg-[#3d5a4c] text-white shadow-2xs scale-105"
                             : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
                         }`}
                       >
@@ -655,16 +734,54 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                   });
                 })()}
 
-                {/* Botón Siguiente */}
+                {/* Siguiente */}
                 <button
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() => {
+                    setCurrentPage((p) => Math.min(totalPages, p + 1));
+                    window.scrollTo({ top: 350, behavior: 'smooth' });
+                  }}
                   disabled={currentPage === totalPages}
                   className="p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   title="Página siguiente"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
+
+                {/* Última página */}
+                {totalPages > 5 && currentPage < totalPages - 2 && (
+                  <button
+                    onClick={() => {
+                      setCurrentPage(totalPages);
+                      window.scrollTo({ top: 350, behavior: 'smooth' });
+                    }}
+                    className="hidden sm:flex p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] transition-colors cursor-pointer"
+                    title="Última página"
+                  >
+                    <ChevronsRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
+
+              {/* Selector directo de página si hay muchas páginas */}
+              {totalPages > 7 && (
+                <div className="hidden md:flex items-center gap-1.5 text-xs text-[#6e7d73]">
+                  <span>Ir a:</span>
+                  <select
+                    value={currentPage}
+                    onChange={(e) => {
+                      setCurrentPage(Number(e.target.value));
+                      window.scrollTo({ top: 350, behavior: 'smooth' });
+                    }}
+                    className="bg-white border border-[#e0d8cc] rounded-lg px-2 py-1 text-xs text-[#212924] font-medium cursor-pointer focus:outline-none"
+                  >
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                      <option key={`goto-${num}`} value={num}>
+                        Pág. {num}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           )}
         </section>
@@ -826,6 +943,11 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                     sizes="(max-width: 768px) 100vw, 600px"
                     className="object-contain p-3 transition-all duration-500"
                     priority
+                    unoptimized={activeProductImages[currentImgIndex]?.startsWith('data:')}
+                    onError={() => {
+                      const key = `${selectedProduct.id}-modal-${currentImgIndex}`;
+                      setFailedImages((prev) => ({ ...prev, [key]: true }));
+                    }}
                   />
                 ) : null}
 
@@ -890,6 +1012,11 @@ export const ShopClient: React.FC<ShopClientProps> = ({ config, products, therap
                         fill
                         sizes="60px"
                         className="object-cover"
+                        unoptimized={img?.startsWith('data:')}
+                        onError={() => {
+                          const key = `${selectedProduct.id}-modal-${idx}`;
+                          setFailedImages((prev) => ({ ...prev, [key]: true }));
+                        }}
                       />
                     </button>
                   ))}
