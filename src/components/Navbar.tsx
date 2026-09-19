@@ -29,11 +29,11 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
   }, []);
 
   const navLinks = [
-    { name: "Inicio", href: "/" },
-    { name: "Tienda", href: "/tienda" },
-    { name: "Bienestar", href: pathname === "/tienda" ? "#bienestar" : "/tienda#bienestar" },
-    { name: "Terapias", href: pathname === "/tienda" ? "#carta-terapias" : "/tienda#carta-terapias" },
-    { name: "El espacio", href: pathname === "/" ? "#sobre-mi" : "/#sobre-mi" },
+    { name: "Inicio", href: "/#inicio" },
+    { name: "Tienda", href: "/#tienda" },
+    { name: "Bienestar", href: "/#bienestar" },
+    { name: "Terapias", href: "/#carta-terapias" },
+    { name: "El espacio", href: "/#sobre-mi" },
   ];
 
   const resolveHref = (href: string) => {
