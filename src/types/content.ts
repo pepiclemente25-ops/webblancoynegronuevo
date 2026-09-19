@@ -144,6 +144,8 @@ export interface CartItem {
 
 export interface WebSectionItem {
   id: string;
+  idSeccion?: string;
+  imagen?: string;
   orden: number;
   tipoPlantilla: string;
   titulo: string;

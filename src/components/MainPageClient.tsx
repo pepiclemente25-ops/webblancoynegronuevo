@@ -460,7 +460,9 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
   }, [products]);
 
   const heroSection = data.sections?.find((s) => s.tipoPlantilla === "hero");
-  const aboutSection = data.sections?.find((s) => s.tipoPlantilla === "sobre_mi");
+  const tiendaSection = data.sections?.find((s) => s.tipoPlantilla === "tienda" || s.idSeccion === "sec-tienda");
+  const aboutSection = data.sections?.find((s) => s.tipoPlantilla === "sobre_mi" || s.idSeccion === "sec-sobre-mi");
+  const faqSection = data.sections?.find((s) => s.tipoPlantilla === "faq" || s.idSeccion === "sec-faq");
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#fbf9f5] text-[#212924] scroll-smooth">
@@ -500,13 +502,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           {/* CABECERA PRINCIPAL (CAPTURA 1) */}
           <div className="text-center max-w-3xl mx-auto mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#eaf2ec] text-[#2f4d3e] text-xs font-bold uppercase tracking-wider mb-3">
-              <span>✨ ESPACIO BOTÁNICO, MINERALES & SESIONES</span>
+              <span>{tiendaSection?.contenido?.badge || "✨ ESPACIO BOTÁNICO, MINERALES & SESIONES"}</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#1c2720] tracking-tight leading-snug uppercase">
-              Herramientas de autocuidado y purificación energética para el día a día
+              {tiendaSection?.titulo || "Herramientas de autocuidado y purificación energética para el día a día"}
             </h2>
             <p className="text-xs sm:text-sm text-[#5f7467] mt-3 max-w-2xl mx-auto leading-relaxed">
-              Elementos consagrados para tu práctica personal en casa, terapias de cabina con Pepi en Boiro y bonos para regalar bienestar.
+              {tiendaSection?.contenido?.descripcion || tiendaSection?.subtitulo || "Elementos consagrados para tu práctica personal en casa, terapias de cabina con Pepi en Boiro y bonos para regalar bienestar."}
             </p>
           </div>
 
@@ -1235,133 +1237,136 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         </section>
 
         {/* ================= SECCIÓN 7: EL ESPACIO BLANCO Y NEGRO (SOBRE MÍ) ================= */}
-        <section id="sobre-mi" className="py-16 bg-[#faf7f2] border-b border-[#ebdcca]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              <div className="lg:col-span-5 aspect-4/3 rounded-3xl overflow-hidden shadow-lg border-2 border-[#ebdcca] relative bg-gray-100">
-                <Image
-                  src={
-                    aboutSection?.contenido?.imagenUrl ||
-                    "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80"
-                  }
-                  alt={`Espacio Blanco y Negro en Boiro`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="lg:col-span-7 space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3 py-1 rounded-full">
-                  El Espacio Blanco y Negro
-                </span>
-                <h2 className="font-serif text-3xl font-bold text-[#1b261f]">
-                  Un rincón de paz creado para reconectar contigo
-                </h2>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  Situado en Boiro (A Coruña), Blanco y Negro nació como un templo de escucha, sanación y armonía. Aquí unimos las terapias energéticas y manuales con una selección honesta de cuarzos auténticos, velas naturales e inciensos consagrados.
-                </p>
-                <div className="pt-3 flex flex-wrap gap-4">
-                  <button
-                    onClick={() => handleOpenBooking()}
-                    className="px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2c4036] shadow transition cursor-pointer"
-                  >
-                    Pedir cita con Pepi
-                  </button>
-                  <a
-                    href="#contacto"
-                    className="px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition"
-                  >
-                    Ver ubicación en Boiro
-                  </a>
+        {aboutSection?.activo !== false && (
+          <section id="sobre-mi" className="py-16 bg-[#faf7f2] border-b border-[#ebdcca]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <div className="lg:col-span-5 aspect-4/3 rounded-3xl overflow-hidden shadow-lg border-2 border-[#ebdcca] relative bg-gray-100">
+                  <Image
+                    src={
+                      aboutSection?.imagen ||
+                      aboutSection?.contenido?.imagenUrl ||
+                      aboutSection?.contenido?.therapistImg ||
+                      "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80"
+                    }
+                    alt={aboutSection?.titulo || `Espacio Blanco y Negro en Boiro`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="lg:col-span-7 space-y-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3 py-1 rounded-full">
+                    {aboutSection?.contenido?.badge || "El Espacio Blanco y Negro"}
+                  </span>
+                  <h2 className="font-serif text-3xl font-bold text-[#1b261f]">
+                    {aboutSection?.titulo || "Un rincón de paz creado para reconectar contigo"}
+                  </h2>
+                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                    {aboutSection?.contenido?.filosofia ||
+                      aboutSection?.contenido?.bio ||
+                      aboutSection?.subtitulo ||
+                      "Situado en Boiro (A Coruña), Blanco y Negro nació como un templo de escucha, sanación y armonía. Aquí unimos las terapias energéticas y manuales con una selección honesta de cuarzos auténticos, velas naturales e inciensos consagrados."}
+                  </p>
+                  {(aboutSection?.contenido?.fraseLema || aboutSection?.contenido?.lema) && (
+                    <p className="text-xs italic text-[#3d5a4c] font-serif border-l-2 border-[#3d5a4c] pl-3 py-1">
+                      &ldquo;{aboutSection.contenido.fraseLema || aboutSection.contenido.lema}&rdquo;
+                    </p>
+                  )}
+                  <div className="pt-3 flex flex-wrap gap-4">
+                    <button
+                      onClick={() => handleOpenBooking()}
+                      className="px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2c4036] shadow transition cursor-pointer"
+                    >
+                      Pedir cita con {aboutSection?.contenido?.nombreTerapeuta || "Pepi"}
+                    </button>
+                    <a
+                      href="#contacto"
+                      className="px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition"
+                    >
+                      Ver ubicación en {aboutSection?.contenido?.localizacion || "Boiro"}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ================= SECCIÓN 8: FAQ Y MÉTODOS DE PAGO ================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-3xl border border-[#ece4d8] overflow-hidden shadow-2xs">
-            <button
-              onClick={() => setIsFaqOpen(!isFaqOpen)}
-              className="w-full p-6 sm:p-7 flex items-center justify-between text-left hover:bg-[#faf7f2] transition-colors cursor-pointer"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#3d5a4c] flex items-center justify-center">
-                  <HelpCircle className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
-                    ¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?
-                  </h3>
-                  <p className="text-xs text-[#6e7d73]">
-                    Pulsa para ver los 4 pasos sencillos y transparentes de compra.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-2 rounded-xl bg-[#fbf9f5] text-[#3d5a4c] border border-[#e5dcce]">
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${
-                    isFaqOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
-            </button>
-
-            {isFaqOpen && (
-              <div className="p-6 sm:p-8 pt-0 border-t border-[#f4efe5] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
-                    1
+        {faqSection?.activo !== false && (
+          <section id="faq" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="bg-white rounded-3xl border border-[#ece4d8] overflow-hidden shadow-2xs">
+              <button
+                onClick={() => setIsFaqOpen(!isFaqOpen)}
+                className="w-full p-6 sm:p-7 flex items-center justify-between text-left hover:bg-[#faf7f2] transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#3d5a4c] flex items-center justify-center">
+                    <HelpCircle className="w-5 h-5" />
                   </div>
-                  <h4 className="font-serif font-semibold text-xs text-[#212924]">
-                    Elige tus artículos
-                  </h4>
-                  <p className="text-xs text-[#55645a] leading-relaxed">
-                    Añade a tu cesta los aceites botánicos, minerales o saquitos que desees.
-                  </p>
+                  <div>
+                    <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
+                      {faqSection?.titulo || "¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?"}
+                    </h3>
+                    <p className="text-xs text-[#6e7d73]">
+                      {faqSection?.subtitulo || "Pulsa para ver los pasos sencillos y transparentes de compra."}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
-                    2
-                  </div>
-                  <h4 className="font-serif font-semibold text-xs text-[#212924]">
-                    Recogida o Envío
-                  </h4>
-                  <p className="text-xs text-[#55645a] leading-relaxed">
-                    Elige <strong>recogida gratis en tienda (Boiro)</strong> o{" "}
-                    <strong>envío a domicilio</strong> indicando tus datos de contacto.
-                  </p>
+                <div className="p-2 rounded-xl bg-[#fbf9f5] text-[#3d5a4c] border border-[#e5dcce]">
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      isFaqOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </div>
+              </button>
 
-                <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
-                    3
-                  </div>
-                  <h4 className="font-serif font-semibold text-xs text-[#212924]">
-                    Código Oficial
-                  </h4>
-                  <p className="text-xs text-[#55645a] leading-relaxed">
-                    Tu pedido se registra al instante en nuestra base de datos y obtienes tu número oficial (ej. #BYN-8421).
-                  </p>
+              {isFaqOpen && (
+                <div className="p-6 sm:p-8 pt-0 border-t border-[#f4efe5] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                  {(faqSection?.contenido?.pasos && faqSection.contenido.pasos.length > 0
+                    ? faqSection.contenido.pasos
+                    : [
+                        {
+                          numero: "1",
+                          titulo: "Elige tus artículos",
+                          descripcion: "Añade a tu cesta los aceites botánicos, minerales o saquitos que desees.",
+                        },
+                        {
+                          numero: "2",
+                          titulo: "Recogida o Envío",
+                          descripcion: "Elige recogida gratis en tienda (Boiro) o envío a domicilio indicando tus datos de contacto.",
+                        },
+                        {
+                          numero: "3",
+                          titulo: "Código Oficial",
+                          descripcion: "Tu pedido se registra al instante en nuestra base de datos y obtienes tu número oficial (ej. #BYN-8421).",
+                        },
+                        {
+                          numero: "4",
+                          titulo: "Bizum o en Tienda",
+                          descripcion: "Envía el Bizum con un clic indicando tu número de comanda, o abónalo al retirar tu paquete en Boiro.",
+                        },
+                      ]
+                  ).map((paso: any, idx: number) => (
+                    <div key={idx} className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
+                      <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
+                        {paso.numero || idx + 1}
+                      </div>
+                      <h4 className="font-serif font-semibold text-xs text-[#212924]">
+                        {paso.titulo}
+                      </h4>
+                      <p className="text-xs text-[#55645a] leading-relaxed">
+                        {paso.descripcion}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-
-                <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
-                    4
-                  </div>
-                  <h4 className="font-serif font-semibold text-xs text-[#212924]">
-                    Bizum o en Tienda
-                  </h4>
-                  <p className="text-xs text-[#55645a] leading-relaxed">
-                    Envía el Bizum con un clic indicando tu número de comanda, o abónalo al retirar tu paquete en Boiro.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+              )}
+            </div>
+          </section>
+        )}
       </main>
 
       {/* 9. FOOTER OFICIAL */}
