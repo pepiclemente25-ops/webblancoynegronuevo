@@ -112,7 +112,7 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       id: p.id || p.ref || `prod-${idx + 1}`,
       name: p.nombre || "Artículo Holístico",
       category: p.categoria || "aromaterapia",
-      categoryLabel: p.categoria_label || "Holístico",
+      categoryLabel: p.familia_nombre || p.categoria_label || "Holístico",
       shortDescription: p.descripcion_corta || "",
       fullDescription: p.descripcion_completa || "",
       price: priceNum,
