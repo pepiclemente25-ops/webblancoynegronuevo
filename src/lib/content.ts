@@ -134,6 +134,7 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       tipoServicio: p.tipo_servicio || p.tipoServicio || (p.categoria === "terapias" ? "terapia" : undefined),
       esExperienciaEstrella: Boolean(p.es_experiencia_estrella || p.esExperienciaEstrella),
       experienciaEstrellaTitulo: p.experiencia_estrella_titulo || p.experienciaEstrellaTitulo || undefined,
+      orden: typeof p.orden === "number" ? p.orden : (typeof p.orden_web === "number" ? p.orden_web : undefined),
     };
   }).filter((p) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
 }
@@ -261,6 +262,7 @@ function buildWebDataFromPayload(payload: any): WebData {
       tipoServicio: p.tipoServicio || p.tipo_servicio || (p.categoria === "terapias" ? "terapia" : undefined),
       esExperienciaEstrella: Boolean(p.esExperienciaEstrella || p.es_experiencia_estrella),
       experienciaEstrellaTitulo: p.experienciaEstrellaTitulo || p.experiencia_estrella_titulo || undefined,
+      orden: typeof p.orden === "number" ? p.orden : (typeof p.orden_web === "number" ? p.orden_web : undefined),
     };
   }).filter((p: any) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
 
@@ -281,8 +283,8 @@ function buildWebDataFromPayload(payload: any): WebData {
     workshops: payload.talleres || payload.workshops || defaultWebData.workshops,
     harmonization: payload.armonizacion || payload.harmonization || defaultWebData.harmonization,
     reviews: payload.resenas || payload.reviews || defaultWebData.reviews,
-    familias: payload.familias || payload.familiasConfig || defaultFamilias,
-    bienestares: payload.bienestares || payload.bienestaresConfig || defaultBienestares,
+    familias: (payload.familias || payload.familiasConfig || defaultFamilias).sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0)),
+    bienestares: (payload.bienestares || payload.bienestaresConfig || defaultBienestares).sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0)),
     experienciaEstrella: payload.experienciaEstrella || payload.experienciaEstrellaConfig || defaultExperienciaEstrella,
   };
 }
@@ -298,7 +300,7 @@ export async function getWebData(): Promise<WebData> {
   if (sql) {
     try {
       const [prodsRes, secsRes, cfgRes] = await Promise.all([
-        sql.query("SELECT * FROM productos WHERE publicado_web = true AND (archivado IS NOT TRUE) ORDER BY categoria, nombre ASC"),
+        sql.query("SELECT * FROM productos WHERE publicado_web = true AND (archivado IS NOT TRUE) ORDER BY COALESCE(orden, 9999) ASC, categoria, nombre ASC"),
         sql.query("SELECT * FROM secciones_web WHERE activo = true ORDER BY orden ASC"),
         sql.query("SELECT clave, valor FROM configuracion_web"),
       ]);
@@ -332,13 +334,17 @@ export async function getWebData(): Promise<WebData> {
           if (k === "familias_config" || k === "familiasconfig" || k === "familias") {
             try {
               const parsed = JSON.parse(v);
-              if (Array.isArray(parsed) && parsed.length > 0) neonFamilias = parsed;
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                neonFamilias = parsed.sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0));
+              }
             } catch {}
           }
           if (k === "bienestares_config" || k === "bienestaresconfig" || k === "bienestares") {
             try {
               const parsed = JSON.parse(v);
-              if (Array.isArray(parsed) && parsed.length > 0) neonBienestares = parsed;
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                neonBienestares = parsed.sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0));
+              }
             } catch {}
           }
           if (k === "experiencia_estrella_config" || k === "experienciaestrellaconfig" || k === "experiencia_estrella") {

@@ -78,7 +78,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
   const activeBienestares = useMemo(() => {
     return bienestares && bienestares.length > 0
-      ? bienestares.filter((b) => b.activo !== false)
+      ? bienestares.filter((b) => b.activo !== false).sort((a, b) => (a.orden || 0) - (b.orden || 0))
       : defaultBienestares;
   }, [bienestares]);
 
@@ -385,7 +385,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
   // Terapias y Cuidados divididos en 2 columnas
   const terapiasHolisticas = useMemo(() => {
-    const dbItems = products.filter((p) => p.esServicio && p.tipoServicio === "terapia");
+    const dbItems = products
+      .filter((p) => p.esServicio && p.tipoServicio === "terapia" && p.publicadoWeb !== false)
+      .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
     if (dbItems.length > 0) return dbItems;
     return [
       {
@@ -428,7 +430,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   }, [products]);
 
   const cuidadosManuales = useMemo(() => {
-    const dbItems = products.filter((p) => p.esServicio && p.tipoServicio === "cuidado");
+    const dbItems = products
+      .filter((p) => p.esServicio && p.tipoServicio === "cuidado" && p.publicadoWeb !== false)
+      .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
     if (dbItems.length > 0) return dbItems;
     return [
       {
@@ -548,11 +552,11 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           </div>
         </section>
 
-        {/* ================= SECCIÓN 1: FAMILIAS DE PRODUCTOS (BARRA HORIZONTAL) ================= */}
+        {/* ================= SECCIÓN 1: CATEGORÍAS DE PRODUCTOS (BARRA HORIZONTAL) ================= */}
         <section id="tienda" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 space-y-4">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#6e7d73]">
-              Familias de Productos
+              Categorías de Productos
             </h2>
             {selectedFamilia !== "all" && (
               <button
@@ -565,7 +569,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             )}
           </div>
 
-          {/* Selector horizontal de Familias con conteos reales */}
+          {/* Selector horizontal de Categorías con conteos reales */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
             <button
               onClick={() => setSelectedFamilia("all")}
@@ -575,7 +579,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea] hover:border-[#cbdbd0]"
               }`}
             >
-              <span>Todas las familias</span>
+              <span>Todos</span>
               <span
                 className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
                   selectedFamilia === "all"
@@ -615,63 +619,44 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             })}
           </div>
 
-          {/* Fila de Controles: Buscador + Tipo + Ordenación + Botón Filtros Laterales */}
+          {/* Fila de Controles: Buscador + Limpiar Filtros + Ordenación + Botón Filtros Laterales */}
           <div className="bg-white rounded-2xl border border-[#ece4d8] p-3 sm:p-4 shadow-2xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-            {/* Buscador */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-[#718276] absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar por nombre, familia o beneficio..."
-                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf9f5] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3d5a4c]"
-              />
-              {searchQuery && (
+            {/* Buscador directo y botón Limpiar Filtros a su derecha */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-xl">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#718276] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar por nombre, categoría o beneficio..."
+                  className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf9f5] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3d5a4c]"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-gray-600 font-bold px-1 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Botón Limpiar filtros verde tipo Pedir Cita a la derecha del buscador */}
+              {totalActiveFilters > 0 && (
                 <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-gray-600 font-bold px-1 cursor-pointer"
+                  onClick={handleResetFilters}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#3d5a4c] text-white font-medium text-xs shadow-sm hover:bg-[#2d473b] hover:shadow transition-all duration-200 cursor-pointer shrink-0 animate-fadeIn"
+                  title="Limpiar todos los filtros"
                 >
-                  ✕
+                  <RotateCcw className="w-3.5 h-3.5 text-[#dfc89f]" />
+                  <span>Limpiar filtros</span>
                 </button>
               )}
             </div>
 
             {/* Controles secundarios */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-              {/* Filtro de Tipo */}
-              <div className="inline-flex rounded-xl bg-[#f4efe5] p-0.5 border border-[#e5dcce]">
-                <button
-                  onClick={() => setFilterType("all")}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    filterType === "all"
-                      ? "bg-white text-[#212924] shadow-2xs font-semibold"
-                      : "text-[#6e7d73] hover:text-[#212924]"
-                  }`}
-                >
-                  Todos
-                </button>
-                <button
-                  onClick={() => setFilterType("products")}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    filterType === "products"
-                      ? "bg-white text-[#212924] shadow-2xs font-semibold"
-                      : "text-[#6e7d73] hover:text-[#212924]"
-                  }`}
-                >
-                  Productos
-                </button>
-                <button
-                  onClick={() => setFilterType("services")}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    filterType === "services"
-                      ? "bg-white text-[#212924] shadow-2xs font-semibold"
-                      : "text-[#6e7d73] hover:text-[#212924]"
-                  }`}
-                >
-                  Terapias
-                </button>
-              </div>
 
               {/* Selector de Ordenación */}
               <div className="flex items-center gap-1.5 bg-[#fbf9f5] border border-[#d8d0c2] px-3 py-1.5 rounded-xl">

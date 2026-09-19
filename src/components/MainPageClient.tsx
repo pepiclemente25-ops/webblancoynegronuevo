@@ -68,7 +68,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
 
   const activeBienestares = useMemo(() => {
     return data.bienestares && data.bienestares.length > 0
-      ? data.bienestares.filter((b) => b.activo !== false)
+      ? data.bienestares.filter((b) => b.activo !== false).sort((a, b) => (a.orden || 0) - (b.orden || 0))
       : defaultBienestares;
   }, [data.bienestares]);
 
@@ -370,7 +370,9 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
 
   // Terapias y Cuidados divididos en 2 columnas
   const terapiasHolisticas = useMemo(() => {
-    const dbItems = products.filter((p) => p.esServicio && p.tipoServicio === "terapia");
+    const dbItems = products
+      .filter((p) => p.esServicio && p.tipoServicio === "terapia" && p.publicadoWeb !== false)
+      .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
     if (dbItems.length > 0) return dbItems;
     return [
       {
@@ -413,7 +415,9 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
   }, [products]);
 
   const cuidadosManuales = useMemo(() => {
-    const dbItems = products.filter((p) => p.esServicio && p.tipoServicio === "cuidado");
+    const dbItems = products
+      .filter((p) => p.esServicio && p.tipoServicio === "cuidado" && p.publicadoWeb !== false)
+      .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
     if (dbItems.length > 0) return dbItems;
     return [
       {
@@ -504,57 +508,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             <p className="text-xs sm:text-sm text-[#5f7467] mt-3 max-w-2xl mx-auto leading-relaxed">
               Elementos consagrados para tu práctica personal en casa, terapias de cabina con Pepi en Boiro y bonos para regalar bienestar.
             </p>
-
-            {/* LAS PESTAÑAS MAESTRAS DEL CATÁLOGO (CAPTURA 1) */}
-            <div className="inline-flex p-1.5 bg-[#eae2d5] rounded-2xl mt-6 shadow-inner flex-wrap justify-center gap-1.5">
-              <button
-                onClick={() => setMasterTab("all")}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                  masterTab === "all"
-                    ? "bg-white text-[#2a3d33] shadow-sm"
-                    : "text-[#5b6e62] hover:text-[#1c2720]"
-                }`}
-              >
-                🌿 Todo el Catálogo ({countAll})
-              </button>
-              <button
-                onClick={() => setMasterTab("products")}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                  masterTab === "products"
-                    ? "bg-white text-[#2a3d33] shadow-sm"
-                    : "text-[#5b6e62] hover:text-[#1c2720]"
-                }`}
-              >
-                🛍️ Tienda & Minerales ({countProducts})
-              </button>
-              <button
-                onClick={() => setMasterTab("services")}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                  masterTab === "services"
-                    ? "bg-white text-[#2a3d33] shadow-sm"
-                    : "text-[#5b6e62] hover:text-[#1c2720]"
-                }`}
-              >
-                🧘 Terapias & Masajes ({countServices})
-              </button>
-              <button
-                onClick={() => setMasterTab("gifts")}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                  masterTab === "gifts"
-                    ? "bg-white text-[#2a3d33] shadow-sm"
-                    : "text-[#5b6e62] hover:text-[#1c2720]"
-                }`}
-              >
-                🎁 Bonos Regalo ({countGifts})
-              </button>
-            </div>
           </div>
 
-          {/* ================= SELECTOR DE FAMILIAS (CAPTURA 2) ================= */}
+          {/* ================= SELECTOR DE CATEGORÍAS (CAPTURA 2) ================= */}
           <div className="mb-4 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#6e7d73]">
-                FAMILIAS DE PRODUCTOS
+                CATEGORÍAS DE PRODUCTOS
               </span>
               {selectedFamilia !== "all" && (
                 <button
@@ -576,7 +536,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
                 }`}
               >
-                <span>Todas las familias</span>
+                <span>Todos</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
                     selectedFamilia === "all"
@@ -619,62 +579,45 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
 
           {/* ================= BARRA DE CONTROLES INTEGRADA (CAPTURA 2) ================= */}
           <div className="bg-white rounded-2xl border border-[#ece4d8] p-3 sm:p-4 shadow-2xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-6">
-            {/* Buscador directo */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-[#718276] absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar por nombre, familia o beneficio..."
-                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf9f5] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3d5a4c]"
-              />
-              {searchQuery && (
+            {/* Buscador directo y botón Limpiar Filtros a su derecha */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-xl">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#718276] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar por nombre, categoría o beneficio..."
+                  className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf9f5] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3d5a4c]"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-gray-600 font-bold px-1 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Botón Limpiar filtros verde tipo Pedir Cita a la derecha del buscador */}
+              {(selectedFamilia !== "all" ||
+                selectedBienestaresFilter.length > 0 ||
+                searchQuery.trim() ||
+                sortBy !== "featured") && (
                 <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-gray-600 font-bold px-1 cursor-pointer"
+                  onClick={handleResetFilters}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#3d5a4c] text-white font-medium text-xs shadow-sm hover:bg-[#2d473b] hover:shadow transition-all duration-200 cursor-pointer shrink-0 animate-fadeIn"
+                  title="Limpiar todos los filtros"
                 >
-                  ✕
+                  <RotateCcw className="w-3.5 h-3.5 text-[#dfc89f]" />
+                  <span>Limpiar filtros</span>
                 </button>
               )}
             </div>
 
             {/* Controles secundarios */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-              {/* Filtro de Tipo */}
-              <div className="inline-flex rounded-xl bg-[#f4efe5] p-0.5 border border-[#e5dcce]">
-                <button
-                  onClick={() => setFilterType("all")}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    filterType === "all"
-                      ? "bg-white text-[#212924] shadow-2xs font-semibold"
-                      : "text-[#6e7d73] hover:text-[#212924]"
-                  }`}
-                >
-                  Todos
-                </button>
-                <button
-                  onClick={() => setFilterType("products")}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    filterType === "products"
-                      ? "bg-white text-[#212924] shadow-2xs font-semibold"
-                      : "text-[#6e7d73] hover:text-[#212924]"
-                  }`}
-                >
-                  Productos
-                </button>
-                <button
-                  onClick={() => setFilterType("services")}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    filterType === "services"
-                      ? "bg-white text-[#212924] shadow-2xs font-semibold"
-                      : "text-[#6e7d73] hover:text-[#212924]"
-                  }`}
-                >
-                  Terapias
-                </button>
-              </div>
-
               {/* Selector de Ordenación */}
               <div className="flex items-center gap-1.5 bg-[#fbf9f5] border border-[#d8d0c2] px-3 py-1.5 rounded-xl">
                 <ArrowUpDown className="w-3.5 h-3.5 text-[#3d5a4c]" />
@@ -708,7 +651,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* Resumen de artículos mostrados y botón limpiar filtros */}
+          {/* Resumen de artículos mostrados */}
           <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-[#6e7d73] mb-6">
             <span>
               Mostrando{" "}
@@ -718,23 +661,6 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               de <strong className="text-[#212924]">{totalItems}</strong> artículos
               {totalItems !== products.length && ` (filtrado de ${products.length} totales)`}
             </span>
-
-            {(selectedFamilia !== "all" ||
-              selectedBienestaresFilter.length > 0 ||
-              filterType !== "all" ||
-              masterTab !== "all" ||
-              searchQuery.trim() ||
-              sortBy !== "featured") && (
-              <button
-                onClick={handleResetFilters}
-                className="text-[#3d5a4c] font-semibold hover:underline cursor-pointer flex items-center gap-1"
-              >
-                <span>Limpiar filtros</span>
-                <span className="text-[10px] bg-[#eaf0ec] text-[#3d5a4c] px-1.5 py-0.2 rounded-full">
-                  ✕
-                </span>
-              </button>
-            )}
           </div>
 
           {/* ================= REJILLA DE PRODUCTOS ================= */}

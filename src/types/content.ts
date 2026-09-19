@@ -134,6 +134,7 @@ export interface ShopProduct {
   tipoServicio?: "terapia" | "cuidado";
   esExperienciaEstrella?: boolean;
   experienciaEstrellaTitulo?: string;
+  orden?: number;
 }
 
 export interface CartItem {
