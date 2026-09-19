@@ -26,6 +26,9 @@ export default async function TiendaPage() {
       products={products}
       therapies={data.therapies}
       sections={data.sections}
+      familias={data.familias}
+      bienestares={data.bienestares}
+      experienciaEstrella={data.experienciaEstrella}
     />
   );
 }

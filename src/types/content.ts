@@ -76,6 +76,38 @@ export interface ChakraItem {
   symptoms: string;
 }
 
+export interface FamiliaItem {
+  id: string;
+  nombre: string;
+  descripcion?: string;
+  icono?: string;
+  orden?: number;
+  activa?: boolean;
+}
+
+export interface BienestarPropositoItem {
+  id: string;
+  nombre: string;
+  subtitulo: string;
+  descripcion: string;
+  imagenUrl: string;
+  colorBadge?: string;
+  orden?: number;
+  activo?: boolean;
+}
+
+export interface ExperienciaEstrellaData {
+  badge?: string;
+  titulo: string;
+  duracion?: string;
+  descripcion: string;
+  precio: number;
+  imagenFondoUrl?: string;
+  botonTexto?: string;
+  activo?: boolean;
+  productoId?: string;
+}
+
 export interface ShopProduct {
   id: string;
   name: string;
@@ -95,6 +127,13 @@ export interface ShopProduct {
   esServicio?: boolean;
   duracionMinutos?: number;
   publicadoWeb?: boolean;
+  familiaId?: string;
+  familiaNombre?: string;
+  bienestarId?: string;
+  bienestarIds?: string[];
+  tipoServicio?: "terapia" | "cuidado";
+  esExperienciaEstrella?: boolean;
+  experienciaEstrellaTitulo?: string;
 }
 
 export interface CartItem {
@@ -121,5 +160,8 @@ export interface WebData {
   chakras: ChakraItem[];
   products?: ShopProduct[];
   sections?: WebSectionItem[];
+  familias?: FamiliaItem[];
+  bienestares?: BienestarPropositoItem[];
+  experienciaEstrella?: ExperienciaEstrellaData;
 }
 

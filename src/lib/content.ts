@@ -1,7 +1,71 @@
-import { WebData, Therapy, Workshop, HarmonizationItem, Review, ShopProduct, WebSectionItem } from "@/types/content";
+import { WebData, Therapy, Workshop, HarmonizationItem, Review, ShopProduct, WebSectionItem, FamiliaItem, BienestarPropositoItem, ExperienciaEstrellaData } from "@/types/content";
 import { defaultWebData } from "@/data/defaultContent";
 import { formatImageUrl } from "@/lib/drive";
 import { getDb } from "@/lib/db";
+
+export const defaultFamilias: FamiliaItem[] = [
+  { id: 'minerales', nombre: 'Minerales y Cuarzos', orden: 1, activa: true },
+  { id: 'aceites', nombre: 'Aceites Esenciales', orden: 2, activa: true },
+  { id: 'inciensos', nombre: 'Inciensos y Resinas', orden: 3, activa: true },
+  { id: 'quemadores', nombre: 'Quemadores y Difusores', orden: 4, activa: true },
+  { id: 'velas', nombre: 'Velas e Iluminación', orden: 5, activa: true },
+  { id: 'sonido', nombre: 'Cuencos y Sonoterapia', orden: 6, activa: true },
+  { id: 'joyeria', nombre: 'Joyería Energética', orden: 7, activa: true },
+];
+
+export const defaultBienestares: BienestarPropositoItem[] = [
+  {
+    id: 'calma-ansiedad',
+    nombre: 'Calma & Estrés',
+    subtitulo: 'Desconecta la mente acelerada',
+    descripcion: 'Artículos seleccionados con propiedades relajantes y aromaterapia de lavanda y cedro para disipar la tensión diaria.',
+    imagenUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
+    colorBadge: 'emerald',
+    orden: 1,
+    activo: true,
+  },
+  {
+    id: 'energia-vitalidad',
+    nombre: 'Energía & Claridad',
+    subtitulo: 'Reactiva tu impulso natural',
+    descripcion: 'Cítricos vigorizantes y cuarzos solares diseñados para despertar la motivación y disolver el cansancio acumulado.',
+    imagenUrl: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=600&q=80',
+    colorBadge: 'amber',
+    orden: 2,
+    activo: true,
+  },
+  {
+    id: 'armonizacion-hogar',
+    nombre: 'Hogar Sagrado',
+    subtitulo: 'Espacios limpios y serenos',
+    descripcion: 'Sahumerios de salvia blanca, palo santo y campanas tibetanas para liberar energías estancadas en casa.',
+    imagenUrl: 'https://images.unsplash.com/photo-1602928321679-560bb453f190?auto=format&fit=crop&w=600&q=80',
+    colorBadge: 'sky',
+    orden: 3,
+    activo: true,
+  },
+  {
+    id: 'abundancia-prosperidad',
+    nombre: 'Abundancia & Éxito',
+    subtitulo: 'Sintoniza con el merecimiento',
+    descripcion: 'Piritas doradas, canela y preparados alquímicos para atraer prosperidad material y apertura de caminos.',
+    imagenUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+    colorBadge: 'violet',
+    orden: 4,
+    activo: true,
+  },
+];
+
+export const defaultExperienciaEstrella: ExperienciaEstrellaData = {
+  badge: '★ NUESTRA EXPERIENCIA ESTRELLA',
+  titulo: 'Ritual Integral Renacer (90 min)',
+  duracion: '90 min',
+  descripcion: 'Combina Quiromasaje terapéutico descontracturante + Envoltura de Fangoterapia marina remineralizante + Armonización final de Chakras con Reiki y sonido.',
+  precio: 75,
+  imagenFondoUrl: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=1200&q=80',
+  botonTexto: 'Reservar Experiencia',
+  activo: true,
+};
 
 /**
  * Convierte filas de la tabla "productos" de Neon a ShopProduct[]
@@ -61,6 +125,15 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       stockActual: stockNum,
       accionAgotado: accion,
       publicadoWeb: p.publicado_web !== false,
+      esServicio: Boolean(p.es_servicio || p.esServicio || p.categoria === "terapias"),
+      duracionMinutos: p.duracion_minutos || p.duracionMinutos || undefined,
+      familiaId: p.familia_id || p.familiaId || undefined,
+      familiaNombre: p.familia_nombre || p.familiaNombre || undefined,
+      bienestarId: p.bienestar_id || p.bienestarId || undefined,
+      bienestarIds: Array.isArray(p.bienestar_ids) ? p.bienestar_ids : (p.bienestar_id ? [p.bienestar_id] : []),
+      tipoServicio: p.tipo_servicio || p.tipoServicio || (p.categoria === "terapias" ? "terapia" : undefined),
+      esExperienciaEstrella: Boolean(p.es_experiencia_estrella || p.esExperienciaEstrella),
+      experienciaEstrellaTitulo: p.experiencia_estrella_titulo || p.experienciaEstrellaTitulo || undefined,
     };
   }).filter((p) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
 }
@@ -181,6 +254,13 @@ function buildWebDataFromPayload(payload: any): WebData {
       publicadoWeb: isPublicado,
       esServicio: Boolean(p.es_servicio || p.esServicio),
       duracionMinutos: p.duracion_minutos || p.duracionMinutos || undefined,
+      familiaId: p.familiaId || p.familia_id || undefined,
+      familiaNombre: p.familiaNombre || p.familia_nombre || undefined,
+      bienestarId: p.bienestarId || p.bienestar_id || undefined,
+      bienestarIds: Array.isArray(p.bienestarIds || p.bienestar_ids) ? (p.bienestarIds || p.bienestar_ids) : (p.bienestarId || p.bienestar_id ? [p.bienestarId || p.bienestar_id] : []),
+      tipoServicio: p.tipoServicio || p.tipo_servicio || (p.categoria === "terapias" ? "terapia" : undefined),
+      esExperienciaEstrella: Boolean(p.esExperienciaEstrella || p.es_experiencia_estrella),
+      experienciaEstrellaTitulo: p.experienciaEstrellaTitulo || p.experiencia_estrella_titulo || undefined,
     };
   }).filter((p: any) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
 
@@ -201,6 +281,9 @@ function buildWebDataFromPayload(payload: any): WebData {
     workshops: payload.talleres || payload.workshops || defaultWebData.workshops,
     harmonization: payload.armonizacion || payload.harmonization || defaultWebData.harmonization,
     reviews: payload.resenas || payload.reviews || defaultWebData.reviews,
+    familias: payload.familias || payload.familiasConfig || defaultFamilias,
+    bienestares: payload.bienestares || payload.bienestaresConfig || defaultBienestares,
+    experienciaEstrella: payload.experienciaEstrella || payload.experienciaEstrellaConfig || defaultExperienciaEstrella,
   };
 }
 
@@ -225,6 +308,10 @@ export async function getWebData(): Promise<WebData> {
       const neonTherapies = mapNeonTherapies(prodsRes);
 
       const customConfig = { ...defaultWebData.config };
+      let neonFamilias: FamiliaItem[] = defaultFamilias;
+      let neonBienestares: BienestarPropositoItem[] = defaultBienestares;
+      let neonExperiencia: ExperienciaEstrellaData = defaultExperienciaEstrella;
+
       if (cfgRes && cfgRes.length > 0) {
         cfgRes.forEach((row: any) => {
           const k = String(row.clave || "").toLowerCase();
@@ -242,6 +329,24 @@ export async function getWebData(): Promise<WebData> {
           if (k === "email") customConfig.email = v;
           if (k === "direccion" || k === "address") customConfig.address = v;
           if (k === "horario" || k === "schedule") customConfig.schedule = v;
+          if (k === "familias_config" || k === "familiasconfig" || k === "familias") {
+            try {
+              const parsed = JSON.parse(v);
+              if (Array.isArray(parsed) && parsed.length > 0) neonFamilias = parsed;
+            } catch {}
+          }
+          if (k === "bienestares_config" || k === "bienestaresconfig" || k === "bienestares") {
+            try {
+              const parsed = JSON.parse(v);
+              if (Array.isArray(parsed) && parsed.length > 0) neonBienestares = parsed;
+            } catch {}
+          }
+          if (k === "experiencia_estrella_config" || k === "experienciaestrellaconfig" || k === "experiencia_estrella") {
+            try {
+              const parsed = JSON.parse(v);
+              if (parsed && typeof parsed === "object") neonExperiencia = { ...defaultExperienciaEstrella, ...parsed };
+            } catch {}
+          }
         });
       }
 
@@ -252,6 +357,9 @@ export async function getWebData(): Promise<WebData> {
         products: neonProducts,
         sections: neonSections.length > 0 ? neonSections : defaultWebData.sections,
         therapies: neonTherapies.length > 0 ? neonTherapies : defaultWebData.therapies,
+        familias: neonFamilias,
+        bienestares: neonBienestares,
+        experienciaEstrella: neonExperiencia,
       };
     } catch (neonErr) {
       console.warn("[Neon] Aviso consultando base de datos, usando fallback:", neonErr);
@@ -294,5 +402,8 @@ export async function getWebData(): Promise<WebData> {
   return {
     ...defaultWebData,
     products: [],
+    familias: defaultFamilias,
+    bienestares: defaultBienestares,
+    experienciaEstrella: defaultExperienciaEstrella,
   };
 }

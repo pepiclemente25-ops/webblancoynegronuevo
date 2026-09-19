@@ -28,51 +28,15 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Map each navigation link to the corresponding section template type (or types)
-  const navLinkSectionMap: Record<string, string[]> = {
-    "Terapias": ["terapias"],
-    "Sobre el Espacio": ["sobre_mi"],
-    "Chakras": ["chakras"],
-    "Talleres": ["talleres"],
-    "Armonización": ["armonizacion"],
-    "Tienda": ["tienda"],
-    "Reseñas": ["resenas"],
-    "Contacto": ["contacto", "ubicacion", "reservas", "booking"],
-  };
-
-  const rawNavLinks = [
+  const navLinks = [
     { name: "Inicio", href: "/" },
-    { name: "Terapias", href: "#terapias" },
-    { name: "Sobre el Espacio", href: "#sobre-mi" },
-    { name: "Chakras", href: "#chakras" },
-    { name: "Talleres", href: "#talleres" },
-    { name: "Armonización", href: "#armonizacion" },
     { name: "Tienda", href: "/tienda" },
-    { name: "Reseñas", href: "#resenas" },
-    { name: "Contacto", href: "#contacto" },
+    { name: "Bienestar", href: pathname === "/tienda" ? "#bienestar" : "/tienda#bienestar" },
+    { name: "Terapias", href: pathname === "/tienda" ? "#carta-terapias" : "/tienda#carta-terapias" },
+    { name: "El espacio", href: pathname === "/" ? "#sobre-mi" : "/#sobre-mi" },
   ];
 
-  // Si sections viene provisto, ocultar aquellos enlaces cuya sección esté explícitamente desactivada
-  const navLinks = rawNavLinks.filter((link) => {
-    if (link.name === "Inicio") return true;
-    if (!sections || sections.length === 0) return true;
-
-    const templates = navLinkSectionMap[link.name];
-    if (!templates) return true;
-
-    // Buscar si existe alguna sección configurada con esa plantilla
-    const matchingSections = sections.filter((s) => templates.includes(s.tipoPlantilla));
-    if (matchingSections.length === 0) return true; // Si no está en la lista de secciones, mantener visible
-
-    // Si todas las secciones correspondientes están inactivas (activo === false), ocultar del menú
-    return matchingSections.some((s) => s.activo);
-  });
-
-  // Resuelve si el link debe ir a la home con hash si estamos en /tienda
   const resolveHref = (href: string) => {
-    if (href.startsWith("#")) {
-      return pathname === "/" ? href : `/${href}`;
-    }
     return href;
   };
 
