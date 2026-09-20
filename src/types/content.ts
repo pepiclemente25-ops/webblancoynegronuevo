@@ -14,6 +14,7 @@ export interface SiteConfig {
   googleCalendarUrl: string;
   googleMapsUrl: string;
   googleReviewsUrl: string;
+  disclaimerLegal?: string;
 }
 
 export interface Therapy {

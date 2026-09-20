@@ -67,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                 {config.name}
               </span>
               <span className="text-xs text-[#5e7065] tracking-wider uppercase font-medium block">
-                Terapias Holísticas y Bienestar
+                {config.tagline || "Terapias Holísticas y Bienestar"}
               </span>
             </div>
           </Link>
@@ -113,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
 
             {/* WhatsApp */}
             <a
-              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent("Hola, quisiera consultar información sobre tus terapias.")}`}
+              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(`Hola ${config.name}, quisiera consultar información sobre tus terapias.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2.5 rounded-full text-[#25D366] hover:bg-[#eaf0ec] transition-transform hover:scale-110"
@@ -132,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
 
             {/* Pedir Cita - Abre WhatsApp directamente */}
             <a
-              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent("Hola, deseo agendar una cita en Blanco y Negro.")}`}
+              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(`Hola ${config.name}, deseo agendar una cita.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#3d5a4c] text-white font-medium text-sm shadow-sm hover:bg-[#2d473b] hover:shadow transition-all duration-200 cursor-pointer"
@@ -159,7 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
             </button>
 
             <a
-              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent("Hola, deseo agendar una cita en Blanco y Negro.")}`}
+              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(`Hola ${config.name}, deseo agendar una cita.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-[#3d5a4c] text-white"

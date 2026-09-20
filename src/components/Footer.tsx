@@ -33,12 +33,13 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
                   {config.name}
                 </span>
                 <span className="text-[11px] text-[#dfc89f] tracking-wider uppercase font-medium block">
-                  Terapias Holísticas y Bienestar
+                  {config.tagline || "Terapias Holísticas y Bienestar"}
                 </span>
               </div>
             </div>
             <p className="text-xs sm:text-sm text-[#95a39a] leading-relaxed max-w-sm">
-              Espacio dedicado a la reconexión profunda entre cuerpo, mente y alma. Quiromasaje terapéutico, Reiki Usui, Registros Akáshicos y respiración consciente.
+              {config.description ||
+                "Espacio dedicado a la reconexión profunda entre cuerpo, mente y alma. Terapias naturales, productos conscientes y bienestar integral."}
             </p>
           </div>
 
@@ -49,33 +50,40 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
               <li>
-                <a href="#terapias" className="hover:text-white transition-colors">
-                  Terapias Holísticas
+                <a href="/#inicio" className="hover:text-white transition-colors">
+                  Inicio
                 </a>
               </li>
               <li>
-                <a href="#sobre-mi" className="hover:text-white transition-colors">
+                <a href="/#tienda" className="hover:text-white transition-colors">
+                  Tienda Holística & Minerales
+                </a>
+              </li>
+              <li>
+                <a href="/#carta-terapias" className="hover:text-white transition-colors">
+                  Carta de Terapias & Sesiones
+                </a>
+              </li>
+              <li>
+                <a href="/#sobre-mi" className="hover:text-white transition-colors">
                   Sobre el Espacio & Filosofía
                 </a>
               </li>
               <li>
-                <a href="#chakras" className="hover:text-white transition-colors">
-                  Equilibrio de Chakras
+                <a href="/#faq" className="hover:text-white transition-colors">
+                  Preguntas Frecuentes
                 </a>
               </li>
               <li>
-                <a href="#talleres" className="hover:text-white transition-colors">
-                  Talleres y Charlas
-                </a>
-              </li>
-              <li>
-                <a href="#armonizacion" className="hover:text-white transition-colors">
-                  Armonización de Espacios
-                </a>
-              </li>
-              <li>
-                <a href="#resenas" className="hover:text-white transition-colors">
-                  Reseñas de Clientes
+                <a
+                  href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(
+                    `Hola ${config.name}, quisiera agendar una cita o hacer una consulta.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#dfc89f] hover:text-white transition-colors font-medium flex items-center gap-1 mt-3"
+                >
+                  <span>Pedir Cita por WhatsApp →</span>
                 </a>
               </li>
             </ul>
@@ -89,10 +97,16 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
             <p className="text-xs sm:text-sm text-[#cfd6d1] mb-2">{config.address}</p>
             <p className="text-xs text-[#95a39a] mb-4">{config.city}</p>
             <p className="text-xs text-[#95a39a] mb-1">
-              Teléfono: <strong className="text-white">{config.phoneDisplay}</strong>
+              Teléfono:{" "}
+              <a href={`tel:${config.phone}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
+                {config.phoneDisplay}
+              </a>
             </p>
             <p className="text-xs text-[#95a39a]">
-              Email: <strong className="text-white">{config.email}</strong>
+              Email:{" "}
+              <a href={`mailto:${config.email}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
+                {config.email}
+              </a>
             </p>
           </div>
 
@@ -101,7 +115,9 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
         {/* Disclaimer médico / holístico ético */}
         <div className="py-6 border-b border-[#313c35] text-[11px] text-[#7a8880] leading-relaxed">
           <p>
-            <strong className="text-[#a1b0a7]">Aviso Legal Terapéutico:</strong> Las terapias y actividades ofrecidas en {config.name} (quiromasaje, reiki, registros akáshicos y ejercicios de respiración) son herramientas de bienestar integral, relajación y desarrollo personal. En ningún caso constituyen un acto médico oficial ni pretenden diagnosticar, tratar o sustituir tratamientos médicos, farmacológicos o psicológicos convencionales.
+            <strong className="text-[#a1b0a7]">Aviso Legal Terapéutico:</strong>{" "}
+            {config.disclaimerLegal ||
+              `Las terapias y actividades ofrecidas en ${config.name} (quiromasaje, reiki, registros akáshicos y ejercicios de respiración) son herramientas de bienestar integral, relajación y desarrollo personal. En ningún caso constituyen un acto médico oficial ni pretenden diagnosticar, tratar o sustituir tratamientos médicos, farmacológicos o psicológicos convencionales.`}
           </p>
         </div>
 

@@ -474,6 +474,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
     ];
   }, [products]);
 
+  const tiendaSection = sections?.find((s) => s.tipoPlantilla === "tienda" || s.idSeccion === "sec-tienda");
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#fbf9f5] text-[#212924] scroll-smooth">
       {/* Cañas de bambú zen ambientales fijas en los bordes */}
@@ -529,13 +531,16 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             <div className="space-y-1.5 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f2ecdf] border border-[#e0d8ca] text-[11px] font-semibold text-[#3d5a4c] uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5 text-[#b08d4b]" />
-                <span>Autocuidado & Bienestar en Casa</span>
+                <span>{tiendaSection?.contenido?.badge || "Autocuidado & Bienestar en Casa"}</span>
               </div>
               <h1 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-[#212924]">
-                Catálogo Holístico & Tienda
+                {tiendaSection?.titulo || "Catálogo Holístico & Tienda"}
               </h1>
               <p className="text-xs sm:text-sm text-[#55645a] leading-relaxed">
-                Herramientas botánicas, minerales energéticos, aromaterapia pura y sesiones de cuidado en Boiro.
+                {tiendaSection?.contenido?.descripcion ||
+                  (config.city
+                    ? `Herramientas botánicas, minerales energéticos, aromaterapia pura y sesiones de cuidado en ${config.city}.`
+                    : "Herramientas botánicas, minerales energéticos, aromaterapia pura y sesiones de cuidado.")}
               </p>
             </div>
 
@@ -545,7 +550,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 <Store className="w-4 h-4" />
               </div>
               <div className="text-[11px] leading-tight">
-                <span className="font-semibold text-[#212924] block">Recogida en Boiro o Envío</span>
+                <span className="font-semibold text-[#212924] block">
+                  Recogida en {config.city || "tienda"} o Envío
+                </span>
                 <span className="text-[#6e7d73]">Pago cómodo por Bizum o en tienda</span>
               </div>
             </div>

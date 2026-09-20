@@ -5,9 +5,10 @@ import { Mail } from "lucide-react";
 
 interface FloatingContactButtonsProps {
   whatsapp?: string;
+  name?: string;
 }
 
-export const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({ whatsapp }) => {
+export const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({ whatsapp, name }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -21,11 +22,12 @@ export const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({ 
   }, []);
 
   const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, "") : "34600123456";
+  const placeName = name ? ` en ${name}` : "";
   const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-    "Hola, quisiera consultar información sobre Blanco y Negro."
+    `Hola${placeName}, quisiera consultar información sobre tus terapias y productos.`
   )}`;
   const citaUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-    "Hola, deseo agendar una cita en Blanco y Negro."
+    `Hola${placeName}, deseo agendar una cita.`
   )}`;
 
   return (
