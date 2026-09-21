@@ -576,26 +576,19 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             )}
           </div>
 
-          {/* Selector horizontal de Categorías con conteos reales */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pb-2">
+          {/* Selector horizontal de Categorías con conteos reales en cajita estilo superior */}
+          <div className="inline-flex p-1.5 sm:p-2 bg-[#eae2d5] rounded-2xl sm:rounded-3xl shadow-inner flex-wrap items-center gap-1.5 sm:gap-2 max-w-full">
             <button
+              type="button"
               onClick={() => setSelectedFamilia("all")}
-              className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${
+              className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 selectedFamilia === "all"
-                  ? "bg-[#3d5a4c] text-white shadow-sm ring-2 ring-[#3d5a4c]/20"
-                  : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea] hover:border-[#cbdbd0]"
+                  ? "bg-white text-[#1c2720] shadow-sm"
+                  : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
               }`}
             >
               <span>Todos</span>
-              <span
-                className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
-                  selectedFamilia === "all"
-                    ? "bg-white/20 text-white"
-                    : "bg-[#f0ebe1] text-[#6e7d73]"
-                }`}
-              >
-                {products.length}
-              </span>
+              <span className="text-[11px] opacity-75">({products.length})</span>
             </button>
 
             {activeFamilias.map((fam) => {
@@ -604,23 +597,16 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               return (
                 <button
                   key={fam.id}
+                  type="button"
                   onClick={() => setSelectedFamilia(fam.id)}
-                  className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${
+                  className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     isSelected
-                      ? "bg-[#3d5a4c] text-white shadow-sm ring-2 ring-[#3d5a4c]/20"
-                      : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea] hover:border-[#cbdbd0]"
+                      ? "bg-white text-[#1c2720] shadow-sm"
+                      : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
                   }`}
                 >
                   <span>{fam.nombre}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
-                      isSelected
-                        ? "bg-white/20 text-white"
-                        : "bg-[#f0ebe1] text-[#6e7d73]"
-                    }`}
-                  >
-                    {count}
-                  </span>
+                  <span className="text-[11px] opacity-75">({count})</span>
                 </button>
               );
             })}
