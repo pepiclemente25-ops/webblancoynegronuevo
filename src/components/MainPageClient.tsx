@@ -539,77 +539,9 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             <p className="text-xs sm:text-sm text-[#5f7467] mt-3 max-w-2xl mx-auto leading-relaxed">
               {tiendaSection?.contenido?.descripcion || tiendaSection?.subtitulo || "Elementos consagrados para tu práctica personal en casa, terapias de cabina con Pepi en Boiro y bonos para regalar bienestar."}
             </p>
-
-            {/* LAS PESTAÑAS MAESTRAS DEL CATÁLOGO EN CAJITA AUTOEXPANDIBLE (CAPTURA 1) */}
-            <div className="inline-flex p-1.5 sm:p-2 bg-[#eae2d5] rounded-2xl sm:rounded-3xl mt-6 shadow-inner flex-wrap justify-center gap-1.5 sm:gap-2 max-w-full">
-              <button
-                type="button"
-                onClick={() => {
-                  setMasterTab("all");
-                  setSelectedFamilia("all");
-                }}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  masterTab === "all"
-                    ? "bg-white text-[#1c2720] shadow-sm"
-                    : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
-                }`}
-              >
-                <span>🌿 Todo el Catálogo</span>
-                <span className="text-[11px] opacity-75">({countAll})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMasterTab("products");
-                  setSelectedFamilia("all");
-                }}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  masterTab === "products"
-                    ? "bg-white text-[#1c2720] shadow-sm"
-                    : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
-                }`}
-              >
-                <span>🛍️ Tienda & Minerales</span>
-                <span className="text-[11px] opacity-75">({countProducts})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMasterTab("services");
-                  setSelectedFamilia("all");
-                }}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  masterTab === "services"
-                    ? "bg-white text-[#1c2720] shadow-sm"
-                    : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
-                }`}
-              >
-                <span>🧘 Terapias & Masajes</span>
-                <span className="text-[11px] opacity-75">({countServices})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMasterTab("gifts");
-                  setSelectedFamilia("all");
-                }}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  masterTab === "gifts"
-                    ? "bg-white text-[#1c2720] shadow-sm"
-                    : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
-                }`}
-              >
-                <span>🎁 Bonos Regalo</span>
-                <span className="text-[11px] opacity-75">({countGifts})</span>
-              </button>
-            </div>
           </div>
 
           {/* ================= SELECTOR DE CATEGORÍAS (SIN SCROLL HORIZONTAL / RESPONSIVE) ================= */}
-          {(masterTab === "all" || masterTab === "products") && (
           <div className="mb-4 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#6e7d73]">
@@ -661,7 +593,6 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               })}
             </div>
           </div>
-          )}
 
           {/* ================= BARRA DE CONTROLES INTEGRADA (CAPTURA 2) ================= */}
           <div className="bg-white rounded-2xl border border-[#ece4d8] p-3 sm:p-4 shadow-2xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-6">
