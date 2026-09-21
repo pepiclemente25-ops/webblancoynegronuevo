@@ -8,28 +8,29 @@ import Image from "next/image";
 interface HeroProps {
   config: SiteConfig;
   section?: WebSectionItem;
+  garantiasSection?: WebSectionItem;
   onOpenBooking?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) => {
+export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, onOpenBooking }) => {
   const contenido = section?.contenido || {};
   const lema =
     contenido.lemaSuperior ||
     contenido.badge ||
-    "🌿 Tu Santuario de Sanación & Bienestar en Boiro";
+    "ARMONÍA YIN-YANG & BIENESTAR HOLÍSTICO · BOIRO";
   const titulo =
     contenido.tituloGrande ||
     section?.titulo ||
     contenido.titulo ||
-    "Armoniza tu energía, cuida tu templo y eleva tu vibración.";
+    "Reconecta con tu equilibrio vital y la calma profunda";
   const descripcion =
     contenido.fraseBienvenida ||
     contenido.descripcion ||
-    "Encuentra cuarzos auténticos, velas ritualizadas e inciensos botánicos para tu hogar, o sumérgete en una sesión presencial de Reiki y masajes en nuestro espacio en Boiro.";
-  const boton1Texto = contenido.botonTexto || contenido.boton1Texto || "Explorar Tienda & Herramientas";
+    "Un santuario de calma y equilibrio en el que reconectar con tu esencia natural a través del quiromasaje, la energía Reiki, las lecturas de Registros Akáshicos y la respiración consciente.";
+  const boton1Texto = contenido.botonTexto || contenido.boton1Texto || "Reservar Cita";
   const boton1Link = contenido.boton1Link || "#tienda";
   const boton2Texto =
-    contenido.botonSecundario || contenido.boton2Texto || "Ver Carta de Terapias en Boiro";
+    contenido.botonSecundario || contenido.boton2Texto || "Explorar Terapias";
   const boton2Link = contenido.boton2Link || "#carta-terapias";
   const heroImg =
     contenido.heroImg ||
@@ -37,6 +38,29 @@ export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) =>
     contenido.imagen ||
     "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80";
   const therapistName = contenido.nombreTerapeuta || config.therapistName || "Pepi";
+  const subtituloFoto = contenido.subtituloFoto || "Centro Holístico & Tienda";
+  const tituloFoto = contenido.tituloFoto || `${therapistName} · Boiro (A Coruña)`;
+  const tarjetaFlotanteIcono = contenido.tarjetaFlotanteIcono || "★";
+  const tarjetaFlotanteTitulo = contenido.tarjetaFlotanteTitulo || "Atención Cercana";
+  const tarjetaFlotanteTexto = contenido.tarjetaFlotanteTexto || "Recogida en Boiro y envíos a toda España";
+
+  // Garantías / Ventajas dinámicas (Sección 2 o contenido de Hero)
+  const gContenido = garantiasSection?.contenido || contenido.garantias || {};
+  const garantia1Icono = gContenido.icono1 || "📦";
+  const garantia1Titulo = gContenido.titulo1 || "Envíos Cuidados";
+  const garantia1Desc = gContenido.desc1 || "A domicilio en 24-48h";
+
+  const garantia2Icono = gContenido.icono2 || "🏪";
+  const garantia2Titulo = gContenido.titulo2 || "Recogida Gratuita";
+  const garantia2Desc = gContenido.desc2 || "En nuestro centro de Boiro";
+
+  const garantia3Icono = gContenido.icono3 || "✨";
+  const garantia3Titulo = gContenido.titulo3 || "100% Auténtico";
+  const garantia3Desc = gContenido.desc3 || "Minerales y ceras naturales";
+
+  const garantia4Icono = gContenido.icono4 || "💬";
+  const garantia4Titulo = gContenido.titulo4 || "Asesoría WhatsApp";
+  const garantia4Desc = gContenido.desc4 || "Te ayudamos a elegir";
 
   return (
     <>
@@ -95,10 +119,10 @@ export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) =>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-[11px] font-semibold uppercase tracking-widest text-[#dfc89f]">
-                      Centro Holístico & Tienda
+                      {subtituloFoto}
                     </p>
                     <p className="text-base font-bold font-serif">
-                      {therapistName} · Terapeuta & Guía Holística
+                      {tituloFoto}
                     </p>
                   </div>
                 </div>
@@ -106,12 +130,12 @@ export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) =>
                 {/* Badge Flotante */}
                 <div className="absolute -bottom-5 -left-3 sm:-left-6 bg-white p-3.5 sm:p-4 rounded-2xl shadow-xl border border-[#ebdcca] flex items-center gap-3 animate-zen-float max-w-[260px]">
                   <div className="w-10 h-10 rounded-xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center font-bold text-lg shrink-0">
-                    ★
+                    {tarjetaFlotanteIcono}
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase font-bold text-gray-400">Atención Cercana</p>
+                    <p className="text-[10px] uppercase font-bold text-gray-400">{tarjetaFlotanteTitulo}</p>
                     <p className="text-xs font-bold text-[#1f2923] leading-tight">
-                      Recogida en Boiro y envíos a toda España
+                      {tarjetaFlotanteTexto}
                     </p>
                   </div>
                 </div>
@@ -122,46 +146,46 @@ export const Hero: React.FC<HeroProps> = ({ config, section, onOpenBooking }) =>
       </section>
 
       {/* BANDA DE GARANTÍAS */}
-      <div className="bg-white border-b border-[#ebdcca] py-4 relative z-10">
+      <div id="garantias" className="bg-white border-b border-[#ebdcca] py-4 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-3 p-2">
               <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                📦
+                {garantia1Icono}
               </span>
               <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">Envíos Cuidados</h4>
-                <p className="text-[11px] text-gray-500">A domicilio en 24-48h</p>
+                <h4 className="text-xs font-bold text-[#1e2822]">{garantia1Titulo}</h4>
+                <p className="text-[11px] text-gray-500">{garantia1Desc}</p>
               </div>
             </div>
 
             <div className="flex items-center justify-center md:justify-start gap-3 p-2">
               <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                🏪
+                {garantia2Icono}
               </span>
               <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">Recogida Gratuita</h4>
-                <p className="text-[11px] text-gray-500">En nuestro centro de Boiro</p>
+                <h4 className="text-xs font-bold text-[#1e2822]">{garantia2Titulo}</h4>
+                <p className="text-[11px] text-gray-500">{garantia2Desc}</p>
               </div>
             </div>
 
             <div className="flex items-center justify-center md:justify-start gap-3 p-2">
               <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                ✨
+                {garantia3Icono}
               </span>
               <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">100% Auténtico</h4>
-                <p className="text-[11px] text-gray-500">Minerales y ceras naturales</p>
+                <h4 className="text-xs font-bold text-[#1e2822]">{garantia3Titulo}</h4>
+                <p className="text-[11px] text-gray-500">{garantia3Desc}</p>
               </div>
             </div>
 
             <div className="flex items-center justify-center md:justify-start gap-3 p-2">
               <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                💬
+                {garantia4Icono}
               </span>
               <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">Asesoría WhatsApp</h4>
-                <p className="text-[11px] text-gray-500">Te ayudamos a elegir</p>
+                <h4 className="text-xs font-bold text-[#1e2822]">{garantia4Titulo}</h4>
+                <p className="text-[11px] text-gray-500">{garantia4Desc}</p>
               </div>
             </div>
           </div>

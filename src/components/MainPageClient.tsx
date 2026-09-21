@@ -459,10 +459,38 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
     ];
   }, [products]);
 
-  const heroSection = data.sections?.find((s) => s.tipoPlantilla === "hero");
+  const heroSection = data.sections?.find((s) => s.tipoPlantilla === "hero" || s.idSeccion === "sec-hero");
+  const garantiasSection = data.sections?.find((s) => s.tipoPlantilla === "garantias" || s.idSeccion === "sec-garantias");
   const tiendaSection = data.sections?.find((s) => s.tipoPlantilla === "tienda" || s.idSeccion === "sec-tienda");
+  const bienestarSection = data.sections?.find((s) => s.tipoPlantilla === "bienestar" || s.idSeccion === "sec-bienestar");
+  const terapiasSection = data.sections?.find((s) => s.tipoPlantilla === "terapias" || s.idSeccion === "sec-terapias");
   const aboutSection = data.sections?.find((s) => s.tipoPlantilla === "sobre_mi" || s.idSeccion === "sec-sobre-mi");
   const faqSection = data.sections?.find((s) => s.tipoPlantilla === "faq" || s.idSeccion === "sec-faq");
+
+  // Secciones extra personalizadas creadas por el usuario
+  const extraSections = useMemo(() => {
+    const standardIds = ["sec-hero", "sec-garantias", "sec-tienda", "sec-bienestar", "sec-terapias", "sec-sobre-mi", "sec-faq"];
+    const standardTypes = ["hero", "garantias", "tienda", "bienestar", "terapias", "sobre_mi", "faq"];
+    return (data.sections || []).filter(
+      (s) => !standardIds.includes(s.idSeccion || s.id) && !standardTypes.includes(s.tipoPlantilla) && s.activo !== false
+    );
+  }, [data.sections]);
+
+  // Reserva directa por WhatsApp con mensaje personalizado con el nombre del servicio
+  const handleWhatsAppBooking = (serviceTitle?: string) => {
+    const cleanPhone = (config.whatsapp || "34600123456").replace(/[^0-9]/g, "");
+    const customTemplate = terapiasSection?.contenido?.mensajeWhatsappTemplate;
+    let messageText = "";
+    if (customTemplate && serviceTitle) {
+      messageText = customTemplate.replace("{servicio}", serviceTitle);
+    } else if (serviceTitle) {
+      messageText = `Hola, me gustaría reservar una cita para "${serviceTitle}". ¿Qué disponibilidad tenéis?`;
+    } else {
+      messageText = "Hola, me gustaría reservar una cita en Blanco y Negro. ¿Qué disponibilidad tenéis?";
+    }
+    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#fbf9f5] text-[#212924] scroll-smooth">
@@ -494,6 +522,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         <Hero
           config={config}
           section={heroSection}
+          garantiasSection={garantiasSection}
           onOpenBooking={() => handleOpenBooking()}
         />
 
@@ -505,14 +534,14 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               <span>{tiendaSection?.contenido?.badge || "✨ ESPACIO BOTÁNICO, MINERALES & SESIONES"}</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#1c2720] tracking-tight leading-snug uppercase">
-              {tiendaSection?.titulo || "Herramientas de autocuidado y purificación energética para el día a día"}
+              {tiendaSection?.contenido?.titulo || tiendaSection?.titulo || "Herramientas de autocuidado y purificación energética para el día a día"}
             </h2>
             <p className="text-xs sm:text-sm text-[#5f7467] mt-3 max-w-2xl mx-auto leading-relaxed">
               {tiendaSection?.contenido?.descripcion || tiendaSection?.subtitulo || "Elementos consagrados para tu práctica personal en casa, terapias de cabina con Pepi en Boiro y bonos para regalar bienestar."}
             </p>
           </div>
 
-          {/* ================= SELECTOR DE CATEGORÍAS (CAPTURA 2) ================= */}
+          {/* ================= SELECTOR DE CATEGORÍAS (SIN SCROLL HORIZONTAL / RESPONSIVE) ================= */}
           <div className="mb-4 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#6e7d73]">
@@ -529,10 +558,10 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               )}
             </div>
 
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <button
                 onClick={() => setSelectedFamilia("all")}
-                className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 shadow-2xs ${
                   selectedFamilia === "all"
                     ? "bg-[#3d5a4c] text-white shadow-sm ring-2 ring-[#3d5a4c]/20"
                     : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
@@ -557,7 +586,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   <button
                     key={fam.id}
                     onClick={() => setSelectedFamilia(fam.id)}
-                    className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${
+                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 shadow-2xs ${
                       isSelected
                         ? "bg-[#3d5a4c] text-white shadow-sm ring-2 ring-[#3d5a4c]/20"
                         : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
@@ -976,13 +1005,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
-                Guía de Bienestar Consciente
+                {bienestarSection?.contenido?.badge || "Guía de Bienestar Consciente"}
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
-                Cómo integrar las herramientas de autocuidado en tu rutina
+                {bienestarSection?.contenido?.titulo || bienestarSection?.titulo || "Cómo integrar las herramientas de autocuidado en tu rutina"}
               </h2>
               <p className="text-xs sm:text-sm text-[#5f7467] mt-2.5 leading-relaxed">
-                Selecciona tu propósito vital para filtrar automáticamente los elementos consagrados que mejor acompañan tu proceso.
+                {bienestarSection?.contenido?.descripcion || bienestarSection?.subtitulo || "Selecciona tu propósito vital para filtrar automáticamente los elementos consagrados que mejor acompañan tu proceso."}
               </p>
             </div>
 
@@ -1053,13 +1082,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-14">
               <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
-                Centro Holístico en Boiro (A Coruña)
+                {terapiasSection?.contenido?.badge || "Centro Holístico en Boiro (A Coruña)"}
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
-                Carta de Terapias & Cuidados
+                {terapiasSection?.contenido?.titulo || terapiasSection?.titulo || "Carta de Terapias & Cuidados"}
               </h2>
               <p className="text-xs sm:text-sm text-gray-600 mt-2.5 leading-relaxed">
-                Cada sesión es un viaje personalizado hacia tu centro. En cabina individual, climatizada y con acompañamiento integral por Pepi.
+                {terapiasSection?.contenido?.descripcion || terapiasSection?.subtitulo || "Cada sesión es un viaje personalizado hacia tu centro. En cabina individual, climatizada y con acompañamiento integral por Pepi."}
               </p>
             </div>
 
@@ -1074,10 +1103,10 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     </span>
                     <div>
                       <h3 className="font-serif font-bold text-lg text-[#1e2822]">
-                        Canalización Energética & Reiki
+                        {terapiasSection?.contenido?.col1Titulo || "Canalización Energética & Reiki"}
                       </h3>
                       <p className="text-[11px] text-gray-500">
-                        Restablece el flujo bioenergético natural
+                        {terapiasSection?.contenido?.col1Subtitulo || "Restablece el flujo bioenergético natural"}
                       </p>
                     </div>
                   </div>
@@ -1117,10 +1146,11 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                               {terapia.price.toFixed(2)} €
                             </span>
                             <button
-                              onClick={() => handleOpenBooking(terapia.name)}
-                              className="px-3.5 py-1.5 bg-[#3d5a4c] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer"
+                              onClick={() => handleWhatsAppBooking(terapia.name)}
+                              className="px-3.5 py-1.5 bg-[#3d5a4c] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer flex items-center gap-1.5"
                             >
-                              Reservar Cita
+                              <MessageCircle className="w-3.5 h-3.5 text-[#dfc89f]" />
+                              <span>{terapiasSection?.contenido?.botonReservaTexto || "Reservar Cita"}</span>
                             </button>
                           </div>
                         </div>
@@ -1139,10 +1169,10 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     </span>
                     <div>
                       <h3 className="font-serif font-bold text-lg text-[#1e2822]">
-                        Terapias Manuales & Cuidados
+                        {terapiasSection?.contenido?.col2Titulo || "Terapias Manuales & Cuidados"}
                       </h3>
                       <p className="text-[11px] text-gray-500">
-                        Cuerpo físico, musculatura y relajación
+                        {terapiasSection?.contenido?.col2Subtitulo || "Cuerpo físico, musculatura y relajación"}
                       </p>
                     </div>
                   </div>
@@ -1182,10 +1212,11 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                               {cuidado.price.toFixed(2)} €
                             </span>
                             <button
-                              onClick={() => handleOpenBooking(cuidado.name)}
-                              className="px-3.5 py-1.5 bg-[#3d5a4c] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer"
+                              onClick={() => handleWhatsAppBooking(cuidado.name)}
+                              className="px-3.5 py-1.5 bg-[#3d5a4c] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer flex items-center gap-1.5"
                             >
-                              Reservar Cita
+                              <MessageCircle className="w-3.5 h-3.5 text-[#dfc89f]" />
+                              <span>{terapiasSection?.contenido?.botonReservaTexto || "Reservar Cita"}</span>
                             </button>
                           </div>
                         </div>
@@ -1225,10 +1256,11 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     {activeExperienciaEstrella.precio.toFixed(2)} €
                   </span>
                   <button
-                    onClick={() => handleOpenBooking(activeExperienciaEstrella.titulo)}
-                    className="block mt-3 px-7 py-3.5 bg-[#dfc89f] hover:bg-white text-[#1f2d24] rounded-2xl font-bold text-xs shadow-lg transition hover:scale-105 cursor-pointer"
+                    onClick={() => handleWhatsAppBooking(activeExperienciaEstrella.titulo)}
+                    className="block mt-3 px-7 py-3.5 bg-[#dfc89f] hover:bg-white text-[#1f2d24] rounded-2xl font-bold text-xs shadow-lg transition hover:scale-105 cursor-pointer flex items-center justify-center gap-2"
                   >
-                    {activeExperienciaEstrella.botonTexto || "Reservar Experiencia"}
+                    <MessageCircle className="w-4 h-4 text-[#1f2d24]" />
+                    <span>{activeExperienciaEstrella.botonTexto || "Reservar Experiencia"}</span>
                   </button>
                 </div>
               </div>
@@ -1274,16 +1306,19 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   )}
                   <div className="pt-3 flex flex-wrap gap-4">
                     <button
-                      onClick={() => handleOpenBooking()}
-                      className="px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2c4036] shadow transition cursor-pointer"
+                      onClick={() => handleWhatsAppBooking(`Cita general con ${aboutSection?.contenido?.nombreTerapeuta || "Pepi"}`)}
+                      className="px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2c4036] shadow transition cursor-pointer flex items-center gap-1.5"
                     >
-                      Pedir cita con {aboutSection?.contenido?.nombreTerapeuta || "Pepi"}
+                      <MessageCircle className="w-3.5 h-3.5 text-[#dfc89f]" />
+                      <span>{aboutSection?.contenido?.botonCitaTexto || `Pedir cita con ${aboutSection?.contenido?.nombreTerapeuta || "Pepi"}`}</span>
                     </button>
                     <a
-                      href="#contacto"
+                      href={aboutSection?.contenido?.botonUbicacionLink || config.googleMapsUrl || "#contacto"}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition"
                     >
-                      Ver ubicación en {aboutSection?.contenido?.localizacion || "Boiro"}
+                      {aboutSection?.contenido?.botonUbicacionTexto || `Ver ubicación en ${aboutSection?.contenido?.localizacion || "Boiro"}`}
                     </a>
                   </div>
                 </div>
@@ -1306,10 +1341,10 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   </div>
                   <div>
                     <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
-                      {faqSection?.titulo || "¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?"}
+                      {faqSection?.contenido?.tituloAcordeon || faqSection?.titulo || "¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?"}
                     </h3>
                     <p className="text-xs text-[#6e7d73]">
-                      {faqSection?.subtitulo || "Pulsa para ver los pasos sencillos y transparentes de compra."}
+                      {faqSection?.contenido?.subtituloAcordeon || faqSection?.subtitulo || "Pulsa para ver los pasos sencillos y transparentes de compra."}
                     </p>
                   </div>
                 </div>
@@ -1367,6 +1402,88 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             </div>
           </section>
         )}
+
+        {/* ================= SECCIONES ADICIONALES PERSONALIZADAS ================= */}
+        {extraSections.map((sec) => (
+          <section key={sec.id || sec.idSeccion} id={sec.idSeccion || sec.id} className="py-12 md:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {sec.tipoPlantilla === 'texto_foto' && (
+              <div className="bg-white rounded-3xl p-8 sm:p-12 border border-[#ece4d8] shadow-2xs grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                {sec.contenido?.imagenUrl && (
+                  <div className="md:col-span-5 aspect-4/3 rounded-2xl overflow-hidden relative shadow-sm">
+                    <Image src={sec.contenido.imagenUrl} alt={sec.titulo} fill className="object-cover" />
+                  </div>
+                )}
+                <div className={sec.contenido?.imagenUrl ? 'md:col-span-7 space-y-4' : 'md:col-span-12 space-y-4 text-center'}>
+                  {sec.contenido?.badge && (
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full inline-block">
+                      {sec.contenido.badge}
+                    </span>
+                  )}
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1a251e]">{sec.titulo}</h2>
+                  <p className="text-sm text-[#5f7467] leading-relaxed whitespace-pre-line">{sec.contenido?.texto || sec.subtitulo}</p>
+                  {sec.contenido?.botonTexto && (
+                    <a
+                      href={sec.contenido.botonLink || '#tienda'}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2a3d34] shadow-md transition"
+                    >
+                      <span>{sec.contenido.botonTexto}</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {sec.tipoPlantilla === 'tarjetas' && (
+              <div className="space-y-8">
+                <div className="text-center max-w-3xl mx-auto space-y-2">
+                  {sec.contenido?.badge && (
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full inline-block">
+                      {sec.contenido.badge}
+                    </span>
+                  )}
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1a251e]">{sec.titulo}</h2>
+                  {sec.subtitulo && <p className="text-xs sm:text-sm text-[#5f7467]">{sec.subtitulo}</p>}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {(sec.contenido?.tarjetas || []).map((t: any, tidx: number) => (
+                    <div key={tidx} className="bg-white rounded-2xl p-6 border border-[#ece4d8] shadow-2xs space-y-3">
+                      {t.icono && <span className="text-2xl block">{t.icono}</span>}
+                      <h4 className="font-serif font-bold text-base text-[#1c2720]">{t.titulo}</h4>
+                      <p className="text-xs text-[#6e7d73] leading-relaxed">{t.descripcion}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {sec.tipoPlantilla === 'banner' && (
+              <div className="rounded-3xl bg-[#24352b] text-white p-8 sm:p-12 shadow-xl relative overflow-hidden text-center space-y-4">
+                {sec.contenido?.badge && (
+                  <span className="px-3.5 py-1 rounded-full bg-[#dfc89f] text-[#24352b] text-[10px] font-black uppercase tracking-wider inline-block">
+                    {sec.contenido.badge}
+                  </span>
+                )}
+                <h2 className="font-serif text-2xl sm:text-4xl font-bold text-white max-w-3xl mx-auto">{sec.titulo}</h2>
+                <p className="text-sm text-gray-200 max-w-2xl mx-auto leading-relaxed">{sec.contenido?.texto || sec.subtitulo}</p>
+                {sec.contenido?.botonTexto && (
+                  <a
+                    href={sec.contenido.botonLink || '#contacto'}
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#dfc89f] text-[#1f2d24] text-xs font-bold hover:bg-white shadow-lg transition"
+                  >
+                    <span>{sec.contenido.botonTexto}</span>
+                  </a>
+                )}
+              </div>
+            )}
+
+            {!['texto_foto', 'tarjetas', 'banner'].includes(sec.tipoPlantilla) && (
+              <div className="bg-white rounded-3xl p-8 border border-[#ece4d8] shadow-2xs space-y-3 text-center">
+                <h3 className="font-serif text-2xl font-bold text-[#1c2720]">{sec.titulo}</h3>
+                <p className="text-sm text-gray-600 max-w-2xl mx-auto leading-relaxed">{sec.contenido?.texto || sec.subtitulo}</p>
+              </div>
+            )}
+          </section>
+        ))}
       </main>
 
       {/* 9. FOOTER OFICIAL */}
