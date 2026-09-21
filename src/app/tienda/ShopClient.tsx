@@ -577,7 +577,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           </div>
 
           {/* Selector horizontal de Categorías con conteos reales */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pb-2">
             <button
               onClick={() => setSelectedFamilia("all")}
               className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${

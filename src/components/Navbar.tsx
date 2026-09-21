@@ -44,15 +44,15 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? "bg-[#fbf9f5]/92 backdrop-blur-md shadow-sm py-3 border-b border-[#ece4d8]/80"
-          : "bg-transparent py-5"
+          ? "bg-[#fbf9f5]/95 backdrop-blur-md shadow-sm py-2.5 sm:py-3 border-b border-[#ece4d8]/80"
+          : "bg-[#fbf9f5]/90 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none py-2.5 sm:py-5 border-b border-[#ece4d8]/60 sm:border-b-0"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo con el Yin-Yang oficial */}
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-11 h-11 rounded-full bg-[#f6f2ea] border-2 border-[#3d5a4c]/20 overflow-hidden shadow-md flex items-center justify-center transition-transform group-hover:scale-105 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3.5 group min-w-0">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#f6f2ea] border-2 border-[#3d5a4c]/20 overflow-hidden shadow-md flex items-center justify-center transition-transform group-hover:scale-105 flex-shrink-0">
               <Image
                 src="/brand/yinyang.webp"
                 alt="Logo Blanco y Negro - Yin Yang"
@@ -62,12 +62,18 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                 priority
               />
             </div>
-            <div>
-              <span className="font-serif text-xl sm:text-2xl font-semibold tracking-wide text-[#212924] block leading-tight">
+            <div className="min-w-0">
+              {/* En móvil mostramos el nombre de marca conciso para evitar que ocupe múltiples líneas */}
+              <span className="sm:hidden font-serif text-base font-bold tracking-wide text-[#212924] block leading-tight truncate">
+                Blanco y Negro
+              </span>
+              <span className="hidden sm:block font-serif text-xl sm:text-2xl font-semibold tracking-wide text-[#212924] leading-tight truncate">
                 {config.name}
               </span>
-              <span className="text-xs text-[#5e7065] tracking-wider uppercase font-medium block">
-                {config.tagline || "Terapias Holísticas y Bienestar"}
+              <span className="text-[10px] sm:text-xs text-[#5e7065] tracking-wider uppercase font-medium hidden sm:block truncate max-w-xs sm:max-w-md">
+                {config.tagline && !config.tagline.toLowerCase().includes("ticket") && !config.tagline.toLowerCase().includes("visita")
+                  ? config.tagline
+                  : "Terapias Holísticas y Bienestar"}
               </span>
             </div>
           </Link>

@@ -67,7 +67,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
       {/* SECCIÓN 1: HERO PRINCIPAL */}
       <section
         id="inicio"
-        className="relative pt-28 pb-14 md:pt-36 md:pb-20 overflow-hidden bg-gradient-to-b from-[#faf7f2] via-[#f4eee4] to-[#faf7f2] border-b border-[#ebdcca]"
+        className="relative pt-32 pb-14 sm:pt-36 md:pt-40 md:pb-20 overflow-hidden bg-gradient-to-b from-[#faf7f2] via-[#f4eee4] to-[#faf7f2] border-b border-[#ebdcca]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
