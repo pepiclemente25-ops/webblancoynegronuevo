@@ -71,10 +71,22 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
   // Familias y Bienestares configurados
   const activeFamilias = useMemo(() => {
-    return familias && familias.length > 0
-      ? familias.filter((f) => f.activa !== false)
-      : defaultFamilias;
-  }, [familias]);
+    const list = familias && familias.length > 0 ? familias : defaultFamilias;
+    return list.filter((f) => {
+      // 1. Si está explícitamente desactivada
+      if (f.activa === false) return false;
+
+      const modo = f.modoVisibilidad || 'auto';
+      if (modo === 'ocultar') return false;
+      if (modo === 'mostrar') return true;
+
+      // 2. Modo 'auto': ocultar si no tiene ningún producto asignado
+      const count = products.filter(
+        (p) => p.familiaId === f.id || p.category === f.id || p.familiaNombre?.toLowerCase() === f.nombre.toLowerCase()
+      ).length;
+      return count > 0;
+    });
+  }, [familias, products]);
 
   const activeBienestares = useMemo(() => {
     return bienestares && bienestares.length > 0
@@ -576,40 +588,42 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             )}
           </div>
 
-          {/* Selector horizontal de Categorías con conteos reales en cajita estilo superior */}
-          <div className="inline-flex p-1.5 sm:p-2 bg-[#eae2d5] rounded-2xl sm:rounded-3xl shadow-inner flex-wrap items-center gap-1.5 sm:gap-2 max-w-full">
-            <button
-              type="button"
-              onClick={() => setSelectedFamilia("all")}
-              className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                selectedFamilia === "all"
-                  ? "bg-white text-[#1c2720] shadow-sm"
-                  : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
-              }`}
-            >
-              <span>Todos</span>
-              <span className="text-[11px] opacity-75">({products.length})</span>
-            </button>
+          {/* Contenedor adaptativo: Carrusel deslizante suave en móvil + Rejilla uniforme bien alineada en desktop */}
+          <div className="w-full bg-[#eae2d5] rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 shadow-inner">
+            <div className="flex sm:flex-wrap items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-0.5 px-0.5 scroll-smooth">
+              <button
+                type="button"
+                onClick={() => setSelectedFamilia("all")}
+                className={`px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 sm:shrink ${
+                  selectedFamilia === "all"
+                    ? "bg-white text-[#1c2720] shadow-sm"
+                    : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
+                }`}
+              >
+                <span className="whitespace-nowrap">Todos</span>
+                <span className="text-[11px] opacity-75">({products.length})</span>
+              </button>
 
-            {activeFamilias.map((fam) => {
-              const isSelected = selectedFamilia === fam.id;
-              const count = familiaCounts[fam.id] || 0;
-              return (
-                <button
-                  key={fam.id}
-                  type="button"
-                  onClick={() => setSelectedFamilia(fam.id)}
-                  className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    isSelected
-                      ? "bg-white text-[#1c2720] shadow-sm"
-                      : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
-                  }`}
-                >
-                  <span>{fam.nombre}</span>
-                  <span className="text-[11px] opacity-75">({count})</span>
-                </button>
-              );
-            })}
+              {activeFamilias.map((fam) => {
+                const isSelected = selectedFamilia === fam.id;
+                const count = familiaCounts[fam.id] || 0;
+                return (
+                  <button
+                    key={fam.id}
+                    type="button"
+                    onClick={() => setSelectedFamilia(fam.id)}
+                    className={`px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 sm:shrink ${
+                      isSelected
+                        ? "bg-white text-[#1c2720] shadow-sm"
+                        : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
+                    }`}
+                  >
+                    <span className="whitespace-nowrap">{fam.nombre}</span>
+                    <span className="text-[11px] opacity-75">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Fila de Controles: Buscador + Limpiar Filtros + Ordenación + Botón Filtros Laterales */}

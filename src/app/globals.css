@@ -57,3 +57,12 @@ body {
 .aura-card-glow:hover {
   box-shadow: 0 20px 35px -10px rgba(56, 83, 69, 0.12), 0 4px 12px -2px rgba(191, 161, 107, 0.1);
 }
+
+/* Ocultar barra de scroll para carruseles táctiles suaves */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

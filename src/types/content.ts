@@ -84,6 +84,7 @@ export interface FamiliaItem {
   icono?: string;
   orden?: number;
   activa?: boolean;
+  modoVisibilidad?: 'mostrar' | 'ocultar' | 'auto';
 }
 
 export interface BienestarPropositoItem {
