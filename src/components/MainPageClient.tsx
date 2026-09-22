@@ -141,19 +141,25 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
     [products]
   );
 
-  // Conteo de productos por Familia
+  // Conteo de productos por Familia (1 vez por producto por cada familia activa)
   const familiaCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    products.forEach((p) => {
-      if (p.familiaId) {
-        counts[p.familiaId] = (counts[p.familiaId] || 0) + 1;
-      }
-      if (p.category) {
-        counts[p.category] = (counts[p.category] || 0) + 1;
-      }
+    activeFamilias.forEach((fam) => {
+      const famIdLower = (fam.id || "").toLowerCase();
+      const famNomLower = (fam.nombre || "").toLowerCase();
+      counts[fam.id] = products.filter((p) => {
+        const pFamId = (p.familiaId || "").toLowerCase();
+        const pCat = (p.category || "").toLowerCase();
+        const pFamNom = (p.familiaNombre || "").toLowerCase();
+        return (
+          pFamId === famIdLower ||
+          pCat === famIdLower ||
+          (pFamNom && pFamNom === famNomLower)
+        );
+      }).length;
     });
     return counts;
-  }, [products]);
+  }, [products, activeFamilias]);
 
   // Filtrado y ordenación
   const filteredAndSortedProducts = useMemo(() => {

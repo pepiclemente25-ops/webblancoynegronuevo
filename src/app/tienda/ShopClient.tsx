@@ -131,32 +131,40 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   const DEFAULT_FALLBACK_IMG =
     "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80";
 
-  // Conteo dinámico de productos por Familia
+  // Conteo dinámico de productos por Familia (1 vez por producto por cada familia activa)
   const familiaCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    products.forEach((p) => {
-      if (p.familiaId) {
-        counts[p.familiaId] = (counts[p.familiaId] || 0) + 1;
-      }
-      if (p.category) {
-        counts[p.category] = (counts[p.category] || 0) + 1;
-      }
+    activeFamilias.forEach((fam) => {
+      const famIdLower = (fam.id || "").toLowerCase();
+      const famNomLower = (fam.nombre || "").toLowerCase();
+      counts[fam.id] = products.filter((p) => {
+        const pFamId = (p.familiaId || "").toLowerCase();
+        const pCat = (p.category || "").toLowerCase();
+        const pFamNom = (p.familiaNombre || "").toLowerCase();
+        return (
+          pFamId === famIdLower ||
+          pCat === famIdLower ||
+          (pFamNom && pFamNom === famNomLower)
+        );
+      }).length;
     });
     return counts;
-  }, [products]);
+  }, [products, activeFamilias]);
 
-  // Conteo dinámico de productos por Bienestar
+  // Conteo dinámico de productos por Bienestar (1 vez por producto para cada bienestar)
   const bienestarCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     products.forEach((p) => {
-      if (p.bienestarId) {
-        counts[p.bienestarId] = (counts[p.bienestarId] || 0) + 1;
-      }
+      const setB = new Set<string>();
+      if (p.bienestarId) setB.add(p.bienestarId);
       if (p.bienestarIds && Array.isArray(p.bienestarIds)) {
         p.bienestarIds.forEach((bId) => {
-          counts[bId] = (counts[bId] || 0) + 1;
+          if (bId) setB.add(bId);
         });
       }
+      setB.forEach((bId) => {
+        counts[bId] = (counts[bId] || 0) + 1;
+      });
     });
     return counts;
   }, [products]);
