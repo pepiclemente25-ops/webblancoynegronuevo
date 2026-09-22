@@ -1140,14 +1140,25 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   <div>
                     {/* Imagen con badge */}
                     <div className="aspect-16/10 w-full relative overflow-hidden bg-[#faf7f2]">
-                      <Image
-                        src={bienestar.imagenUrl || DEFAULT_FALLBACK_IMG}
-                        alt={bienestar.nombre}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 300px"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        unoptimized={bienestar.imagenUrl?.startsWith("data:")}
-                      />
+                      {(() => {
+                        const isInvalidUrl = !bienestar.imagenUrl || bienestar.imagenUrl.startsWith('/imagenes/') || bienestar.imagenUrl.startsWith('http://localhost');
+                        const imgSrc = failedImages[`bienestar-${bienestar.id}`] || isInvalidUrl
+                          ? DEFAULT_FALLBACK_IMG
+                          : bienestar.imagenUrl;
+                        return (
+                          <Image
+                            src={imgSrc}
+                            alt={bienestar.nombre}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 300px"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            unoptimized={imgSrc.startsWith("data:")}
+                            onError={() => {
+                              setFailedImages((prev) => ({ ...prev, [`bienestar-${bienestar.id}`]: true }));
+                            }}
+                          />
+                        );
+                      })()}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
                       <div className="absolute top-3 left-3">
                         <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-[#2a4537] text-[10px] font-bold shadow-xs">
