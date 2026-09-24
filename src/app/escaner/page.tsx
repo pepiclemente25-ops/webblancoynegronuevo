@@ -470,16 +470,17 @@ export default function EscanerPage() {
   const handleGuardarProducto = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    if (!nombre.trim()) {
-      alert("Por favor, introduzca o escanee el nombre del producto.");
-      return;
+    const cleanEan = ean.trim();
+    const cleanRef = ref.trim();
+    let finalNombre = nombre.trim();
+    if (!finalNombre) {
+      finalNombre = cleanEan
+        ? `Artículo ${cleanEan}`
+        : (cleanRef ? `Artículo ${cleanRef}` : (siguienteCodigoSugerido ? `Artículo ${siguienteCodigoSugerido}` : `Artículo sin nombre`));
     }
 
-    const pVentaNum = parseFloat(precioVenta.replace(",", "."));
-    if (isNaN(pVentaNum) || pVentaNum <= 0) {
-      alert("Por favor, introduzca un precio de venta válido mayor a 0 €.");
-      return;
-    }
+    const pVentaParsedRaw = parseFloat(precioVenta.replace(",", "."));
+    const pVentaNum = (!isNaN(pVentaParsedRaw) && pVentaParsedRaw >= 0) ? pVentaParsedRaw : 0;
 
     const pCosteNum = parseFloat(precioCoste.replace(",", ".")) || 0;
     const famObj = familias.find((f) => f.id === familiaId);
@@ -490,9 +491,9 @@ export default function EscanerPage() {
 
     try {
       const payload = {
-        nombre: nombre.trim(),
-        ean: ean.trim(),
-        ref: ref.trim(),
+        nombre: finalNombre,
+        ean: cleanEan,
+        ref: cleanRef,
         categoria: familiaId,
         categoriaLabel: famObj?.nombre || "Sin asignación",
         familiaId,
@@ -841,7 +842,7 @@ export default function EscanerPage() {
         <div>
           <div className="flex items-center justify-between mb-1">
             <label className="text-xs font-semibold text-slate-200">
-              Nombre / Título del Producto <span className="text-rose-400">*</span>
+              Nombre / Título del Producto
             </label>
             <button
               type="button"
@@ -853,10 +854,9 @@ export default function EscanerPage() {
           </div>
           <input
             type="text"
-            required
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
-            placeholder="Ej: Incienso Ruda y Romero 15g"
+            placeholder="Ej: Incienso Ruda y Romero 15g (opcional)"
             className="w-full px-3.5 py-3 rounded-xl bg-slate-900 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm text-slate-100 placeholder:text-slate-600 outline-none"
           />
         </div>
@@ -967,13 +967,12 @@ export default function EscanerPage() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Precio Venta (€) <span className="text-rose-400">*</span>
+                Precio Venta (€)
               </label>
               <div className="relative">
                 <input
                   type="text"
                   inputMode="decimal"
-                  required
                   value={precioVenta}
                   onChange={(e) => setPrecioVenta(e.target.value)}
                   placeholder="0,00"

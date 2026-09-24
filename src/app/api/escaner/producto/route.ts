@@ -38,21 +38,18 @@ export async function POST(req: NextRequest) {
       proveedor = "",
     } = body;
 
-    const nombreLimpio = String(nombre || "").trim();
+    const cleanEan = String(ean || "").trim();
+    const cleanRef = String(ref || "").trim();
+
+    let nombreLimpio = String(nombre || "").trim();
     if (!nombreLimpio) {
-      return NextResponse.json(
-        { success: false, error: "El nombre o título del producto es obligatorio." },
-        { status: 400 }
-      );
+      nombreLimpio = cleanEan 
+        ? `Artículo ${cleanEan}` 
+        : (cleanRef ? `Artículo ${cleanRef}` : `Artículo sin nombre`);
     }
 
-    const pVenta = Number(precioVenta) || 0;
-    if (pVenta <= 0) {
-      return NextResponse.json(
-        { success: false, error: "El precio de venta debe ser superior a 0 €." },
-        { status: 400 }
-      );
-    }
+    const pVentaRaw = Number(precioVenta);
+    const pVenta = (!isNaN(pVentaRaw) && pVentaRaw >= 0) ? pVentaRaw : 0;
 
     const sql = getDb();
     if (!sql) {
@@ -65,9 +62,6 @@ export async function POST(req: NextRequest) {
     // Comprobar si ya existe un producto con este EAN o Referencia
     let existingId: string | null = null;
     let stockPrevio = 0;
-
-    const cleanEan = String(ean || "").trim();
-    const cleanRef = String(ref || "").trim();
 
     if (cleanEan || cleanRef) {
       const checkRows = await sql.query(
