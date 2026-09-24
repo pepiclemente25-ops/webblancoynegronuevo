@@ -134,6 +134,18 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       tipoServicio: p.tipo_servicio || p.tipoServicio || (p.categoria === "terapias" ? "terapia" : undefined),
       esExperienciaEstrella: Boolean(p.es_experiencia_estrella || p.esExperienciaEstrella),
       experienciaEstrellaTitulo: p.experiencia_estrella_titulo || p.experienciaEstrellaTitulo || undefined,
+      presentacionTexto: p.presentacion_texto ? String(p.presentacion_texto).trim() : (p.presentacionTexto ? String(p.presentacionTexto).trim() : undefined),
+      entregaUbicacionTexto: p.entrega_ubicacion_texto ? String(p.entrega_ubicacion_texto).trim() : (p.entregaUbicacionTexto ? String(p.entregaUbicacionTexto).trim() : undefined),
+      compromisoTexto: p.compromiso_texto ? String(p.compromiso_texto).trim() : (p.compromisoTexto ? String(p.compromisoTexto).trim() : undefined),
+      compromisoActivo: p.compromiso_activo !== undefined ? (p.compromiso_activo === true || p.compromiso_activo === 'true' || p.compromiso_activo === 1) : (p.compromisoActivo !== undefined ? Boolean(p.compromisoActivo) : true),
+      compromisoEtiqueta: p.compromiso_etiqueta || p.compromisoEtiqueta || 'Compromiso Blanco y Negro',
+      camposFichaWeb: Array.isArray(p.campos_ficha_web) 
+        ? p.campos_ficha_web 
+        : (Array.isArray(p.camposFichaWeb) 
+            ? p.camposFichaWeb 
+            : (typeof p.campos_ficha_web === 'string' 
+                ? (() => { try { const parsed = JSON.parse(p.campos_ficha_web); return Array.isArray(parsed) ? parsed : []; } catch { return []; } })() 
+                : [])),
       orden: typeof p.orden === "number" ? p.orden : (typeof p.orden_web === "number" ? p.orden_web : undefined),
     };
   }).filter((p) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));
@@ -262,6 +274,18 @@ function buildWebDataFromPayload(payload: any): WebData {
       tipoServicio: p.tipoServicio || p.tipo_servicio || (p.categoria === "terapias" ? "terapia" : undefined),
       esExperienciaEstrella: Boolean(p.esExperienciaEstrella || p.es_experiencia_estrella),
       experienciaEstrellaTitulo: p.experienciaEstrellaTitulo || p.experiencia_estrella_titulo || undefined,
+      presentacionTexto: p.presentacionTexto || p.presentacion_texto ? String(p.presentacionTexto || p.presentacion_texto).trim() : undefined,
+      entregaUbicacionTexto: p.entregaUbicacionTexto || p.entrega_ubicacion_texto ? String(p.entregaUbicacionTexto || p.entrega_ubicacion_texto).trim() : undefined,
+      compromisoTexto: p.compromisoTexto || p.compromiso_texto ? String(p.compromisoTexto || p.compromiso_texto).trim() : undefined,
+      compromisoActivo: p.compromisoActivo !== undefined ? Boolean(p.compromisoActivo) : (p.compromiso_activo !== undefined ? Boolean(p.compromiso_activo) : true),
+      compromisoEtiqueta: p.compromisoEtiqueta || p.compromiso_etiqueta || 'Compromiso Blanco y Negro',
+      camposFichaWeb: Array.isArray(p.camposFichaWeb)
+        ? p.camposFichaWeb
+        : (Array.isArray(p.campos_ficha_web)
+            ? p.campos_ficha_web
+            : (typeof p.campos_ficha_web === 'string'
+                ? (() => { try { const parsed = JSON.parse(p.campos_ficha_web); return Array.isArray(parsed) ? parsed : []; } catch { return []; } })()
+                : [])),
       orden: typeof p.orden === "number" ? p.orden : (typeof p.orden_web === "number" ? p.orden_web : undefined),
     };
   }).filter((p: any) => p.publicadoWeb && !(p.accionAgotado === "ocultar" && !p.inStock));

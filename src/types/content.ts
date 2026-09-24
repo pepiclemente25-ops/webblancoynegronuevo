@@ -136,7 +136,20 @@ export interface ShopProduct {
   tipoServicio?: "terapia" | "cuidado";
   esExperienciaEstrella?: boolean;
   experienciaEstrellaTitulo?: string;
+  presentacionTexto?: string;
+  entregaUbicacionTexto?: string;
+  compromisoTexto?: string;
+  compromisoActivo?: boolean;
+  compromisoEtiqueta?: string;
+  camposFichaWeb?: CampoFichaWeb[];
   orden?: number;
+}
+
+export interface CampoFichaWeb {
+  id: string;
+  activo: boolean;
+  etiqueta: string;
+  valor: string;
 }
 
 export interface CartItem {
