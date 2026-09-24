@@ -133,8 +133,8 @@ export async function POST(req: NextRequest) {
         updated_at = NOW()`,
       [
         prodId,
-        cleanRef,
-        cleanEan,
+        cleanRef || null,
+        cleanEan || null,
         nombreLimpio,
         categoria || "sin-asignacion",
         categoriaLabel || "Sin asignación",
