@@ -73,7 +73,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   const activeFamilias = useMemo(() => {
     const list = familias && familias.length > 0 ? familias : defaultFamilias;
     return list.filter((f) => {
-      // 1. Si está explícitamente desactivada
+      // 1. Si es 'Sin asignación' o está explícitamente desactivada
+      if (f.id === 'sin-asignacion' || f.id === 'sin_asignacion' || (f.nombre && f.nombre.toLowerCase().includes('sin asignaci'))) return false;
       if (f.activa === false) return false;
 
       const modo = f.modoVisibilidad || 'auto';
@@ -901,7 +902,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       {/* Familia / Categoría pill */}
                       <div className="absolute bottom-3 left-3">
                         <span className="px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-xs text-[#212924] text-[10px] font-semibold shadow-2xs">
-                          {product.familiaNombre || product.categoryLabel || "Bienestar"}
+                          {(product.familiaNombre && !product.familiaNombre.toLowerCase().includes("sin asignaci")) ? product.familiaNombre : (product.categoryLabel && !product.categoryLabel.toLowerCase().includes("sin asignaci")) ? product.categoryLabel : "Bienestar"}
                         </span>
                       </div>
                     </div>
@@ -1864,7 +1865,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 {/* Badges de Categoría y Stock */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="px-3 py-1 rounded-full bg-[#f4efe5] text-[#3d5a4c] text-xs font-semibold">
-                    {selectedProduct.familiaNombre || selectedProduct.categoryLabel || "Bienestar"}
+                    {(selectedProduct.familiaNombre && !selectedProduct.familiaNombre.toLowerCase().includes("sin asignaci")) ? selectedProduct.familiaNombre : (selectedProduct.categoryLabel && !selectedProduct.categoryLabel.toLowerCase().includes("sin asignaci")) ? selectedProduct.categoryLabel : "Bienestar"}
                   </span>
 
                   {selectedProduct.badge && (

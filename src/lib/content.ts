@@ -108,11 +108,23 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       ? parsedImages.map((img: string) => formatImageUrl(img, defaultFallback))
       : [mainImgUrl];
 
+    const rawFamId = p.familia_id || p.familiaId || undefined;
+    const rawFamNom = p.familia_nombre || p.familiaNombre || undefined;
+    const esSinAsig =
+      rawFamId === "sin-asignacion" ||
+      rawFamId === "sin_asignacion" ||
+      (rawFamNom && rawFamNom.toLowerCase().includes("sin asignaci")) ||
+      p.categoria === "sin-asignacion";
+
+    const finalFamId = esSinAsig ? undefined : rawFamId;
+    const finalFamNom = esSinAsig ? undefined : rawFamNom;
+    const finalCatLabel = esSinAsig ? "Bienestar" : (rawFamNom || p.categoria_label || "Holístico");
+
     return {
       id: p.id || p.ref || `prod-${idx + 1}`,
       name: p.nombre || "Artículo Holístico",
-      category: p.categoria || "aromaterapia",
-      categoryLabel: p.familia_nombre || p.categoria_label || "Holístico",
+      category: esSinAsig ? "aromaterapia" : (p.categoria || "aromaterapia"),
+      categoryLabel: finalCatLabel,
       shortDescription: p.descripcion_corta || "",
       fullDescription: p.descripcion_completa || "",
       price: priceNum,
@@ -127,8 +139,8 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       publicadoWeb: p.publicado_web !== false,
       esServicio: Boolean(p.es_servicio || p.esServicio || p.categoria === "terapias"),
       duracionMinutos: p.duracion_minutos || p.duracionMinutos || undefined,
-      familiaId: p.familia_id || p.familiaId || undefined,
-      familiaNombre: p.familia_nombre || p.familiaNombre || undefined,
+      familiaId: finalFamId,
+      familiaNombre: finalFamNom,
       bienestarId: p.bienestar_id || p.bienestarId || undefined,
       bienestarIds: Array.isArray(p.bienestar_ids) ? p.bienestar_ids : (p.bienestar_id ? [p.bienestar_id] : []),
       tipoServicio: p.tipo_servicio || p.tipoServicio || (p.categoria === "terapias" ? "terapia" : undefined),
@@ -366,7 +378,9 @@ export async function getWebData(): Promise<WebData> {
             try {
               const parsed = JSON.parse(v);
               if (Array.isArray(parsed) && parsed.length > 0) {
-                neonFamilias = parsed.sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0));
+                neonFamilias = parsed
+                  .filter((f: any) => f && f.id !== "sin-asignacion" && f.id !== "sin_asignacion" && !String(f.nombre || "").toLowerCase().includes("sin asignaci"))
+                  .sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0));
               }
             } catch {}
           }
