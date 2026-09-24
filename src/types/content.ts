@@ -101,6 +101,8 @@ export interface BienestarPropositoItem {
 
 export interface ExperienciaEstrellaData {
   badge?: string;
+  badgeIcono?: string;
+  icono?: string;
   titulo: string;
   duracion?: string;
   descripcion: string;

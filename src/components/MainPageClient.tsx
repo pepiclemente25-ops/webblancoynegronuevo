@@ -1158,7 +1158,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   <div>
                     <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
                       <span className="w-10 h-10 rounded-2xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-xl font-bold">
-                        ✨
+                        {terapiasSection?.contenido?.columnaTerapiasIcono || terapiasSection?.contenido?.col1Icono || "✨"}
                       </span>
                       <div>
                         <h3 className="font-serif font-bold text-lg text-[#1e2822]">
@@ -1224,7 +1224,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 <div>
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
                     <span className="w-10 h-10 rounded-2xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-xl font-bold">
-                      🌿
+                      {terapiasSection?.contenido?.columnaCuidadosIcono || terapiasSection?.contenido?.col2Icono || "🌿"}
                     </span>
                     <div>
                       <h3 className="font-serif font-bold text-lg text-[#1e2822]">
@@ -1299,7 +1299,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               <div className="relative z-10 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="max-w-xl text-center md:text-left">
                   <span className="px-3.5 py-1 rounded-full bg-[#dfc89f] text-[#24352b] text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1.5">
-                    <span>★</span>
+                    <span>{terapiasSection?.contenido?.estrellaIcono || terapiasSection?.contenido?.estrellaBadgeIcono || activeExperienciaEstrella.badgeIcono || activeExperienciaEstrella.icono || "★"}</span>
                     <span>{activeExperienciaEstrella.badge || "Nuestra Experiencia Estrella"}</span>
                   </span>
                   <h3 className="font-serif text-2xl sm:text-3xl font-bold mt-3 text-white">
@@ -1402,8 +1402,12 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 className="w-full p-6 sm:p-7 flex items-center justify-between text-left hover:bg-[#faf7f2] transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#3d5a4c] flex items-center justify-center">
-                    <HelpCircle className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#3d5a4c] flex items-center justify-center text-xl">
+                    {faqSection?.contenido?.icono || faqSection?.contenido?.faqIcono ? (
+                      <span>{faqSection?.contenido?.icono || faqSection?.contenido?.faqIcono}</span>
+                    ) : (
+                      <HelpCircle className="w-5 h-5" />
+                    )}
                   </div>
                   <div>
                     <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
@@ -1453,7 +1457,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   ).map((paso: any, idx: number) => (
                     <div key={idx} className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
                       <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
-                        {paso.numero || idx + 1}
+                        {paso.icono || paso.numero || idx + 1}
                       </div>
                       <h4 className="font-serif font-semibold text-xs text-[#212924]">
                         {paso.titulo}
