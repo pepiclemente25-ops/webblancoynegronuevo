@@ -144,6 +144,7 @@ export interface ShopProduct {
   compromisoTexto?: string;
   compromisoActivo?: boolean;
   compromisoEtiqueta?: string;
+  compromisoIcono?: string;
   camposFichaWeb?: CampoFichaWeb[];
   orden?: number;
 }
@@ -153,6 +154,7 @@ export interface CampoFichaWeb {
   activo: boolean;
   etiqueta: string;
   valor: string;
+  icono?: string;
 }
 
 export interface CartItem {

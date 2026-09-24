@@ -151,6 +151,7 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       compromisoTexto: p.compromiso_texto ? String(p.compromiso_texto).trim() : (p.compromisoTexto ? String(p.compromisoTexto).trim() : undefined),
       compromisoActivo: p.compromiso_activo !== undefined ? (p.compromiso_activo === true || p.compromiso_activo === 'true' || p.compromiso_activo === 1) : (p.compromisoActivo !== undefined ? Boolean(p.compromisoActivo) : true),
       compromisoEtiqueta: p.compromiso_etiqueta || p.compromisoEtiqueta || 'Compromiso Blanco y Negro',
+      compromisoIcono: p.compromiso_icono || p.compromisoIcono || '🌿',
       camposFichaWeb: Array.isArray(p.campos_ficha_web) 
         ? p.campos_ficha_web 
         : (Array.isArray(p.camposFichaWeb) 

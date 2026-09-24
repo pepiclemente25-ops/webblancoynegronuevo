@@ -1774,13 +1774,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 {/* Cajas de detalles prácticos y energéticos */}
                 {(() => {
                   // Si el producto tiene definido camposFichaWeb (es un array), respetamos estrictamente su configuración (incluso si todos están inactivos/desmarcados)
-                  const camposAMostrar: Array<{ id: string; etiqueta: string; valor: string }> = Array.isArray(selectedProduct.camposFichaWeb)
+                  const camposAMostrar: Array<{ id: string; etiqueta: string; valor: string; icono?: string }> = Array.isArray(selectedProduct.camposFichaWeb)
                     ? selectedProduct.camposFichaWeb
                         .filter((c) => c && c.activo !== false && (c.valor || '').trim() !== '')
-                        .map(c => ({ id: c.id, etiqueta: (c.etiqueta || '').trim() || 'Detalle', valor: c.valor.trim() }))
+                        .map(c => ({ id: c.id, etiqueta: (c.etiqueta || '').trim() || 'Detalle', valor: c.valor.trim(), icono: c.icono }))
                     : [
-                        ...(selectedProduct.presentacionTexto?.trim() ? [{ id: 'pres', etiqueta: 'Presentación', valor: selectedProduct.presentacionTexto.trim() }] : []),
-                        ...(selectedProduct.entregaUbicacionTexto?.trim() ? [{ id: 'ent', etiqueta: 'Entrega / Ubicación', valor: selectedProduct.entregaUbicacionTexto.trim() }] : []),
+                        ...(selectedProduct.presentacionTexto?.trim() ? [{ id: 'pres', etiqueta: 'Presentación', valor: selectedProduct.presentacionTexto.trim(), icono: '✨' }] : []),
+                        ...(selectedProduct.entregaUbicacionTexto?.trim() ? [{ id: 'ent', etiqueta: 'Entrega / Ubicación', valor: selectedProduct.entregaUbicacionTexto.trim(), icono: '🏪' }] : []),
                       ];
 
                   // Compromiso Blanco y Negro: SOLO si compromisoActivo no es false
@@ -1796,7 +1796,9 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                           {camposAMostrar.map((campo, idx) => (
                             <div key={campo.id || idx} className="p-3 bg-white rounded-2xl border border-[#ebdcca] shadow-2xs">
                               <p className="font-bold text-[#3d5a4c] flex items-center gap-1.5 mb-0.5">
-                                {idx % 2 === 0 ? (
+                                {campo.icono ? (
+                                  <span className="text-sm shrink-0 leading-none">{campo.icono}</span>
+                                ) : idx % 2 === 0 ? (
                                   <Sparkles className="w-3.5 h-3.5 text-[#b08d4b]" />
                                 ) : (
                                   <Store className="w-3.5 h-3.5 text-[#3d5a4c]" />
@@ -1814,7 +1816,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       {/* Sello de confianza */}
                       {showCompromiso && Boolean(textoCompromiso) && (
                         <div className="p-3.5 bg-[#f1f7f3] rounded-2xl border border-[#cbe3d2] flex items-center gap-3 text-xs text-[#284534]">
-                          <span className="text-lg">🌿</span>
+                          <span className="text-lg">{selectedProduct.compromisoIcono || '🌿'}</span>
                           <p className="text-[11px] leading-tight whitespace-pre-line">
                             <strong>{compromisoEtiqueta}:</strong> {textoCompromiso}
                           </p>
