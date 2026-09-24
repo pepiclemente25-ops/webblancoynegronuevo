@@ -1,15 +1,29 @@
 "use client";
 
 import React from "react";
-import { SiteConfig } from "@/types/content";
+import { SiteConfig, WebSectionItem } from "@/types/content";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 
 interface FooterProps {
   config: SiteConfig;
+  section?: WebSectionItem;
 }
 
-export const Footer: React.FC<FooterProps> = ({ config }) => {
+export const Footer: React.FC<FooterProps> = ({ config, section }) => {
+  const fContenido = section?.contenido || {};
+  const nombre = fContenido.nombre || config.name || "Blanco y Negro";
+  const tagline = fContenido.tagline || config.tagline || "Terapias Holísticas y Bienestar · Boiro";
+  const descripcion = fContenido.descripcion || config.description ||
+    "Espacio dedicado a la reconexión profunda entre cuerpo, mente y alma. Terapias naturales, productos conscientes y bienestar integral.";
+  const direccion = fContenido.direccion || config.address || "Rúa Estatuto de Galicia, 39";
+  const ciudad = fContenido.ciudad || config.city || "Boiro (A Coruña)";
+  const telefono = fContenido.telefono || config.phoneDisplay || config.phone || "600 123 456";
+  const email = fContenido.email || config.email || "contacto@blancoynegroterapias.com";
+  const horario = fContenido.horario || "";
+  const disclaimerLegal = fContenido.disclaimerLegal || config.disclaimerLegal ||
+    `Las terapias y actividades ofrecidas en ${nombre} (quiromasaje, reiki, registros akáshicos y ejercicios de respiración) son herramientas de bienestar integral, relajación y desarrollo personal. En ningún caso constituyen un acto médico oficial ni pretenden diagnosticar, tratar o sustituir tratamientos médicos, farmacológicos o psicológicos convencionales.`;
+
   return (
     <footer className="bg-[#212924] text-[#cfd6d1] pt-16 pb-12 border-t border-[#313c35]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,7 +36,7 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
               <div className="w-10 h-10 rounded-full bg-[#f6f2ea] border border-[#dfc89f]/40 overflow-hidden flex items-center justify-center flex-shrink-0">
                 <Image
                   src="/brand/yinyang.webp"
-                  alt="Logo Blanco y Negro"
+                  alt={`Logo ${nombre}`}
                   width={40}
                   height={40}
                   className="w-full h-full object-cover"
@@ -30,16 +44,15 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
               </div>
               <div>
                 <span className="font-serif text-2xl font-semibold text-white tracking-wide block leading-tight">
-                  {config.name}
+                  {nombre}
                 </span>
                 <span className="text-[11px] text-[#dfc89f] tracking-wider uppercase font-medium block">
-                  {config.tagline || "Terapias Holísticas y Bienestar"}
+                  {tagline}
                 </span>
               </div>
             </div>
             <p className="text-xs sm:text-sm text-[#95a39a] leading-relaxed max-w-sm">
-              {config.description ||
-                "Espacio dedicado a la reconexión profunda entre cuerpo, mente y alma. Terapias naturales, productos conscientes y bienestar integral."}
+              {descripcion}
             </p>
           </div>
 
@@ -76,8 +89,8 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
               </li>
               <li>
                 <a
-                  href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(
-                    `Hola ${config.name}, quisiera agendar una cita o hacer una consulta.`
+                  href={`https://wa.me/${config.whatsapp || "34600123456"}?text=${encodeURIComponent(
+                    `Hola ${nombre}, quisiera agendar una cita o hacer una consulta.`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -94,18 +107,24 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#dfc89f] mb-4">
               Visitas y Citas
             </h4>
-            <p className="text-xs sm:text-sm text-[#cfd6d1] mb-2">{config.address}</p>
-            <p className="text-xs text-[#95a39a] mb-4">{config.city}</p>
+            <p className="text-xs sm:text-sm text-[#cfd6d1] mb-1">{direccion}</p>
+            <p className="text-xs text-[#95a39a] mb-3">{ciudad}</p>
+            {horario && (
+              <p className="text-xs text-[#dfc89f]/90 mb-3 bg-[#2a352e] p-2 rounded-lg border border-[#37453d]">
+                <strong className="text-white block mb-0.5">Horario:</strong>
+                {horario}
+              </p>
+            )}
             <p className="text-xs text-[#95a39a] mb-1">
               Teléfono:{" "}
-              <a href={`tel:${config.phone}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
-                {config.phoneDisplay}
+              <a href={`tel:${telefono.replace(/\s+/g, '')}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
+                {telefono}
               </a>
             </p>
             <p className="text-xs text-[#95a39a]">
               Email:{" "}
-              <a href={`mailto:${config.email}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
-                {config.email}
+              <a href={`mailto:${email}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
+                {email}
               </a>
             </p>
           </div>
@@ -116,14 +135,13 @@ export const Footer: React.FC<FooterProps> = ({ config }) => {
         <div className="py-6 border-b border-[#313c35] text-[11px] text-[#7a8880] leading-relaxed">
           <p>
             <strong className="text-[#a1b0a7]">Aviso Legal Terapéutico:</strong>{" "}
-            {config.disclaimerLegal ||
-              `Las terapias y actividades ofrecidas en ${config.name} (quiromasaje, reiki, registros akáshicos y ejercicios de respiración) son herramientas de bienestar integral, relajación y desarrollo personal. En ningún caso constituyen un acto médico oficial ni pretenden diagnosticar, tratar o sustituir tratamientos médicos, farmacológicos o psicológicos convencionales.`}
+            {disclaimerLegal}
           </p>
         </div>
 
         {/* Créditos y Copyright */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#7a8880]">
-          <p>© {new Date().getFullYear()} {config.name}. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} {nombre}. Todos los derechos reservados.</p>
           <div className="flex items-center gap-1">
             <span>Hecho con</span>
             <Heart className="w-3.5 h-3.5 text-[#dfc89f] fill-[#dfc89f]" />

@@ -20,17 +20,18 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
     "ARMONÍA YIN-YANG & BIENESTAR HOLÍSTICO · BOIRO";
   const titulo =
     contenido.tituloGrande ||
-    section?.titulo ||
     contenido.titulo ||
+    section?.titulo ||
     "Reconecta con tu equilibrio vital y la calma profunda";
   const descripcion =
     contenido.fraseBienvenida ||
     contenido.descripcion ||
+    section?.subtitulo ||
     "Un santuario de calma y equilibrio en el que reconectar con tu esencia natural a través del quiromasaje, la energía Reiki, las lecturas de Registros Akáshicos y la respiración consciente.";
-  const boton1Texto = contenido.botonTexto || contenido.boton1Texto || "Reservar Cita";
+  const boton1Texto = contenido.botonTexto || contenido.boton1Texto || "Explorar Tienda & Herramientas";
   const boton1Link = contenido.boton1Link || "#tienda";
   const boton2Texto =
-    contenido.botonSecundario || contenido.boton2Texto || "Explorar Terapias";
+    contenido.botonSecundario || contenido.boton2Texto || "Ver Carta de Terapias en Boiro";
   const boton2Link = contenido.boton2Link || "#carta-terapias";
   const heroImg =
     contenido.heroImg ||
@@ -40,27 +41,30 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
   const therapistName = contenido.nombreTerapeuta || config.therapistName || "Pepi";
   const subtituloFoto = contenido.subtituloFoto || "Centro Holístico & Tienda";
   const tituloFoto = contenido.tituloFoto || `${therapistName} · Boiro (A Coruña)`;
-  const tarjetaFlotanteIcono = contenido.tarjetaFlotanteIcono || "★";
-  const tarjetaFlotanteTitulo = contenido.tarjetaFlotanteTitulo || "Atención Cercana";
-  const tarjetaFlotanteTexto = contenido.tarjetaFlotanteTexto || "Recogida en Boiro y envíos a toda España";
+  const tarjetaFlotanteIcono = contenido.tarjetaFlotanteIcono || contenido.tarjetaBadgeIcono || "★";
+  const tarjetaFlotanteTitulo = contenido.tarjetaBadge || contenido.tarjetaFlotanteTitulo || "Atención Cercana";
+  const tarjetaFlotanteTexto = contenido.tarjetaConfianza || contenido.tarjetaFlotanteTexto || "Recogida en Boiro y envíos a toda España";
 
-  // Garantías / Ventajas dinámicas (Sección 2 o contenido de Hero)
+  // Chips dinámicos del Hero
+  const chips: Array<{ titulo: string; desc: string; icono?: string }> = Array.isArray(contenido.chips) && contenido.chips.length > 0
+    ? contenido.chips
+    : [
+        { titulo: "100% Botánico & Sagrado", desc: "Aceites puros ecológicos", icono: "🌿" },
+        { titulo: "Atención Plena en Boiro", desc: "Sin prisas ni esperas", icono: "🕯️" },
+        { titulo: "Armonía Cuerpo y Alma", desc: "Enfoque holístico integral", icono: "✨" },
+      ];
+
+  // Garantías / Ventajas dinámicas (sec-garantias)
   const gContenido = garantiasSection?.contenido || contenido.garantias || {};
-  const garantia1Icono = gContenido.icono1 || "📦";
-  const garantia1Titulo = gContenido.titulo1 || "Envíos Cuidados";
-  const garantia1Desc = gContenido.desc1 || "A domicilio en 24-48h";
-
-  const garantia2Icono = gContenido.icono2 || "🏪";
-  const garantia2Titulo = gContenido.titulo2 || "Recogida Gratuita";
-  const garantia2Desc = gContenido.desc2 || "En nuestro centro de Boiro";
-
-  const garantia3Icono = gContenido.icono3 || "✨";
-  const garantia3Titulo = gContenido.titulo3 || "100% Auténtico";
-  const garantia3Desc = gContenido.desc3 || "Minerales y ceras naturales";
-
-  const garantia4Icono = gContenido.icono4 || "💬";
-  const garantia4Titulo = gContenido.titulo4 || "Asesoría WhatsApp";
-  const garantia4Desc = gContenido.desc4 || "Te ayudamos a elegir";
+  const showGarantias = garantiasSection?.activo !== false;
+  const tarjetasGarantias: Array<{ icono: string; titulo: string; desc: string }> = Array.isArray(gContenido.tarjetas) && gContenido.tarjetas.length > 0
+    ? gContenido.tarjetas
+    : [
+        { icono: gContenido.icono1 || "📦", titulo: gContenido.titulo1 || "Envíos Cuidados", desc: gContenido.desc1 || "A domicilio en 24-48h" },
+        { icono: gContenido.icono2 || "🏪", titulo: gContenido.titulo2 || "Recogida Gratuita", desc: gContenido.desc2 || "En nuestro centro de Boiro" },
+        { icono: gContenido.icono3 || "✨", titulo: gContenido.titulo3 || "100% Auténtico", desc: gContenido.desc3 || "Minerales y ceras naturales" },
+        { icono: gContenido.icono4 || "💬", titulo: gContenido.titulo4 || "Asesoría WhatsApp", desc: gContenido.desc4 || "Te ayudamos a elegir" },
+      ];
 
   return (
     <>
@@ -81,11 +85,11 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                 {titulo}
               </h1>
 
-              <p className="text-base sm:text-lg text-[#55695e] leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8 font-normal">
+              <p className="text-base sm:text-lg text-[#55695e] leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8 font-normal whitespace-pre-line">
                 {descripcion}
               </p>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8">
                 <a
                   href={boton1Link}
                   className="px-7 sm:px-8 py-3.5 rounded-full bg-[#3d5a4c] hover:bg-[#2a3d34] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 group cursor-pointer"
@@ -101,6 +105,23 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                   <span>{boton2Texto}</span>
                 </a>
               </div>
+
+              {/* Chips informativos inferiores del Hero */}
+              {chips.length > 0 && (
+                <div className="pt-6 border-t border-[#ebdcca] grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                  {chips.map((chip, idx) => (
+                    <div key={idx} className="p-3.5 rounded-2xl bg-white/75 border border-[#ebdcca] shadow-2xs flex items-center gap-3">
+                      <span className="w-8 h-8 rounded-xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
+                        {chip.icono || (idx === 0 ? "🌿" : idx === 1 ? "🕯️" : "✨")}
+                      </span>
+                      <div>
+                        <h4 className="font-bold text-xs text-[#1a251e] leading-tight">{chip.titulo}</h4>
+                        <p className="text-[11px] text-[#55695e] leading-tight mt-0.5">{chip.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Columna Derecha: Imagen del Espacio / Terapeuta */}
@@ -145,52 +166,28 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
         </div>
       </section>
 
-      {/* BANDA DE GARANTÍAS */}
-      <div id="garantias" className="bg-white border-b border-[#ebdcca] py-4 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-3 p-2">
-              <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                {garantia1Icono}
-              </span>
-              <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">{garantia1Titulo}</h4>
-                <p className="text-[11px] text-gray-500">{garantia1Desc}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center md:justify-start gap-3 p-2">
-              <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                {garantia2Icono}
-              </span>
-              <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">{garantia2Titulo}</h4>
-                <p className="text-[11px] text-gray-500">{garantia2Desc}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center md:justify-start gap-3 p-2">
-              <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                {garantia3Icono}
-              </span>
-              <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">{garantia3Titulo}</h4>
-                <p className="text-[11px] text-gray-500">{garantia3Desc}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center md:justify-start gap-3 p-2">
-              <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
-                {garantia4Icono}
-              </span>
-              <div>
-                <h4 className="text-xs font-bold text-[#1e2822]">{garantia4Titulo}</h4>
-                <p className="text-[11px] text-gray-500">{garantia4Desc}</p>
-              </div>
+      {/* BANDA DE GARANTÍAS (sec-garantias) */}
+      {showGarantias && tarjetasGarantias.length > 0 && (
+        <div id="garantias" className="bg-white border-b border-[#ebdcca] py-4 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`grid gap-4 text-center md:text-left ${
+              tarjetasGarantias.length <= 2 ? "grid-cols-2" : tarjetasGarantias.length === 3 ? "grid-cols-1 sm:grid-cols-3" : "grid-cols-2 md:grid-cols-4"
+            }`}>
+              {tarjetasGarantias.map((g, idx) => (
+                <div key={idx} className="flex items-center justify-center md:justify-start gap-3 p-2">
+                  <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
+                    {g.icono || "✨"}
+                  </span>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#1e2822]">{g.titulo}</h4>
+                    <p className="text-[11px] text-gray-500">{g.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

@@ -59,6 +59,16 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
   const therapies = data.therapies || [];
   const config = data.config;
 
+  // Extracción canónica de secciones predefinidas
+  const heroSection = data.sections?.find((s) => s.tipoPlantilla === "hero" || s.idSeccion === "sec-hero");
+  const garantiasSection = data.sections?.find((s) => s.tipoPlantilla === "garantias" || s.idSeccion === "sec-garantias");
+  const tiendaSection = data.sections?.find((s) => s.tipoPlantilla === "tienda" || s.idSeccion === "sec-tienda");
+  const bienestarSection = data.sections?.find((s) => s.tipoPlantilla === "bienestar" || s.idSeccion === "sec-bienestar");
+  const terapiasSection = data.sections?.find((s) => s.tipoPlantilla === "terapias" || s.idSeccion === "sec-terapias");
+  const aboutSection = data.sections?.find((s) => s.tipoPlantilla === "sobre_mi" || s.idSeccion === "sec-sobre-mi");
+  const faqSection = data.sections?.find((s) => s.tipoPlantilla === "faq" || s.idSeccion === "sec-faq");
+  const footerSection = data.sections?.find((s) => s.tipoPlantilla === "footer" || s.idSeccion === "sec-footer");
+
   // Familias, Bienestares y Experiencia Estrella configurados o defaults
   const activeFamilias = useMemo(() => {
     const list = data.familias && data.familias.length > 0 ? data.familias : defaultFamilias;
@@ -79,14 +89,50 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
   }, [data.familias, products]);
 
   const activeBienestares = useMemo(() => {
-    return data.bienestares && data.bienestares.length > 0
+    const baseList = data.bienestares && data.bienestares.length > 0
       ? data.bienestares.filter((b) => b.activo !== false).sort((a, b) => (a.orden || 0) - (b.orden || 0))
       : defaultBienestares;
-  }, [data.bienestares]);
+
+    const bloques = bienestarSection?.contenido?.bloques;
+    if (Array.isArray(bloques) && bloques.length > 0) {
+      return baseList.map((b, idx) => {
+        const override = bloques.find((blk: any) => blk.id === b.id) || bloques[idx];
+        if (override) {
+          return {
+            ...b,
+            nombre: override.titulo || override.nombre || b.nombre,
+            subtitulo: override.subtitulo || b.subtitulo,
+            descripcion: override.desc || override.descripcion || b.descripcion,
+            icono: override.icono || b.icono,
+          };
+        }
+        return b;
+      });
+    }
+    return baseList;
+  }, [data.bienestares, bienestarSection]);
 
   const activeExperienciaEstrella = useMemo(() => {
-    return data.experienciaEstrella || defaultExperienciaEstrella;
-  }, [data.experienciaEstrella]);
+    const base = data.experienciaEstrella || defaultExperienciaEstrella;
+    const tCont = terapiasSection?.contenido;
+    if (tCont?.estrellaTitulo || tCont?.estrellaDescripcion) {
+      let parsedPrice = base.precio;
+      if (tCont.estrellaPrecio) {
+        const num = parseFloat(String(tCont.estrellaPrecio).replace("€", "").replace(",", ".").trim());
+        if (!isNaN(num)) parsedPrice = num;
+      }
+      return {
+        ...base,
+        badge: tCont.estrellaBadge || base.badge,
+        titulo: tCont.estrellaTitulo || base.titulo,
+        descripcion: tCont.estrellaDescripcion || base.descripcion,
+        duracion: tCont.estrellaDuracion || base.duracion,
+        precio: parsedPrice,
+        botonTexto: tCont.estrellaBotonTexto || base.botonTexto,
+      };
+    }
+    return base;
+  }, [data.experienciaEstrella, terapiasSection]);
 
   // Pestaña maestra de catálogo (Captura 1)
   const [masterTab, setMasterTab] = useState<MasterTabOption>("all");
@@ -477,18 +523,10 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
     ];
   }, [products]);
 
-  const heroSection = data.sections?.find((s) => s.tipoPlantilla === "hero" || s.idSeccion === "sec-hero");
-  const garantiasSection = data.sections?.find((s) => s.tipoPlantilla === "garantias" || s.idSeccion === "sec-garantias");
-  const tiendaSection = data.sections?.find((s) => s.tipoPlantilla === "tienda" || s.idSeccion === "sec-tienda");
-  const bienestarSection = data.sections?.find((s) => s.tipoPlantilla === "bienestar" || s.idSeccion === "sec-bienestar");
-  const terapiasSection = data.sections?.find((s) => s.tipoPlantilla === "terapias" || s.idSeccion === "sec-terapias");
-  const aboutSection = data.sections?.find((s) => s.tipoPlantilla === "sobre_mi" || s.idSeccion === "sec-sobre-mi");
-  const faqSection = data.sections?.find((s) => s.tipoPlantilla === "faq" || s.idSeccion === "sec-faq");
-
   // Secciones extra personalizadas creadas por el usuario
   const extraSections = useMemo(() => {
-    const standardIds = ["sec-hero", "sec-garantias", "sec-tienda", "sec-bienestar", "sec-terapias", "sec-sobre-mi", "sec-faq"];
-    const standardTypes = ["hero", "garantias", "tienda", "bienestar", "terapias", "sobre_mi", "faq"];
+    const standardIds = ["sec-hero", "sec-garantias", "sec-tienda", "sec-bienestar", "sec-terapias", "sec-sobre-mi", "sec-faq", "sec-footer"];
+    const standardTypes = ["hero", "garantias", "tienda", "bienestar", "terapias", "sobre_mi", "faq", "footer"];
     return (data.sections || []).filter(
       (s) => !standardIds.includes(s.idSeccion || s.id) && !standardTypes.includes(s.tipoPlantilla) && s.activo !== false
     );
@@ -1005,129 +1043,132 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         </section>
 
         {/* ================= SECCIÓN 4: GUÍA DE BIENESTAR CONSCIENTE ================= */}
-        <section
-          id="bienestar"
-          className="py-16 bg-gradient-to-b from-white via-[#f7f3eb] to-white border-y border-[#ebdcca] mb-16"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
-                {bienestarSection?.contenido?.badge || "Guía de Bienestar Consciente"}
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
-                {bienestarSection?.contenido?.titulo || bienestarSection?.titulo || "Cómo integrar las herramientas de autocuidado en tu rutina"}
-              </h2>
-              <p className="text-xs sm:text-sm text-[#5f7467] mt-2.5 leading-relaxed">
-                {bienestarSection?.contenido?.descripcion || bienestarSection?.subtitulo || "Selecciona tu propósito vital para filtrar automáticamente los elementos consagrados que mejor acompañan tu proceso."}
-              </p>
-            </div>
+        {bienestarSection?.activo !== false && (
+          <section
+            id="bienestar"
+            className="py-16 bg-gradient-to-b from-white via-[#f7f3eb] to-white border-y border-[#ebdcca] mb-16"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-12">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
+                  {bienestarSection?.contenido?.badge || "Guía de Bienestar Consciente"}
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
+                  {bienestarSection?.contenido?.titulo || bienestarSection?.titulo || "Cómo integrar las herramientas de autocuidado en tu rutina"}
+                </h2>
+                <p className="text-xs sm:text-sm text-[#5f7467] mt-2.5 leading-relaxed">
+                  {bienestarSection?.contenido?.descripcion || bienestarSection?.subtitulo || "Selecciona tu propósito vital para filtrar automáticamente los elementos consagrados que mejor acompañan tu proceso."}
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {activeBienestares.map((bienestar) => (
-                <div
-                  key={bienestar.id}
-                  className="bg-white rounded-3xl border border-[#ebdcca] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
-                >
-                  <div>
-                    {/* Imagen con badge */}
-                    <div className="aspect-16/10 w-full relative overflow-hidden bg-[#faf7f2]">
-                      {(() => {
-                        const isInvalidUrl = !bienestar.imagenUrl || bienestar.imagenUrl.startsWith('/imagenes/') || bienestar.imagenUrl.startsWith('http://localhost');
-                        const imgSrc = failedImages[`bienestar-${bienestar.id}`] || isInvalidUrl
-                          ? DEFAULT_FALLBACK_IMG
-                          : bienestar.imagenUrl;
-                        return (
-                          <Image
-                            src={imgSrc}
-                            alt={bienestar.nombre}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 300px"
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                            unoptimized={imgSrc.startsWith("data:")}
-                            onError={() => {
-                              setFailedImages((prev) => ({ ...prev, [`bienestar-${bienestar.id}`]: true }));
-                            }}
-                          />
-                        );
-                      })()}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-                      <div className="absolute top-3 left-3">
-                        <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-[#2a4537] text-[10px] font-bold shadow-xs">
-                          {bienestar.subtitulo}
-                        </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {activeBienestares.map((bienestar) => (
+                  <div
+                    key={bienestar.id}
+                    className="bg-white rounded-3xl border border-[#ebdcca] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
+                  >
+                    <div>
+                      {/* Imagen con badge */}
+                      <div className="aspect-16/10 w-full relative overflow-hidden bg-[#faf7f2]">
+                        {(() => {
+                          const isInvalidUrl = !bienestar.imagenUrl || bienestar.imagenUrl.startsWith('/imagenes/') || bienestar.imagenUrl.startsWith('http://localhost');
+                          const imgSrc = failedImages[`bienestar-${bienestar.id}`] || isInvalidUrl
+                            ? DEFAULT_FALLBACK_IMG
+                            : bienestar.imagenUrl;
+                          return (
+                            <Image
+                              src={imgSrc}
+                              alt={bienestar.nombre}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 300px"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              unoptimized={imgSrc.startsWith("data:")}
+                              onError={() => {
+                                setFailedImages((prev) => ({ ...prev, [`bienestar-${bienestar.id}`]: true }));
+                              }}
+                            />
+                          );
+                        })()}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                        <div className="absolute top-3 left-3">
+                          <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-[#2a4537] text-[10px] font-bold shadow-xs">
+                            {bienestar.subtitulo}
+                          </span>
+                        </div>
+                        <div className="absolute bottom-3 left-3 right-3 text-white">
+                          <p className="text-[11px] text-[#dfc89f] font-semibold uppercase tracking-wider">
+                            Propósito Vital
+                          </p>
+                          <p className="text-sm font-bold font-serif drop-shadow-xs">
+                            {bienestar.nombre}
+                          </p>
+                        </div>
                       </div>
-                      <div className="absolute bottom-3 left-3 right-3 text-white">
-                        <p className="text-[11px] text-[#dfc89f] font-semibold uppercase tracking-wider">
-                          Propósito Vital
-                        </p>
-                        <p className="text-sm font-bold font-serif drop-shadow-xs">
+
+                      {/* Texto descriptivo */}
+                      <div className="p-5 sm:p-6 space-y-2">
+                        <h3 className="font-serif font-bold text-base text-gray-900 leading-snug">
                           {bienestar.nombre}
+                        </h3>
+                        <p className="text-xs text-gray-600 leading-relaxed">
+                          {bienestar.descripcion}
                         </p>
                       </div>
                     </div>
 
-                    {/* Texto descriptivo */}
-                    <div className="p-5 sm:p-6 space-y-2">
-                      <h3 className="font-serif font-bold text-base text-gray-900 leading-snug">
-                        {bienestar.nombre}
-                      </h3>
-                      <p className="text-xs text-gray-600 leading-relaxed">
-                        {bienestar.descripcion}
-                      </p>
+                    <div className="p-5 sm:p-6 pt-0">
+                      <button
+                        onClick={() => handleSelectBienestarCard(bienestar.id)}
+                        className="w-full py-2.5 rounded-2xl bg-[#f5f1eb] hover:bg-[#3d5a4c] text-[#3d5a4c] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
+                      >
+                        <span>Ver elementos en la tienda</span>
+                        <span className="text-sm">→</span>
+                      </button>
                     </div>
                   </div>
-
-                  <div className="p-5 sm:p-6 pt-0">
-                    <button
-                      onClick={() => handleSelectBienestarCard(bienestar.id)}
-                      className="w-full py-2.5 rounded-2xl bg-[#f5f1eb] hover:bg-[#3d5a4c] text-[#3d5a4c] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
-                    >
-                      <span>Ver elementos en la tienda</span>
-                      <span className="text-sm">→</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ================= SECCIÓN 5: CARTA OFICIAL DE TERAPIAS & CUIDADOS (2 COLUMNAS) ================= */}
-        <section
-          id="carta-terapias"
-          className="py-16 md:py-20 bg-white border-b border-[#ebdcca] mb-16"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
-                {terapiasSection?.contenido?.badge || "Centro Holístico en Boiro (A Coruña)"}
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
-                {terapiasSection?.contenido?.titulo || terapiasSection?.titulo || "Carta de Terapias & Cuidados"}
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-600 mt-2.5 leading-relaxed">
-                {terapiasSection?.contenido?.descripcion || terapiasSection?.subtitulo || "Cada sesión es un viaje personalizado hacia tu centro. En cabina individual, climatizada y con acompañamiento integral por Pepi."}
-              </p>
-            </div>
+        {terapiasSection?.activo !== false && (
+          <section
+            id="carta-terapias"
+            className="py-16 md:py-20 bg-white border-b border-[#ebdcca] mb-16"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-14">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
+                  {terapiasSection?.contenido?.badge || "Centro Holístico en Boiro (A Coruña)"}
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
+                  {terapiasSection?.contenido?.titulo || terapiasSection?.titulo || "Carta de Terapias & Cuidados"}
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-600 mt-2.5 leading-relaxed">
+                  {terapiasSection?.contenido?.descripcion || terapiasSection?.subtitulo || "Cada sesión es un viaje personalizado hacia tu centro. En cabina individual, climatizada y con acompañamiento integral por Pepi."}
+                </p>
+              </div>
 
-            {/* Desglose temático en 2 Columnas con Fotografías */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-              {/* Columna 1: Sanación Energética & Reiki (Terapias) */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#faf7f2] border border-[#ebdcca] shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
-                    <span className="w-10 h-10 rounded-2xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-xl font-bold">
-                      ✨
-                    </span>
-                    <div>
-                      <h3 className="font-serif font-bold text-lg text-[#1e2822]">
-                        {terapiasSection?.contenido?.col1Titulo || "Canalización Energética & Reiki"}
-                      </h3>
-                      <p className="text-[11px] text-gray-500">
-                        {terapiasSection?.contenido?.col1Subtitulo || "Restablece el flujo bioenergético natural"}
-                      </p>
+              {/* Desglose temático en 2 Columnas con Fotografías */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                {/* Columna 1: Sanación Energética & Reiki (Terapias) */}
+                <div className="p-6 sm:p-8 rounded-3xl bg-[#faf7f2] border border-[#ebdcca] shadow-sm flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
+                      <span className="w-10 h-10 rounded-2xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-xl font-bold">
+                        ✨
+                      </span>
+                      <div>
+                        <h3 className="font-serif font-bold text-lg text-[#1e2822]">
+                          {terapiasSection?.contenido?.columnaTerapiasTitulo || terapiasSection?.contenido?.col1Titulo || "Canalización Energética & Reiki"}
+                        </h3>
+                        <p className="text-[11px] text-gray-500">
+                          {terapiasSection?.contenido?.columnaTerapiasSubtitulo || terapiasSection?.contenido?.col1Subtitulo || "Restablece el flujo bioenergético natural"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
                   <div className="space-y-5">
                     {terapiasHolisticas.map((terapia) => (
@@ -1187,10 +1228,10 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     </span>
                     <div>
                       <h3 className="font-serif font-bold text-lg text-[#1e2822]">
-                        {terapiasSection?.contenido?.col2Titulo || "Terapias Manuales & Cuidados"}
+                        {terapiasSection?.contenido?.columnaCuidadosTitulo || terapiasSection?.contenido?.col2Titulo || "Terapias Manuales & Cuidados"}
                       </h3>
                       <p className="text-[11px] text-gray-500">
-                        {terapiasSection?.contenido?.col2Subtitulo || "Cuerpo físico, musculatura y relajación"}
+                        {terapiasSection?.contenido?.columnaCuidadosSubtitulo || terapiasSection?.contenido?.col2Subtitulo || "Cuerpo físico, musculatura y relajación"}
                       </p>
                     </div>
                   </div>
@@ -1285,6 +1326,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             </div>
           </div>
         </section>
+        )}
 
         {/* ================= SECCIÓN 7: EL ESPACIO BLANCO Y NEGRO (SOBRE MÍ) ================= */}
         {aboutSection?.activo !== false && (
@@ -1312,11 +1354,17 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     {aboutSection?.titulo || "Un rincón de paz creado para reconectar contigo"}
                   </h2>
                   <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
-                    {aboutSection?.contenido?.filosofia ||
+                    {aboutSection?.contenido?.descripcion ||
                       aboutSection?.contenido?.bio ||
+                      aboutSection?.contenido?.filosofia ||
                       aboutSection?.subtitulo ||
                       "Situado en Boiro (A Coruña), Blanco y Negro nació como un templo de escucha, sanación y armonía. Aquí unimos las terapias energéticas y manuales con una selección honesta de cuarzos auténticos, velas naturales e inciensos consagrados."}
                   </p>
+                  {aboutSection?.contenido?.titulacion && (
+                    <p className="text-xs font-semibold text-[#5e7065]">
+                      {aboutSection.contenido.titulacion}
+                    </p>
+                  )}
                   {(aboutSection?.contenido?.fraseLema || aboutSection?.contenido?.lema) && (
                     <p className="text-xs italic text-[#3d5a4c] font-serif border-l-2 border-[#3d5a4c] pl-3 py-1">
                       &ldquo;{aboutSection.contenido.fraseLema || aboutSection.contenido.lema}&rdquo;
@@ -1411,7 +1459,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                         {paso.titulo}
                       </h4>
                       <p className="text-xs text-[#55645a] leading-relaxed">
-                        {paso.descripcion}
+                        {paso.desc || paso.descripcion}
                       </p>
                     </div>
                   ))}
@@ -1467,7 +1515,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     <div key={tidx} className="bg-white rounded-2xl p-6 border border-[#ece4d8] shadow-2xs space-y-3">
                       {t.icono && <span className="text-2xl block">{t.icono}</span>}
                       <h4 className="font-serif font-bold text-base text-[#1c2720]">{t.titulo}</h4>
-                      <p className="text-xs text-[#6e7d73] leading-relaxed">{t.descripcion}</p>
+                      <p className="text-xs text-[#6e7d73] leading-relaxed">{t.desc || t.descripcion}</p>
                     </div>
                   ))}
                 </div>
@@ -1505,7 +1553,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
       </main>
 
       {/* 9. FOOTER OFICIAL */}
-      <Footer config={config} />
+      <Footer config={config} section={footerSection} />
 
       {/* ================= 10. MODAL DE PRODUCTO / TERAPIA GRANDE Y RESPONSIVE ================= */}
       {selectedProduct && (

@@ -215,8 +215,11 @@ function mapNeonSections(rows: any[]): WebSectionItem[] {
           content = JSON.parse(content);
         } catch {}
       }
+      const canonicalId = s.id || `sec-${idx + 1}`;
       return {
-        id: s.id || `sec-${idx + 1}`,
+        id: canonicalId,
+        idSeccion: canonicalId,
+        imagen: s.imagen || content?.imagenUrl || "",
         orden: typeof s.orden === "number" ? s.orden : idx + 1,
         tipoPlantilla: s.tipo_plantilla || "texto_foto",
         titulo: s.titulo || "Sección",
@@ -225,7 +228,6 @@ function mapNeonSections(rows: any[]): WebSectionItem[] {
         contenido: content,
       };
     })
-    .filter((s) => s.activo)
     .sort((a, b) => a.orden - b.orden);
 }
 
@@ -292,7 +294,12 @@ function buildWebDataFromPayload(payload: any): WebData {
 
   const rawSections = payload.secciones || payload.sections || defaultWebData.sections || [];
   const sections = Array.isArray(rawSections)
-    ? rawSections.filter((s: any) => s && s.activo !== false).sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0))
+    ? rawSections.map((s: any, idx: number) => ({
+        ...s,
+        id: s.id || s.idSeccion || `sec-${idx + 1}`,
+        idSeccion: s.idSeccion || s.id || `sec-${idx + 1}`,
+        activo: s.activo !== false,
+      })).sort((a: any, b: any) => (a.orden || 0) - (b.orden || 0))
     : [];
 
   return {
@@ -325,7 +332,7 @@ export async function getWebData(): Promise<WebData> {
     try {
       const [prodsRes, secsRes, cfgRes] = await Promise.all([
         sql.query("SELECT * FROM productos WHERE publicado_web = true AND (archivado IS NOT TRUE) ORDER BY COALESCE(orden, 9999) ASC, categoria, nombre ASC"),
-        sql.query("SELECT * FROM secciones_web WHERE activo = true ORDER BY orden ASC"),
+        sql.query("SELECT * FROM secciones_web ORDER BY orden ASC"),
         sql.query("SELECT clave, valor FROM configuracion_web"),
       ]);
 

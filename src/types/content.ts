@@ -93,6 +93,7 @@ export interface BienestarPropositoItem {
   subtitulo: string;
   descripcion: string;
   imagenUrl: string;
+  icono?: string;
   colorBadge?: string;
   orden?: number;
   activo?: boolean;
