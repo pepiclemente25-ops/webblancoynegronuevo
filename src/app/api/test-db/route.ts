@@ -9,8 +9,6 @@ export async function GET() {
     return NextResponse.json({
       success: false,
       message: "No hay DATABASE_URL configurada en el entorno.",
-      hasDbUrl: Boolean(process.env.DATABASE_URL),
-      hasPostgresUrl: Boolean(process.env.POSTGRES_URL),
     });
   }
 
