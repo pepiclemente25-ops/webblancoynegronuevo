@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from "next/server";
 import { verificarTokenSesion, getEscanerEstado } from "@/lib/escanerAuth";
 import { getDb } from "@/lib/db";
 import { revalidatePath, revalidateTag } from "next/cache";

@@ -656,7 +656,7 @@ export default function EscanerPage() {
         </div>
 
         <button
-          onClick={verificarEstado}
+          onClick={() => verificarEstado(false)}
           className="mt-6 w-full py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-medium flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer shadow-lg shadow-black/30"
         >
           <RefreshCw className="w-4 h-4" />
