@@ -53,7 +53,22 @@ export async function POST(req: NextRequest) {
       filename = `${filename.replace(/\.[^/.]+$/, "")}.webp`;
     }
 
-    // 1. Si Vercel Blob está configurado en producción
+    // 1. Si estamos en Cloudflare con bucket R2 configurado
+    try {
+      const { uploadToR2 } = await import("@/lib/storage");
+      const r2Url = await uploadToR2(`productos/${filename}`, buffer, "image/webp");
+      if (r2Url) {
+        return NextResponse.json({
+          success: true,
+          url: r2Url,
+          provider: "cloudflare_r2",
+        });
+      }
+    } catch (r2Err) {
+      console.warn("[Escáner Upload] Aviso intentando subir a Cloudflare R2:", r2Err);
+    }
+
+    // 2. Si Vercel Blob está configurado en producción (Respaldo)
     if (process.env.BLOB_READ_WRITE_TOKEN) {
       const blob = await put(`productos/${filename}`, buffer, {
         access: "public",

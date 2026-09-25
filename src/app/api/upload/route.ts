@@ -55,7 +55,23 @@ export async function POST(req: NextRequest) {
       filename = `${filename.replace(/\.[^/.]+$/, "")}.webp`;
     }
 
-    // 1. Si Vercel Blob está configurado (Producción en Vercel)
+    // 1. Si estamos en Cloudflare con bucket R2 configurado
+    try {
+      const { uploadToR2 } = await import("@/lib/storage");
+      const r2Url = await uploadToR2(`productos/${filename}`, buffer, "image/webp");
+      if (r2Url) {
+        return NextResponse.json({
+          success: true,
+          url: r2Url,
+          filename,
+          provider: "cloudflare-r2",
+        });
+      }
+    } catch (r2Err) {
+      console.warn("[Upload] Aviso intentando subir a Cloudflare R2:", r2Err);
+    }
+
+    // 2. Si Vercel Blob está configurado (Respaldo en Vercel)
     if (process.env.BLOB_READ_WRITE_TOKEN) {
       const blob = await put(`productos/${filename}`, buffer, {
         access: "public",
@@ -70,7 +86,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 2. Respaldo para local o sin token de Blob configurado
+    // 3. Respaldo para local o sin token de Blob configurado
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
