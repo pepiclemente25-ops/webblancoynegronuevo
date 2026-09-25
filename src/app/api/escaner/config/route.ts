@@ -3,6 +3,9 @@ import { verificarTokenSesion } from "@/lib/escanerAuth";
 import { getDb } from "@/lib/db";
 import { defaultFamilias, defaultBienestares } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   try {
     const token = req.headers.get("authorization")?.replace("Bearer ", "") || null;

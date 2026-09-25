@@ -1,22 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEscanerEstado, getEscanerPin, generarTokenSesion, verificarTokenSesion } from "@/lib/escanerAuth";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   try {
     const estado = await getEscanerEstado();
     const token = req.headers.get("authorization")?.replace("Bearer ", "") || null;
     const sessionValida = token ? await verificarTokenSesion(token) : false;
 
-    return NextResponse.json({
-      activo: estado.activo,
-      motivo: estado.motivo,
-      mensaje: estado.mensaje,
-      autenticado: sessionValida,
-    });
+    return NextResponse.json(
+      {
+        activo: estado.activo,
+        motivo: estado.motivo,
+        mensaje: estado.mensaje,
+        autenticado: sessionValida,
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message || "Error consultando estado" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+        },
+      }
     );
   }
 }

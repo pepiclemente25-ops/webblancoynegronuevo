@@ -1,10 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import { verificarTokenSesion } from "@/lib/escanerAuth";
+import { verificarTokenSesion, getEscanerEstado } from "@/lib/escanerAuth";
 import { getDb } from "@/lib/db";
 import { revalidatePath, revalidateTag } from "next/cache";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function POST(req: NextRequest) {
   try {
+    const estado = await getEscanerEstado();
+    if (!estado.activo) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: estado.mensaje || "El TPV del mostrador está apagado. No se pueden guardar productos.",
+          desactivado: true,
+          motivo: estado.motivo,
+        },
+        { status: 403 }
+      );
+    }
+
     const authHeader = req.headers.get("authorization")?.replace("Bearer ", "") || null;
     const authValida = await verificarTokenSesion(authHeader);
 

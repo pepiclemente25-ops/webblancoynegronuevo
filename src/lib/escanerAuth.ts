@@ -38,25 +38,23 @@ export async function getEscanerEstado(): Promise<EstadoEscanerResponse> {
 
     // 2. Verificación de presencia por Heartbeat del TPV
     const valHeartbeat = map.get("escaner_tpv_heartbeat");
-    if (valHeartbeat !== undefined && valHeartbeat !== null) {
-      if (valHeartbeat === "0" || valHeartbeat.toLowerCase() === "inactivo" || !valHeartbeat) {
-        return {
-          activo: false,
-          motivo: "tpv_offline",
-          mensaje: "El programa TPV del mostrador está cerrado o apagado.",
-        };
-      }
+    if (!valHeartbeat || valHeartbeat === "0" || valHeartbeat.toLowerCase() === "inactivo") {
+      return {
+        activo: false,
+        motivo: "tpv_offline",
+        mensaje: "El programa TPV del mostrador está cerrado o apagado.",
+      };
+    }
 
-      const tiempoHeartbeat = new Date(valHeartbeat).getTime();
-      const ahora = Date.now();
-      // Si el último latido tiene más de 75 segundos, el TPV se cerró o se apagó
-      if (isNaN(tiempoHeartbeat) || ahora - tiempoHeartbeat > 75 * 1000) {
-        return {
-          activo: false,
-          motivo: "tpv_offline",
-          mensaje: "El programa TPV del mostrador no responde o está apagado.",
-        };
-      }
+    const tiempoHeartbeat = new Date(valHeartbeat).getTime();
+    const ahora = Date.now();
+    // Si el último latido tiene más de 50 segundos (el TPV emite cada 20s), el TPV se cerró o se apagó
+    if (isNaN(tiempoHeartbeat) || ahora - tiempoHeartbeat > 50 * 1000) {
+      return {
+        activo: false,
+        motivo: "tpv_offline",
+        mensaje: "El programa TPV del mostrador no responde o está apagado.",
+      };
     }
 
     return { activo: true, motivo: "ok" };

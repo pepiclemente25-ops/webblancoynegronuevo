@@ -102,11 +102,14 @@ export default function EscanerPage() {
   const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   // 1. Verificación inicial de estado del escáner en Neon
-  const verificarEstado = useCallback(async () => {
-    setEstadoCarga("verificando");
+  const verificarEstado = useCallback(async (silencioso = false) => {
+    if (!silencioso) {
+      setEstadoCarga("verificando");
+    }
     try {
       const storedToken = sessionStorage.getItem("escaner_token") || "";
       const res = await fetch("/api/escaner/auth", {
+        cache: "no-store",
         headers: storedToken ? { Authorization: `Bearer ${storedToken}` } : {},
       });
       const data = await res.json();
@@ -118,12 +121,27 @@ export default function EscanerPage() {
         return;
       }
 
-      if (data.autenticado && storedToken) {
-        setTokenSesion(storedToken);
-        setEstadoCarga("listo");
-        cargarConfiguracion(storedToken);
-      } else {
-        setEstadoCarga("pedir_pin");
+      // Si estaba en estado desactivado y el TPV ha vuelto a arrancar
+      setEstadoCarga((prev) => {
+        if (prev === "desactivado" || prev === "verificando") {
+          if (data.autenticado && storedToken) {
+            setTokenSesion(storedToken);
+            cargarConfiguracion(storedToken);
+            return "listo";
+          }
+          return "pedir_pin";
+        }
+        return prev;
+      });
+
+      if (!silencioso) {
+        if (data.autenticado && storedToken) {
+          setTokenSesion(storedToken);
+          setEstadoCarga("listo");
+          cargarConfiguracion(storedToken);
+        } else {
+          setEstadoCarga("pedir_pin");
+        }
       }
     } catch (err) {
       console.error("Error verificando estado:", err);
@@ -133,7 +151,14 @@ export default function EscanerPage() {
   }, []);
 
   useEffect(() => {
-    verificarEstado();
+    verificarEstado(false);
+
+    // Monitoreo continuo de presencia del TPV cada 15 segundos
+    const presenceTimer = setInterval(() => {
+      verificarEstado(true);
+    }, 15000);
+
+    return () => clearInterval(presenceTimer);
   }, [verificarEstado]);
 
   // Cargar familias, bienestares y código sugerido
