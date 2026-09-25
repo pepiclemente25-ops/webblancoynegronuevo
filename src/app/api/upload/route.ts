@@ -126,16 +126,29 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ success: true, count: 0, message: "No se enviaron URLs para eliminar." });
     }
 
-    // Filtrar URLs de Vercel Blob
+    // 1. Eliminar URLs de Cloudflare R2
+    let deletedR2Count = 0;
+    try {
+      const { deleteFromR2 } = await import("@/lib/storage");
+      const r2Urls = urls.filter((u) => typeof u === "string" && u.includes("r2.dev"));
+      for (const u of r2Urls) {
+        const ok = await deleteFromR2(u);
+        if (ok) deletedR2Count++;
+      }
+    } catch (r2Err) {
+      console.warn("[Upload DELETE] Error eliminando de R2:", r2Err);
+    }
+
+    // 2. Filtrar URLs de Vercel Blob
     const vercelBlobUrls = urls.filter(
-      (u) => typeof u === "string" && (u.includes("public.blob.vercel-storage.com") || u.startsWith("https://"))
+      (u) => typeof u === "string" && u.includes("public.blob.vercel-storage.com")
     );
 
     if (vercelBlobUrls.length > 0 && process.env.BLOB_READ_WRITE_TOKEN) {
       await del(vercelBlobUrls);
     }
 
-    // Eliminar también archivos locales en public/uploads si corresponde
+    // 3. Eliminar también archivos locales en public/uploads si corresponde
     for (const u of urls) {
       if (typeof u === "string" && u.startsWith("/uploads/")) {
         const localPath = path.join(process.cwd(), "public", u);
@@ -149,8 +162,8 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      deletedCount: vercelBlobUrls.length,
-      urls: vercelBlobUrls,
+      deletedCount: deletedR2Count + (process.env.BLOB_READ_WRITE_TOKEN ? vercelBlobUrls.length : 0),
+      urls,
     });
   } catch (err: any) {
     console.error("Error al eliminar imágenes:", err);

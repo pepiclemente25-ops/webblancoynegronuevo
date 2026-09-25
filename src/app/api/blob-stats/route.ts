@@ -14,10 +14,52 @@ function formatBytes(bytes: number): string {
 
 export async function GET(req: NextRequest) {
   try {
+    // 1. Intentar consultar Cloudflare R2 Bucket
+    try {
+      const { getR2Bucket } = await import("@/lib/storage");
+      const bucket = await getR2Bucket();
+      if (bucket && typeof bucket.list === "function") {
+        let truncated = true;
+        let cursor: string | undefined = undefined;
+        let totalBlobs = 0;
+        let totalSizeBytes = 0;
+
+        while (truncated) {
+          const listRes: any = await bucket.list({ cursor, limit: 1000 });
+          const objects = listRes?.objects || [];
+          for (const obj of objects) {
+            totalBlobs++;
+            totalSizeBytes += obj.size || 0;
+          }
+          truncated = Boolean(listRes?.truncated);
+          cursor = listRes?.cursor;
+        }
+
+        const limitBytes = 10 * 1024 * 1024 * 1024; // 10 GB gratuitos en Cloudflare R2
+        const porcentajeNum = Math.min(100, (totalSizeBytes / limitBytes) * 100);
+        const porcentajeUsado = porcentajeNum.toFixed(2) + "%";
+
+        return NextResponse.json({
+          connected: true,
+          provider: "cloudflare-r2",
+          totalBlobs,
+          totalSizeBytes,
+          totalFormatted: formatBytes(totalSizeBytes),
+          limitBytes,
+          limitFormatted: "10 GB (Plan Gratuito R2)",
+          porcentajeUsado,
+          disponibleBytes: Math.max(0, limitBytes - totalSizeBytes),
+          disponibleFormatted: formatBytes(Math.max(0, limitBytes - totalSizeBytes)),
+        });
+      }
+    } catch (r2Err) {
+      console.warn("[blob-stats] Error al consultar R2:", r2Err);
+    }
+
     if (!process.env.BLOB_READ_WRITE_TOKEN) {
       return NextResponse.json({
         connected: false,
-        message: "No se encontró BLOB_READ_WRITE_TOKEN en las variables de entorno de Vercel.",
+        message: "No se encontró almacenamiento R2 ni BLOB_READ_WRITE_TOKEN de Vercel.",
         hasDbUrl: Boolean(process.env.DATABASE_URL),
         dbUrlPrefix: process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 20) : "NO_CONFIGURADA",
         envKeys: Object.keys(process.env).filter(k => !k.includes("KEY") && !k.includes("SECRET")),
@@ -35,7 +77,7 @@ export async function GET(req: NextRequest) {
     let totalBlobs = 0;
     let totalSizeBytes = 0;
 
-    // Iterar para contabilizar todos los blobs almacenados
+    // Iterar para contabilizar todos los blobs almacenados en Vercel
     while (hasMore) {
       const response: { blobs: any[]; hasMore: boolean; cursor?: string } = await list({ cursor, limit: 1000 });
       for (const blob of response.blobs) {
