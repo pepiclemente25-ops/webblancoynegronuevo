@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isEscanerActivo, getEscanerPin, generarTokenSesion, verificarTokenSesion } from "@/lib/escanerAuth";
+import { getEscanerEstado, getEscanerPin, generarTokenSesion, verificarTokenSesion } from "@/lib/escanerAuth";
 
 export async function GET(req: NextRequest) {
   try {
-    const activo = await isEscanerActivo();
+    const estado = await getEscanerEstado();
     const token = req.headers.get("authorization")?.replace("Bearer ", "") || null;
     const sessionValida = token ? await verificarTokenSesion(token) : false;
 
     return NextResponse.json({
-      activo,
+      activo: estado.activo,
+      motivo: estado.motivo,
+      mensaje: estado.mensaje,
       autenticado: sessionValida,
     });
   } catch (err: any) {
@@ -21,13 +23,16 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const activo = await isEscanerActivo();
-    if (!activo) {
+    const estado = await getEscanerEstado();
+    if (!estado.activo) {
       return NextResponse.json(
         {
           success: false,
-          error: "El escáner móvil está desactivado por motivos de seguridad en los ajustes del TPV.",
+          error: estado.mensaje || (estado.motivo === "tpv_offline" 
+            ? "El programa TPV del mostrador está apagado. Inícialo en el ordenador para usar el escáner."
+            : "El escáner móvil está desactivado por motivos de seguridad en los ajustes del TPV."),
           desactivado: true,
+          motivo: estado.motivo,
         },
         { status: 403 }
       );

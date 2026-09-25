@@ -3,26 +3,75 @@ import { getDb } from "@/lib/db";
 
 const DEFAULT_SECRET = process.env.REVALIDATE_SECRET || "aura-pepi-escaner-secret-key";
 
+export interface EstadoEscanerResponse {
+  activo: boolean;
+  motivo?: "ok" | "desactivado" | "tpv_offline";
+  mensaje?: string;
+}
+
 /**
- * Consulta en Neon si el escáner móvil está activo
+ * Consulta en Neon si el escáner móvil está activo y si el TPV del mostrador está encendido (Heartbeat)
  */
-export async function isEscanerActivo(): Promise<boolean> {
+export async function getEscanerEstado(): Promise<EstadoEscanerResponse> {
   const sql = getDb();
-  if (!sql) return true; // Si no hay BD conectada, permitir por defecto
+  if (!sql) return { activo: true, motivo: "ok" };
   try {
     const rows = await sql.query(
-      "SELECT valor FROM configuracion_web WHERE clave = $1",
-      ["escaner_activo"]
+      "SELECT clave, valor FROM configuracion_web WHERE clave IN ('escaner_activo', 'escaner_tpv_heartbeat')"
     );
-    if (!rows || rows.length === 0) {
-      return true; // Por defecto activo hasta que el TPV lo configure
+
+    const map = new Map<string, string>();
+    (rows || []).forEach((r: any) => map.set(r.clave, String(r.valor || "").trim()));
+
+    // 1. Verificación de interruptor maestro (Ajustes TPV)
+    const valActivo = map.get("escaner_activo");
+    if (valActivo) {
+      const lower = valActivo.toLowerCase();
+      if (lower === "false" || lower === "0" || lower === "no") {
+        return {
+          activo: false,
+          motivo: "desactivado",
+          mensaje: "El escáner móvil está desactivado en los Ajustes del TPV.",
+        };
+      }
     }
-    const val = String(rows[0].valor || "").toLowerCase().trim();
-    return val === "true" || val === "1" || val === "si";
+
+    // 2. Verificación de presencia por Heartbeat del TPV
+    const valHeartbeat = map.get("escaner_tpv_heartbeat");
+    if (valHeartbeat !== undefined && valHeartbeat !== null) {
+      if (valHeartbeat === "0" || valHeartbeat.toLowerCase() === "inactivo" || !valHeartbeat) {
+        return {
+          activo: false,
+          motivo: "tpv_offline",
+          mensaje: "El programa TPV del mostrador está cerrado o apagado.",
+        };
+      }
+
+      const tiempoHeartbeat = new Date(valHeartbeat).getTime();
+      const ahora = Date.now();
+      // Si el último latido tiene más de 75 segundos, el TPV se cerró o se apagó
+      if (isNaN(tiempoHeartbeat) || ahora - tiempoHeartbeat > 75 * 1000) {
+        return {
+          activo: false,
+          motivo: "tpv_offline",
+          mensaje: "El programa TPV del mostrador no responde o está apagado.",
+        };
+      }
+    }
+
+    return { activo: true, motivo: "ok" };
   } catch (err) {
     console.error("Error consultando estado del escáner en Neon:", err);
-    return true;
+    return { activo: true, motivo: "ok" };
   }
+}
+
+/**
+ * Helper booleano de compatibilidad
+ */
+export async function isEscanerActivo(): Promise<boolean> {
+  const estado = await getEscanerEstado();
+  return estado.activo;
 }
 
 /**

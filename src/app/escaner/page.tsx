@@ -52,6 +52,8 @@ function reproducirBeep(frecuencia = 880, duracion = 0.12, tipo: OscillatorType 
 export default function EscanerPage() {
   // Estado general de seguridad y sesión
   const [estadoCarga, setEstadoCarga] = useState<"verificando" | "desactivado" | "pedir_pin" | "listo">("verificando");
+  const [motivoDesactivado, setMotivoDesactivado] = useState<"desactivado" | "tpv_offline">("desactivado");
+  const [mensajeDesactivado, setMensajeDesactivado] = useState<string>("");
   const [tokenSesion, setTokenSesion] = useState<string>("");
   const [pinEntrada, setPinEntrada] = useState<string>("");
   const [errorPin, setErrorPin] = useState<string>("");
@@ -110,6 +112,8 @@ export default function EscanerPage() {
       const data = await res.json();
 
       if (!data.activo) {
+        setMotivoDesactivado(data.motivo || "desactivado");
+        setMensajeDesactivado(data.mensaje || "");
         setEstadoCarga("desactivado");
         return;
       }
@@ -123,6 +127,7 @@ export default function EscanerPage() {
       }
     } catch (err) {
       console.error("Error verificando estado:", err);
+      setMotivoDesactivado("tpv_offline");
       setEstadoCarga("desactivado");
     }
   }, []);
@@ -581,30 +586,56 @@ export default function EscanerPage() {
   }
 
   // =========================================================================
-  // VISTA 2: BLOQUEO ABSOLUTO (ESCANER DESACTIVADO DESDE EL TPV)
+  // VISTA 2: BLOQUEO (TPV DESCONECTADO O ESCÁNER DESACTIVADO)
   // =========================================================================
   if (estadoCarga === "desactivado") {
+    const esOffline = motivoDesactivado === "tpv_offline";
+
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto">
-        <div className="w-20 h-20 rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mb-6">
-          <ShieldAlert className="w-10 h-10 text-rose-400" />
+        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 border ${
+          esOffline
+            ? "bg-amber-500/10 border-amber-500/30 text-amber-400"
+            : "bg-rose-500/10 border-rose-500/30 text-rose-400"
+        }`}>
+          {esOffline ? <AlertTriangle className="w-10 h-10" /> : <ShieldAlert className="w-10 h-10" />}
         </div>
-        <h1 className="text-2xl font-bold text-slate-100">Escáner Móvil Desactivado</h1>
+
+        <h1 className="text-2xl font-bold text-slate-100">
+          {esOffline ? "TPV del Mostrador Desconectado" : "Escáner Móvil Desactivado"}
+        </h1>
+
         <p className="text-sm text-slate-400 mt-3 leading-relaxed">
-          Por motivos de seguridad, el acceso a este terminal móvil se encuentra inhabilitado en los ajustes de la tienda física.
+          {esOffline
+            ? "El escáner móvil solo está operativo mientras el programa TPV del ordenador de la tienda permanezca abierto."
+            : (mensajeDesactivado || "Por motivos de seguridad, el acceso a este terminal móvil se encuentra inhabilitado en los ajustes de la tienda física.")}
         </p>
+
         <div className="mt-6 p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 text-left w-full space-y-2">
-          <p className="font-semibold text-slate-200">Para habilitarlo:</p>
-          <p>1. Abra la aplicación de TPV en el ordenador de la tienda.</p>
-          <p>2. Vaya a la pestaña <span className="text-emerald-400 font-mono">Ajustes &gt; Escáner Móvil</span>.</p>
-          <p>3. Active el interruptor de encendido.</p>
+          <p className="font-semibold text-slate-200">
+            {esOffline ? "¿Cómo reanudar el escáner?" : "Para habilitarlo:"}
+          </p>
+          {esOffline ? (
+            <>
+              <p>1. Inicie la aplicación <strong className="text-amber-300">Blanco y Negro TPV</strong> en el ordenador del mostrador.</p>
+              <p>2. Al arrancar, el ordenador enviará su señal de presencia a la nube.</p>
+              <p>3. Pulse el botón inferior para reintentar la conexión.</p>
+            </>
+          ) : (
+            <>
+              <p>1. Abra la aplicación de TPV en el ordenador de la tienda.</p>
+              <p>2. Vaya a la pestaña <span className="text-emerald-400 font-mono">Ajustes &gt; Escáner Móvil</span>.</p>
+              <p>3. Active el interruptor de encendido.</p>
+            </>
+          )}
         </div>
+
         <button
           onClick={verificarEstado}
-          className="mt-6 w-full py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-medium flex items-center justify-center gap-2 border border-slate-700 transition"
+          className="mt-6 w-full py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-medium flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer shadow-lg shadow-black/30"
         >
           <RefreshCw className="w-4 h-4" />
-          <span>Comprobar estado de nuevo</span>
+          <span>{esOffline ? "Reintentar conexión con TPV" : "Comprobar estado de nuevo"}</span>
         </button>
       </div>
     );
