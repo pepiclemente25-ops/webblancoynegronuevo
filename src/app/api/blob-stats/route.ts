@@ -18,6 +18,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         connected: false,
         message: "No se encontró BLOB_READ_WRITE_TOKEN en las variables de entorno de Vercel.",
+        hasDbUrl: Boolean(process.env.DATABASE_URL),
+        dbUrlPrefix: process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 20) : "NO_CONFIGURADA",
+        envKeys: Object.keys(process.env).filter(k => !k.includes("KEY") && !k.includes("SECRET")),
         totalBlobs: 0,
         totalSizeBytes: 0,
         totalFormatted: "0 MB",
