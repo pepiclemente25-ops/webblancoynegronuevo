@@ -47,6 +47,7 @@ export async function getEscanerEstado(): Promise<EstadoEscanerResponse> {
     }
 
     const tiempoHeartbeat = new Date(valHeartbeat).getTime();
+    const ahora = Date.now();
     const diff = ahora - tiempoHeartbeat;
     // Si el último latido tiene más de 90 segundos (el TPV emite cada 20s), el TPV se cerró o se apagó
     if (isNaN(tiempoHeartbeat) || diff > 90 * 1000) {
