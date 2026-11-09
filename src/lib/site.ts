@@ -31,3 +31,6 @@ export function conSlugs<T>(
     return { slug, item };
   });
 }
+
+// Nombre completo de la terapeuta (el TPV aún no lo envía a la web). El nombre corto ("Pepi") sale de la configuración.
+export const TERAPEUTA_NOMBRE_COMPLETO = "Josefa Clemente Martínez";

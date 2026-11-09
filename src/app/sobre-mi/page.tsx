@@ -4,19 +4,18 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { getCatalogoSeo, recortar } from "@/lib/seo";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, TERAPEUTA_NOMBRE_COMPLETO } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await getCatalogoSeo();
-  const nombre = data.config.therapistName || "Pepi";
   const descripcion = recortar(
-    `Conoce a ${nombre}, terapeuta holística en ${data.config.city || "Boiro"}: quiromasaje, Reiki, Registros Akáshicos y respiración consciente en Blanco y Negro.`,
+    `Conoce a ${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta holística en ${data.config.city || "Boiro"}: quiromasaje, Reiki, Registros Akáshicos y respiración consciente en Blanco y Negro.`,
     160
   );
   return {
-    title: `Sobre mí: ${nombre}, terapeuta holística en ${data.config.city || "Boiro"}`,
+    title: `Sobre mí: ${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta holística en ${data.config.city || "Boiro"}`,
     description: descripcion,
     alternates: { canonical: "/sobre-mi" },
     openGraph: { title: `Sobre mí | ${data.config.name}`, description: descripcion, url: `${SITE_URL}/sobre-mi`, type: "profile" },
@@ -34,7 +33,8 @@ export default async function SobreMiPage() {
     "@context": "https://schema.org",
     "@type": "Person",
     "@id": `${SITE_URL}/#terapeuta`,
-    name: nombre,
+    name: TERAPEUTA_NOMBRE_COMPLETO,
+    ...(nombre && nombre !== TERAPEUTA_NOMBRE_COMPLETO ? { alternateName: nombre } : {}),
     jobTitle: "Terapeuta holística",
     description: recortar(c.therapistBio, 300),
     url,
@@ -62,11 +62,12 @@ export default async function SobreMiPage() {
         </nav>
 
         <h1 className="font-serif text-3xl font-bold text-[#212924] sm:text-4xl">
-          Hola, soy {nombre}
+          {TERAPEUTA_NOMBRE_COMPLETO}
         </h1>
         <p className="mt-2 text-lg text-[#4a6b5d]">Terapeuta holística en {c.city || "Boiro"} · {c.name}</p>
 
         <section className="mt-8 space-y-4 text-[#3b4740]">
+          <p className="text-lg font-semibold text-[#212924]">Hola, soy {nombre}.</p>
           <p className="whitespace-pre-line">{c.therapistBio}</p>
           <p>
             {c.name} es mi espacio en {c.city || "Boiro"}. Está pensado como un lugar tranquilo al que venir a parar, a soltar
