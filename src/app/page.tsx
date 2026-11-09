@@ -47,6 +47,9 @@ export default async function Home() {
       {/* Enlaces rastreables a cada ficha, para que Google y los asistentes de IA las encuentren */}
       <section aria-label="Catálogo completo" className="bg-[#fbf9f5] px-4 py-12 text-[#212924]">
         <div className="mx-auto max-w-7xl">
+          <p className="mb-6">
+            <Link href="/sobre-mi" className="font-semibold text-[#4a6b5d] hover:underline">Conoce a la terapeuta: Sobre mí</Link>
+          </p>
           {terapias.length > 0 ? (
             <>
               <h2 className="font-serif text-2xl font-bold">Nuestras terapias</h2>

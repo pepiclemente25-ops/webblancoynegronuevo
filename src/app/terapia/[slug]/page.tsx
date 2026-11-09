@@ -98,7 +98,7 @@ export default async function TerapiaPage({ params }: Props) {
                   Reservar por WhatsApp
                 </a>
               ) : null}
-              <Link href="/#terapias" className="font-semibold text-[#4a6b5d] hover:underline">Ver todas las terapias</Link>
+              <Link href="/#carta-terapias" className="font-semibold text-[#4a6b5d] hover:underline">Ver todas las terapias</Link>
             </div>
           </div>
         </article>

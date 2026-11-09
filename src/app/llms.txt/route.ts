@@ -27,6 +27,7 @@ export async function GET() {
     "",
     "## Más",
     `- [Inicio](${SITE_URL}/)`,
+    `- [Sobre mí](${SITE_URL}/sobre-mi): quién es la terapeuta y cómo trabaja`,
     `- [Mapa del sitio](${SITE_URL}/sitemap.xml)`,
     "",
   ].filter((l, i, arr) => !(l === "" && arr[i - 1] === ""));
