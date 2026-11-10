@@ -1412,7 +1412,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   </div>
                   <div>
                     <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
-                      {faqSection?.contenido?.tituloAcordeon || faqSection?.titulo || "¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?"}
+                      {faqSection?.contenido?.tituloAcordeon || faqSection?.titulo || "¿Cómo funciona el pedido, recogida en Boiro y pago?"}
                     </h3>
                     <p className="text-xs text-[#6e7d73]">
                       {faqSection?.contenido?.subtituloAcordeon || faqSection?.subtitulo || "Pulsa para ver los pasos sencillos y transparentes de compra."}
@@ -1451,8 +1451,8 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                         },
                         {
                           numero: "4",
-                          titulo: "Bizum o en Tienda",
-                          descripcion: "Envía el Bizum con un clic indicando tu número de comanda, o abónalo al retirar tu paquete en Boiro.",
+                          titulo: "Pago",
+                          descripcion: "Abónalo en efectivo o con tarjeta al retirar tu paquete en Boiro. Si es envío, te llamamos para acordar el pago.",
                         },
                       ]
                   ).map((paso: any, idx: number) => (

@@ -574,7 +574,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 <span className="font-semibold text-[#212924] block">
                   Recogida en {config.city || "tienda"} o Envío
                 </span>
-                <span className="text-[#6e7d73]">Pago cómodo por Bizum o en tienda</span>
+                <span className="text-[#6e7d73]">Pago cómodo en tienda al recoger</span>
               </div>
             </div>
           </div>
@@ -1406,7 +1406,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 </div>
                 <div>
                   <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
-                    ¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?
+                    ¿Cómo funciona el pedido, recogida en Boiro y pago?
                   </h3>
                   <p className="text-xs text-[#6e7d73]">
                     Pulsa para ver los 4 pasos sencillos y transparentes de compra.
@@ -1467,10 +1467,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     4
                   </div>
                   <h4 className="font-serif font-semibold text-xs text-[#212924]">
-                    Bizum o en Tienda
+                    Pago
                   </h4>
                   <p className="text-xs text-[#55645a] leading-relaxed">
-                    Envía el Bizum con un clic indicando tu número de comanda, o abónalo al retirar tu paquete en Boiro.
+                    Abónalo en efectivo o con tarjeta al retirar tu paquete en Boiro. Si es envío, te llamamos para acordar el pago.
                   </p>
                 </div>
               </div>
