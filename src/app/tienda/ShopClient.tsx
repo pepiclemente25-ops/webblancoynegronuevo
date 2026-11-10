@@ -14,7 +14,7 @@ import { defaultFamilias, defaultBienestares, defaultExperienciaEstrella } from 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BookingModal } from "@/components/BookingModal";
-import { useCart } from "@/context/CartContext";
+import { useCart, PURCHASES_ENABLED } from "@/context/CartContext";
 import {
   ShoppingBag,
   Sparkles,
@@ -574,7 +574,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 <span className="font-semibold text-[#212924] block">
                   Recogida en {config.city || "tienda"} o Envío
                 </span>
-                <span className="text-[#6e7d73]">Pago cómodo por Bizum o en tienda</span>
+                <span className="text-[#6e7d73]">Pago cómodo en tienda al recoger</span>
               </div>
             </div>
           </div>
@@ -963,7 +963,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                             <Calendar className="w-3.5 h-3.5" />
                             <span>Reservar</span>
                           </button>
-                        ) : (
+                        ) : !PURCHASES_ENABLED ? null : (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -1406,7 +1406,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 </div>
                 <div>
                   <h3 className="font-serif text-base sm:text-lg font-semibold text-[#212924]">
-                    ¿Cómo funciona el pedido, recogida en Boiro y pago con Bizum?
+                    ¿Cómo funciona el pedido, recogida en Boiro y pago?
                   </h3>
                   <p className="text-xs text-[#6e7d73]">
                     Pulsa para ver los 4 pasos sencillos y transparentes de compra.
@@ -1467,10 +1467,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     4
                   </div>
                   <h4 className="font-serif font-semibold text-xs text-[#212924]">
-                    Bizum o en Tienda
+                    Pago
                   </h4>
                   <p className="text-xs text-[#55645a] leading-relaxed">
-                    Envía el Bizum con un clic indicando tu número de comanda, o abónalo al retirar tu paquete en Boiro.
+                    Abónalo en efectivo o con tarjeta al retirar tu paquete en Boiro. Si es envío, te llamamos para acordar el pago.
                   </p>
                 </div>
               </div>
@@ -2011,6 +2011,11 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     <Calendar className="w-4 h-4 text-[#dfc89f]" />
                     <span>Reservar Cita Presencial</span>
                   </button>
+                ) : !PURCHASES_ENABLED ? (
+                  <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] text-center space-y-1">
+                    <p className="text-sm font-semibold text-[#212924]">Compra online próximamente</p>
+                    <p className="text-xs text-[#6e7d73]">Estamos terminando de cargar el catálogo. Consúltanos en tienda o por WhatsApp.</p>
+                  </div>
                 ) : (
                   <div className="flex items-center gap-3">
                     {/* Selector de cantidad */}

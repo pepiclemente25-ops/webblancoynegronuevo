@@ -26,6 +26,10 @@ import Image from "next/image";
 
 type DrawerStep = "cart" | "checkout" | "success";
 
+// Bizum desactivado: el número mostrado era ficticio (600 123 456).
+// Para reactivarlo, poner a true y pasar el teléfono real de Bizum a <CartDrawer />.
+const BIZUM_ENABLED = false;
+
 interface CartDrawerProps {
   phoneDisplay?: string;
   bizumPhone?: string;
@@ -56,7 +60,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [clientAddress, setClientAddress] = useState("");
   const [clientCity, setClientCity] = useState("");
   const [clientPostalCode, setClientPostalCode] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"bizum" | "tienda">("bizum");
+  const [selectedPaymentMethod, setPaymentMethod] = useState<"bizum" | "tienda">("bizum");
+  // Con Bizum desactivado: recogida = pago en tienda; envío = pago a convenir con la tienda.
+  const paymentMethod: "bizum" | "tienda" | "a_convenir" = BIZUM_ENABLED
+    ? selectedPaymentMethod
+    : deliveryType === "envio"
+      ? "a_convenir"
+      : "tienda";
   const [notes, setNotes] = useState("");
 
   // Estado de envío
@@ -486,6 +496,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     3. Método de Pago Preferido
                   </h4>
                   <div className="space-y-2">
+                    {BIZUM_ENABLED && (
                     <label
                       className={`flex items-start gap-3 p-3 rounded-2xl border cursor-pointer transition-all ${
                         paymentMethod === "bizum"
@@ -507,6 +518,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         </span>
                       </div>
                     </label>
+                    )}
 
                     {deliveryType === "tienda" && (
                       <label
@@ -530,6 +542,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           </span>
                         </div>
                       </label>
+                    )}
+
+                    {!BIZUM_ENABLED && deliveryType === "envio" && (
+                      <div className="flex items-start gap-3 p-3 rounded-2xl border bg-[#f5fbf7] border-[#3d5a4c] ring-1 ring-[#3d5a4c]">
+                        <div className="flex-1 text-xs">
+                          <span className="font-semibold text-[#212924] block">Pago a convenir con la tienda</span>
+                          <span className="text-[11px] text-[#6e7d73]">
+                            Te llamaremos al teléfono indicado para confirmar el envío y acordar la forma de pago.
+                          </span>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -625,7 +648,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* Instrucciones de Pago */}
-                {paymentMethod === "bizum" ? (
+                {BIZUM_ENABLED && paymentMethod === "bizum" ? (
                   <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#cbdbd0] space-y-3">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-[#3d5a4c]" />
@@ -693,6 +716,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                     <p className="text-[11px] text-[#6e7d73] leading-relaxed">
                       💡 Realiza el Bizum con ese número y concepto. En cuanto Pepi lo confirme, te avisará al teléfono facilitado para coordinar la recogida o entrega.
+                    </p>
+                  </div>
+                ) : paymentMethod === "a_convenir" ? (
+                  <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#cbdbd0] space-y-2">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c]">
+                      Envío a Domicilio
+                    </h5>
+                    <p className="text-xs text-[#55645a] leading-relaxed">
+                      Hemos recibido tu pedido. Te llamaremos al teléfono que nos has facilitado para confirmar el envío y acordar la forma de pago.
                     </p>
                   </div>
                 ) : (
