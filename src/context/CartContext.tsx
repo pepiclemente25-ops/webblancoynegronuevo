@@ -17,6 +17,10 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Compra online desactivada temporalmente (catálogo incompleto).
+// Poner a true para reactivar cesta y compra.
+export const PURCHASES_ENABLED = false;
+
 const LOCAL_STORAGE_KEY = "blanco_negro_cart_v1";
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -48,6 +52,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [items, isMounted]);
 
   const addToCart = (product: ShopProduct, quantity = 1) => {
+    if (!PURCHASES_ENABLED) return;
     setItems((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {

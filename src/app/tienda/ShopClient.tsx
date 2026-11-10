@@ -14,7 +14,7 @@ import { defaultFamilias, defaultBienestares, defaultExperienciaEstrella } from 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BookingModal } from "@/components/BookingModal";
-import { useCart } from "@/context/CartContext";
+import { useCart, PURCHASES_ENABLED } from "@/context/CartContext";
 import {
   ShoppingBag,
   Sparkles,
@@ -963,7 +963,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                             <Calendar className="w-3.5 h-3.5" />
                             <span>Reservar</span>
                           </button>
-                        ) : (
+                        ) : !PURCHASES_ENABLED ? null : (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -2011,6 +2011,11 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     <Calendar className="w-4 h-4 text-[#dfc89f]" />
                     <span>Reservar Cita Presencial</span>
                   </button>
+                ) : !PURCHASES_ENABLED ? (
+                  <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] text-center space-y-1">
+                    <p className="text-sm font-semibold text-[#212924]">Compra online próximamente</p>
+                    <p className="text-xs text-[#6e7d73]">Estamos terminando de cargar el catálogo. Consúltanos en tienda o por WhatsApp.</p>
+                  </div>
                 ) : (
                   <div className="flex items-center gap-3">
                     {/* Selector de cantidad */}

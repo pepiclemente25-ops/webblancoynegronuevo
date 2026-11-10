@@ -6,7 +6,7 @@ import { Calendar, Menu, X, Phone, MessageCircle, ShoppingBag } from "lucide-rea
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCart } from "@/context/CartContext";
+import { useCart, PURCHASES_ENABLED } from "@/context/CartContext";
 
 interface NavbarProps {
   config: SiteConfig;
@@ -103,6 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
           {/* Action CTAs */}
           <div className="hidden sm:flex items-center gap-2.5">
             {/* Botón Carrito */}
+            {PURCHASES_ENABLED && (
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2.5 rounded-full text-[#3d5a4c] hover:bg-[#eaf0ec] transition-colors cursor-pointer group"
@@ -116,6 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                 </span>
               )}
             </button>
+            )}
 
             {/* WhatsApp */}
             <a
@@ -150,6 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
 
           {/* Mobile hamburger & cart */}
           <div className="flex sm:hidden items-center gap-2">
+            {PURCHASES_ENABLED && (
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 rounded-full bg-[#eaf0ec] text-[#3d5a4c]"
@@ -163,6 +166,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                 </span>
               )}
             </button>
+            )}
 
             <a
               href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(`Hola ${config.name}, deseo agendar una cita.`)}`}
@@ -202,6 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                 );
               })}
               <div className="pt-3 border-t border-[#ece4d8] flex flex-col gap-2">
+                {PURCHASES_ENABLED && (
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
@@ -212,6 +217,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                   <ShoppingBag className="w-4 h-4 text-[#3d5a4c]" />
                   <span>Ver Cesta ({totalItems} {totalItems === 1 ? "artículo" : "artículos"})</span>
                 </button>
+                )}
 
                 {onOpenBooking && (
                   <button
