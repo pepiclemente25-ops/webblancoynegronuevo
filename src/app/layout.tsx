@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { SITE_URL } from "@/lib/site";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
@@ -17,34 +19,49 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Blanco y Negro - Terapias Holísticas y Bienestar",
-  description:
-    "Espacio de sanación y bienestar integral: Quiromasaje terapéutico, Reiki Usui, Registros Akáshicos, Respiración consciente, talleres y armonización energética.",
-  keywords: [
-    "quiromasaje",
-    "reiki",
-    "registros akashicos",
-    "respiracion consciente",
-    "terapias holisticas",
-    "armonizacion energetica",
-    "aromaterapia",
-    "bienestar",
-  ],
-  openGraph: {
-    title: "Blanco y Negro - Terapias Holísticas y Bienestar",
-    description: "Reconecta con tu equilibrio natural: Quiromasaje, Reiki, Registros Akáshicos y Bienestar Holístico.",
-    type: "website",
-    locale: "es_ES",
-  },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "any" },
+const TITULO = "Blanco y Negro - Terapias Holísticas y Bienestar";
+
+export async function generateMetadata(): Promise<Metadata> {
+  // Solo blanconegro.es se indexa; cualquier otra dirección (p. ej. *.workers.dev) lleva noindex para no duplicar contenido
+  const host = ((await headers()).get("host") || "").toLowerCase();
+  const esDominioPrincipal = host === "blanconegro.es" || host === "www.blanconegro.es";
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: TITULO, template: "%s | Blanco y Negro" },
+    description:
+      "Espacio de sanación y bienestar integral: Quiromasaje terapéutico, Reiki Usui, Registros Akáshicos, Respiración consciente, talleres y armonización energética.",
+    keywords: [
+      "quiromasaje",
+      "reiki",
+      "registros akashicos",
+      "respiracion consciente",
+      "terapias holisticas",
+      "armonizacion energetica",
+      "aromaterapia",
+      "bienestar",
     ],
-    apple: "/icon.png",
-  },
-};
+    alternates: { canonical: "/" },
+    robots: esDominioPrincipal ? { index: true, follow: true } : { index: false, follow: false },
+    openGraph: {
+      title: TITULO,
+      description: "Reconecta con tu equilibrio natural: Quiromasaje, Reiki, Registros Akáshicos y Bienestar Holístico.",
+      type: "website",
+      locale: "es_ES",
+      url: SITE_URL,
+      siteName: "Blanco y Negro",
+      images: [{ url: "/icon.png", width: 192, height: 192, alt: "Blanco y Negro" }],
+    },
+    twitter: { card: "summary", title: TITULO },
+    icons: {
+      icon: [
+        { url: "/icon.svg", type: "image/svg+xml" },
+        { url: "/favicon.ico", sizes: "any" },
+      ],
+      apple: "/icon.png",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
