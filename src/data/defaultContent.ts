@@ -9,7 +9,7 @@ export const defaultWebData: WebData = {
       "Unos santuarios de calma y equilibrio en el que reconectar con tu esencia natural a través del quiromasaje, la energía Reiki, las lecturas de Registros Akáshicos y la respiración consciente.",
     therapistName: "Pepi",
     therapistBio:
-      "Terapeuta holística y quiromasajista titulada con más de una década acompañando procesos de sanación física, emocional y espiritual. Concibo el cuerpo y el alma como un todo inseparable: a través del tacto consciente, la canalización energética y la presencia serena, facilito que tu propio sistema recupere su armonía vital original.",
+      "¡Hola! Soy Josefa Clemente (Pepi). Como quiromasajista titulada por la Escuela Europea Parasanitaria (ESPS) y Maestra de Reiki formada por la Federación Española de Reiki, acompaño a las personas a encontrar momentos de calma y bienestar en su día a día.\n\nMi propósito es brindarte un espacio seguro y tranquilo donde puedas hacer una pausa, soltar las tensiones acumuladas y reconectar contigo. A través del quiromasaje y el Reiki, busco ayudarte a cuidar tanto tu cuerpo como tus emociones, respetando siempre tu propio ritmo.\n\nMe encantará recibirte en un ambiente cercano y de confianza para que disfrutes de algo fundamental para tu salud: tiempo para ti, para respirar y cuidarte.",
     phone: "+34600123456",
     phoneDisplay: "600 123 456",
     whatsapp: "34600123456",

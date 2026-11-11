@@ -37,6 +37,7 @@ export default async function SobreMiPage() {
     ...(nombre && nombre !== TERAPEUTA_NOMBRE_COMPLETO ? { alternateName: nombre } : {}),
     jobTitle: "Terapeuta holística",
     description: recortar(c.therapistBio, 300),
+    image: `${SITE_URL}/sobre-mi/josefa-clemente-pepi.jpg`,
     url,
     worksFor: { "@type": "HealthAndBeautyBusiness", "@id": `${SITE_URL}/#negocio`, name: c.name, url: `${SITE_URL}/` },
     workLocation: { "@type": "Place", address: { "@type": "PostalAddress", addressLocality: c.city, addressCountry: "ES" } },
@@ -66,12 +67,31 @@ export default async function SobreMiPage() {
         </h1>
         <p className="mt-2 text-lg text-[#4a6b5d]">Terapeuta holística en {c.city || "Boiro"} · {c.name}</p>
 
-        <section className="mt-8 space-y-4 text-[#3b4740]">
-          <p className="text-lg font-semibold text-[#212924]">Hola, soy {nombre}.</p>
-          <p className="whitespace-pre-line">{c.therapistBio}</p>
-          <p>
-            {c.name} es mi espacio en {c.city || "Boiro"}. Está pensado como un lugar tranquilo al que venir a parar, a soltar
-            tensión y a escucharte, ya sea con una sesión de terapia o paseando entre los productos de la tienda.
+        <section className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-start">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/sobre-mi/josefa-clemente-pepi.jpg"
+            alt={`${TERAPEUTA_NOMBRE_COMPLETO} (${nombre}), terapeuta de ${c.name}`}
+            width={900}
+            height={900}
+            className="h-auto w-full max-w-[260px] rounded-2xl object-cover shadow-md sm:w-64"
+          />
+          <div className="space-y-4 text-[#3b4740]">
+            {c.therapistBio.split(/\n\s*\n/).map((parrafo, i) => (
+              <p key={i}>{parrafo}</p>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="font-serif text-2xl font-bold text-[#212924]">Formación</h2>
+          <ul className="mt-3 list-disc space-y-1 pl-5 text-[#3b4740]">
+            <li>Quiromasajista titulada por la Escuela Europea Parasanitaria (ESPS).</li>
+            <li>Maestra de Reiki, formada por la Federación Española de Reiki.</li>
+          </ul>
+          <p className="mt-4 text-[#3b4740]">
+            {c.name} es mi espacio en {c.city || "Boiro"}: un lugar tranquilo al que venir a parar, a soltar tensión y a
+            escucharte, ya sea con una sesión de terapia o paseando entre los productos de la tienda.
           </p>
         </section>
 
@@ -107,6 +127,15 @@ export default async function SobreMiPage() {
             {c.phoneDisplay || c.phone ? <li><strong>Teléfono:</strong> {c.phoneDisplay || c.phone}</li> : null}
             {c.email ? <li><strong>Email:</strong> {c.email}</li> : null}
           </ul>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/sobre-mi/fachada-blanco-y-negro.jpg"
+            alt={`Fachada de la tienda ${c.name} en ${c.city || "Boiro"}`}
+            width={1400}
+            height={1050}
+            loading="lazy"
+            className="mt-6 h-auto w-full rounded-2xl shadow-md"
+          />
           <p className="mt-4">
             <Link href="/#carta-terapias" className="font-semibold text-[#4a6b5d] hover:underline">Ver terapias y reservar</Link>
             {" · "}
