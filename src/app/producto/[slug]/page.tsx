@@ -82,16 +82,16 @@ export default async function ProductoPage({ params }: Props) {
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-16 pt-28 sm:px-6">
         <JsonLd data={jsonLd} />
         <JsonLd data={migas} />
-        <nav aria-label="Migas de pan" className="mb-6 text-sm text-[#4a6b5d]">
+        <nav aria-label="Migas de pan" className="mb-6 text-sm text-[#2f9a3b]">
           <Link href="/" className="hover:underline">Inicio</Link> · <Link href="/#tienda" className="hover:underline">Tienda</Link> · <span className="text-[#212924]">{p.name}</span>
         </nav>
         <article className="grid gap-8 md:grid-cols-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={p.imageUrl} alt={p.name} className="w-full rounded-2xl object-cover shadow-sm" />
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#4a6b5d]">{p.categoryLabel}</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-[#2f9a3b]">{p.categoryLabel}</p>
             <h1 className="mt-1 font-serif text-3xl font-bold text-[#212924] sm:text-4xl">{p.name}</h1>
-            <p className="mt-4 text-2xl font-bold text-[#2d473b]">
+            <p className="mt-4 text-2xl font-bold text-[#237a2d]">
               {p.price.toFixed(2)} €
               {p.originalPrice ? <span className="ml-3 text-base font-normal text-gray-500 line-through">{p.originalPrice.toFixed(2)} €</span> : null}
             </p>
@@ -107,7 +107,7 @@ export default async function ProductoPage({ params }: Props) {
             ) : null}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <AddToCartButton product={p} />
-              <Link href="/#tienda" className="font-semibold text-[#4a6b5d] hover:underline">Ver toda la tienda</Link>
+              <Link href="/#tienda" className="font-semibold text-[#2f9a3b] hover:underline">Ver toda la tienda</Link>
             </div>
           </div>
         </article>

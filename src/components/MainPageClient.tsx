@@ -535,7 +535,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
 
   // Reserva directa por WhatsApp con mensaje personalizado con el nombre del servicio
   const handleWhatsAppBooking = (serviceTitle?: string) => {
-    const cleanPhone = (config.whatsapp || "34600123456").replace(/[^0-9]/g, "");
+    const cleanPhone = (config.whatsapp || "34643630421").replace(/[^0-9]/g, "");
     const customTemplate = terapiasSection?.contenido?.mensajeWhatsappTemplate;
     let messageText = "";
     if (customTemplate && serviceTitle) {
@@ -550,7 +550,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#fbf9f5] text-[#212924] scroll-smooth">
+    <div className="relative min-h-screen flex flex-col bg-[#fbf8ee] text-[#212924] scroll-smooth">
       {/* Cañas de bambú zen ambientales fijas en los bordes */}
       <div className="hidden lg:block fixed inset-y-0 left-0 w-32 xl:w-44 pointer-events-none z-0 opacity-15 xl:opacity-20 overflow-hidden select-none">
         <Image
@@ -587,7 +587,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         <section id="tienda" className="py-12 md:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* CABECERA PRINCIPAL (CAPTURA 1) */}
           <div className="text-center max-w-3xl mx-auto mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#eaf2ec] text-[#2f4d3e] text-xs font-bold uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e3f5e0] text-[#237a2d] text-xs font-bold uppercase tracking-wider mb-3">
               <span>{tiendaSection?.contenido?.badge || "✨ ESPACIO BOTÁNICO, MINERALES & SESIONES"}</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#1c2720] tracking-tight leading-snug uppercase">
@@ -607,7 +607,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               {selectedFamilia !== "all" && (
                 <button
                   onClick={() => setSelectedFamilia("all")}
-                  className="text-[11px] text-[#3d5a4c] font-semibold hover:underline cursor-pointer flex items-center gap-1"
+                  className="text-[11px] text-[#2f9a3b] font-semibold hover:underline cursor-pointer flex items-center gap-1"
                 >
                   <span>Mostrar todas</span>
                   <RotateCcw className="w-3 h-3" />
@@ -665,7 +665,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar por nombre, categoría o beneficio..."
-                  className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf9f5] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3d5a4c]"
+                  className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf8ee] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2f9a3b]"
                 />
                 {searchQuery && (
                   <button
@@ -684,7 +684,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 sortBy !== "featured") && (
                 <button
                   onClick={handleResetFilters}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#3d5a4c] text-white font-medium text-xs shadow-sm hover:bg-[#2d473b] hover:shadow transition-all duration-200 cursor-pointer shrink-0 animate-fadeIn"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#2f9a3b] text-white font-medium text-xs shadow-sm hover:bg-[#237a2d] hover:shadow transition-all duration-200 cursor-pointer shrink-0 animate-fadeIn"
                   title="Limpiar todos los filtros"
                 >
                   <RotateCcw className="w-3.5 h-3.5 text-[#dfc89f]" />
@@ -696,8 +696,8 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             {/* Controles secundarios */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
               {/* Selector de Ordenación */}
-              <div className="flex items-center gap-1.5 bg-[#fbf9f5] border border-[#d8d0c2] px-3 py-1.5 rounded-xl">
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#3d5a4c]" />
+              <div className="flex items-center gap-1.5 bg-[#fbf8ee] border border-[#d8d0c2] px-3 py-1.5 rounded-xl">
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#2f9a3b]" />
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -717,7 +717,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 <select
                   value={itemsPerPage}
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="bg-[#fbf9f5] border border-[#d8d0c2] rounded-lg px-2 py-1 text-xs text-[#212924] focus:outline-none cursor-pointer font-medium"
+                  className="bg-[#fbf8ee] border border-[#d8d0c2] rounded-lg px-2 py-1 text-xs text-[#212924] focus:outline-none cursor-pointer font-medium"
                 >
                   <option value={8}>8</option>
                   <option value={12}>12</option>
@@ -743,8 +743,8 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           {/* ================= REJILLA DE PRODUCTOS ================= */}
           {products.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-3xl border border-[#ece4d8] p-8 sm:p-12 max-w-lg mx-auto space-y-4 shadow-2xs">
-              <div className="w-16 h-16 rounded-3xl bg-[#f4efe5] text-[#3d5a4c] mx-auto flex items-center justify-center shadow-inner">
-                <Sparkles className="w-8 h-8 text-[#3d5a4c]" />
+              <div className="w-16 h-16 rounded-3xl bg-[#f4efe5] text-[#2f9a3b] mx-auto flex items-center justify-center shadow-inner">
+                <Sparkles className="w-8 h-8 text-[#2f9a3b]" />
               </div>
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#212924]">
                 Catálogo en Actualización
@@ -755,7 +755,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             </div>
           ) : totalItems === 0 ? (
             <div className="text-center py-16 bg-white rounded-3xl border border-[#ece4d8] p-8 max-w-md mx-auto space-y-3 shadow-2xs">
-              <div className="w-14 h-14 rounded-full bg-[#f4efe5] text-[#3d5a4c] mx-auto flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-[#f4efe5] text-[#2f9a3b] mx-auto flex items-center justify-center">
                 <Search className="w-6 h-6 opacity-60" />
               </div>
               <h3 className="font-serif text-lg font-semibold text-[#212924]">
@@ -766,7 +766,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               </p>
               <button
                 onClick={handleResetFilters}
-                className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#3d5a4c] text-white text-xs font-semibold shadow-xs hover:bg-[#2d473b] transition-all cursor-pointer"
+                className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2f9a3b] text-white text-xs font-semibold shadow-xs hover:bg-[#237a2d] transition-all cursor-pointer"
               >
                 Ver todo el catálogo
               </button>
@@ -785,7 +785,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   <article
                     key={product.id}
                     onClick={() => handleOpenProduct(product)}
-                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#ece4d8] shadow-2xs hover:shadow-md hover:border-[#cbdbd0] transition-all duration-300 cursor-pointer"
+                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#ece4d8] shadow-2xs hover:shadow-md hover:border-[#cdeccb] transition-all duration-300 cursor-pointer"
                   >
                     {/* Imagen del producto con badge y overlay de clic */}
                     <div className="relative aspect-4/3 overflow-hidden bg-[#f4efe5]">
@@ -802,7 +802,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       />
                       <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-[#212924] text-xs font-semibold shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                          <Eye className="w-3.5 h-3.5 text-[#3d5a4c]" />
+                          <Eye className="w-3.5 h-3.5 text-[#2f9a3b]" />
                           Ver fotos y detalles
                         </span>
                       </div>
@@ -810,11 +810,11 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       {/* Badges superiores */}
                       <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                         {product.badge ? (
-                          <span className="px-2.5 py-1 rounded-full bg-[#3d5a4c]/90 backdrop-blur-xs text-[#dfc89f] text-[10px] font-bold shadow-xs">
+                          <span className="px-2.5 py-1 rounded-full bg-[#2f9a3b]/90 backdrop-blur-xs text-[#dfc89f] text-[10px] font-bold shadow-xs">
                             {product.badge}
                           </span>
                         ) : product.esServicio ? (
-                          <span className="px-2.5 py-1 rounded-full bg-[#2d473b]/90 backdrop-blur-xs text-white text-[10px] font-semibold shadow-xs">
+                          <span className="px-2.5 py-1 rounded-full bg-[#237a2d]/90 backdrop-blur-xs text-white text-[10px] font-semibold shadow-xs">
                             Sesión Presencial
                           </span>
                         ) : (
@@ -839,7 +839,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     {/* Contenido de la tarjeta */}
                     <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                       <div className="space-y-2">
-                        <h3 className="font-serif text-base font-semibold text-[#212924] group-hover:text-[#3d5a4c] transition-colors line-clamp-2">
+                        <h3 className="font-serif text-base font-semibold text-[#212924] group-hover:text-[#2f9a3b] transition-colors line-clamp-2">
                           {product.name}
                         </h3>
 
@@ -855,7 +855,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                                 key={i}
                                 className="flex items-start gap-1.5 text-[11px] text-[#4a584f]"
                               >
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#3d5a4c] flex-shrink-0 mt-0.5" />
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#2f9a3b] flex-shrink-0 mt-0.5" />
                                 <span className="line-clamp-1">{b}</span>
                               </div>
                             ))}
@@ -887,7 +887,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                               e.stopPropagation();
                               handleOpenBooking(product.name);
                             }}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#f4efe5] hover:bg-[#eae3d5] text-[#3d5a4c] font-semibold text-xs transition-all cursor-pointer border border-[#e5dcce]"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#f4efe5] hover:bg-[#eae3d5] text-[#2f9a3b] font-semibold text-xs transition-all cursor-pointer border border-[#e5dcce]"
                           >
                             <Calendar className="w-3.5 h-3.5" />
                             <span>Reservar</span>
@@ -904,7 +904,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                                 : isJustAdded
                                 ? "bg-[#25D366] text-white scale-105"
-                                : "bg-[#3d5a4c] hover:bg-[#2d473b] text-white hover:shadow-xs"
+                                : "bg-[#2f9a3b] hover:bg-[#237a2d] text-white hover:shadow-xs"
                             }`}
                           >
                             {isJustAdded ? (
@@ -1004,7 +1004,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                         }}
                         className={`w-7 sm:w-8 h-8 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                           isCur
-                            ? "bg-[#3d5a4c] text-white shadow-2xs scale-105"
+                            ? "bg-[#2f9a3b] text-white shadow-2xs scale-105"
                             : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
                         }`}
                       >
@@ -1051,7 +1051,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-3xl mx-auto mb-12">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3.5 py-1.5 rounded-full">
                   {bienestarSection?.contenido?.badge || "Guía de Bienestar Consciente"}
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
@@ -1120,7 +1120,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     <div className="p-5 sm:p-6 pt-0">
                       <button
                         onClick={() => handleSelectBienestarCard(bienestar.id)}
-                        className="w-full py-2.5 rounded-2xl bg-[#f5f1eb] hover:bg-[#3d5a4c] text-[#3d5a4c] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
+                        className="w-full py-2.5 rounded-2xl bg-[#f5f1eb] hover:bg-[#2f9a3b] text-[#2f9a3b] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
                       >
                         <span>Ver elementos en la tienda</span>
                         <span className="text-sm">→</span>
@@ -1141,7 +1141,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-3xl mx-auto mb-14">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3.5 py-1.5 rounded-full">
                   {terapiasSection?.contenido?.badge || "Centro Holístico en Boiro (A Coruña)"}
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
@@ -1158,7 +1158,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 <div className="p-6 sm:p-8 rounded-3xl bg-[#faf7f2] border border-[#ebdcca] shadow-sm flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
-                      <span className="w-10 h-10 rounded-2xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-xl font-bold">
+                      <span className="w-10 h-10 rounded-2xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center text-xl font-bold">
                         {terapiasSection?.contenido?.columnaTerapiasIcono || terapiasSection?.contenido?.col1Icono || "✨"}
                       </span>
                       <div>
@@ -1202,12 +1202,12 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                             {terapia.shortDescription}
                           </p>
                           <div className="flex items-center justify-between gap-2 mt-2">
-                            <span className="font-serif font-bold text-base text-[#3d5a4c]">
+                            <span className="font-serif font-bold text-base text-[#2f9a3b]">
                               {terapia.price.toFixed(2)} €
                             </span>
                             <button
                               onClick={() => handleWhatsAppBooking(terapia.name)}
-                              className="px-3.5 py-1.5 bg-[#3d5a4c] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer flex items-center gap-1.5"
+                              className="px-3.5 py-1.5 bg-[#2f9a3b] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer flex items-center gap-1.5"
                             >
                               <MessageCircle className="w-3.5 h-3.5 text-[#dfc89f]" />
                               <span>{terapiasSection?.contenido?.botonReservaTexto || "Reservar Cita"}</span>
@@ -1224,7 +1224,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               <div className="p-6 sm:p-8 rounded-3xl bg-[#faf7f2] border border-[#ebdcca] shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
-                    <span className="w-10 h-10 rounded-2xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-xl font-bold">
+                    <span className="w-10 h-10 rounded-2xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center text-xl font-bold">
                       {terapiasSection?.contenido?.columnaCuidadosIcono || terapiasSection?.contenido?.col2Icono || "🌿"}
                     </span>
                     <div>
@@ -1268,12 +1268,12 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                             {cuidado.shortDescription}
                           </p>
                           <div className="flex items-center justify-between gap-2 mt-2">
-                            <span className="font-serif font-bold text-base text-[#3d5a4c]">
+                            <span className="font-serif font-bold text-base text-[#2f9a3b]">
                               {cuidado.price.toFixed(2)} €
                             </span>
                             <button
                               onClick={() => handleWhatsAppBooking(cuidado.name)}
-                              className="px-3.5 py-1.5 bg-[#3d5a4c] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer flex items-center gap-1.5"
+                              className="px-3.5 py-1.5 bg-[#2f9a3b] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer flex items-center gap-1.5"
                             >
                               <MessageCircle className="w-3.5 h-3.5 text-[#dfc89f]" />
                               <span>{terapiasSection?.contenido?.botonReservaTexto || "Reservar Cita"}</span>
@@ -1288,7 +1288,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
             </div>
 
             {/* ================= SECCIÓN 6: EXPERIENCIA ESTRELLA BANNER ================= */}
-            <div className="rounded-3xl bg-[#24352b] text-white shadow-xl overflow-hidden relative border border-[#3d5a4c]">
+            <div className="rounded-3xl bg-[#24352b] text-white shadow-xl overflow-hidden relative border border-[#2f9a3b]">
               <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <Image
                   src={activeExperienciaEstrella.imagenFondoUrl || DEFAULT_FALLBACK_IMG}
@@ -1348,7 +1348,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   />
                 </div>
                 <div className="lg:col-span-7 space-y-3">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3 py-1 rounded-full">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3 py-1 rounded-full">
                     {aboutSection?.contenido?.badge || "El Espacio Blanco y Negro"}
                   </span>
                   <h2 className="font-serif text-3xl font-bold text-[#1b261f]">
@@ -1367,14 +1367,14 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                     </p>
                   )}
                   {(aboutSection?.contenido?.fraseLema || aboutSection?.contenido?.lema) && (
-                    <p className="text-xs italic text-[#3d5a4c] font-serif border-l-2 border-[#3d5a4c] pl-3 py-1">
+                    <p className="text-xs italic text-[#2f9a3b] font-serif border-l-2 border-[#2f9a3b] pl-3 py-1">
                       &ldquo;{aboutSection.contenido.fraseLema || aboutSection.contenido.lema}&rdquo;
                     </p>
                   )}
                   <div className="pt-3 flex flex-wrap gap-4">
                     <button
                       onClick={() => handleWhatsAppBooking(`Cita general con ${aboutSection?.contenido?.nombreTerapeuta || "Pepi"}`)}
-                      className="px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2c4036] shadow transition cursor-pointer flex items-center gap-1.5"
+                      className="px-6 py-3 rounded-full bg-[#2f9a3b] text-white text-xs font-bold hover:bg-[#2c4036] shadow transition cursor-pointer flex items-center gap-1.5"
                     >
                       <MessageCircle className="w-3.5 h-3.5 text-[#dfc89f]" />
                       <span>{aboutSection?.contenido?.botonCitaTexto || `Pedir cita con ${aboutSection?.contenido?.nombreTerapeuta || "Pepi"}`}</span>
@@ -1403,7 +1403,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 className="w-full p-6 sm:p-7 flex items-center justify-between text-left hover:bg-[#faf7f2] transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#3d5a4c] flex items-center justify-center text-xl">
+                  <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#2f9a3b] flex items-center justify-center text-xl">
                     {faqSection?.contenido?.icono || faqSection?.contenido?.faqIcono ? (
                       <span>{faqSection?.contenido?.icono || faqSection?.contenido?.faqIcono}</span>
                     ) : (
@@ -1420,7 +1420,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   </div>
                 </div>
 
-                <div className="p-2 rounded-xl bg-[#fbf9f5] text-[#3d5a4c] border border-[#e5dcce]">
+                <div className="p-2 rounded-xl bg-[#fbf8ee] text-[#2f9a3b] border border-[#e5dcce]">
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-300 ${
                       isFaqOpen ? "rotate-180" : ""
@@ -1456,8 +1456,8 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                         },
                       ]
                   ).map((paso: any, idx: number) => (
-                    <div key={idx} className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] space-y-2">
-                      <div className="w-7 h-7 rounded-lg bg-[#3d5a4c] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
+                    <div key={idx} className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] space-y-2">
+                      <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
                         {paso.icono || paso.numero || idx + 1}
                       </div>
                       <h4 className="font-serif font-semibold text-xs text-[#212924]">
@@ -1486,7 +1486,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                 )}
                 <div className={sec.contenido?.imagenUrl ? 'md:col-span-7 space-y-4' : 'md:col-span-12 space-y-4 text-center'}>
                   {sec.contenido?.badge && (
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full inline-block">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3.5 py-1.5 rounded-full inline-block">
                       {sec.contenido.badge}
                     </span>
                   )}
@@ -1495,7 +1495,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                   {sec.contenido?.botonTexto && (
                     <a
                       href={sec.contenido.botonLink || '#tienda'}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#3d5a4c] text-white text-xs font-bold hover:bg-[#2a3d34] shadow-md transition"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#2f9a3b] text-white text-xs font-bold hover:bg-[#1f6b29] shadow-md transition"
                     >
                       <span>{sec.contenido.botonTexto}</span>
                     </a>
@@ -1508,7 +1508,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               <div className="space-y-8">
                 <div className="text-center max-w-3xl mx-auto space-y-2">
                   {sec.contenido?.badge && (
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#3d5a4c] bg-[#eaf2ec] px-3.5 py-1.5 rounded-full inline-block">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3.5 py-1.5 rounded-full inline-block">
                       {sec.contenido.badge}
                     </span>
                   )}
@@ -1661,7 +1661,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       onClick={() => setCurrentImgIndex(idx)}
                       className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden border-2 transition-all cursor-pointer flex-shrink-0 bg-white ${
                         currentImgIndex === idx
-                          ? "border-[#3d5a4c] shadow-md scale-105 ring-2 ring-[#3d5a4c]/30"
+                          ? "border-[#2f9a3b] shadow-md scale-105 ring-2 ring-[#2f9a3b]/30"
                           : "border-transparent opacity-60 hover:opacity-100"
                       }`}
                     >
@@ -1694,12 +1694,12 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
               <div className="space-y-4">
                 {/* Badges de Categoría y Stock */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-3 py-1 rounded-full bg-[#f4efe5] text-[#3d5a4c] text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-[#f4efe5] text-[#2f9a3b] text-xs font-semibold">
                     {(selectedProduct.familiaNombre && !selectedProduct.familiaNombre.toLowerCase().includes("sin asignaci")) ? selectedProduct.familiaNombre : (selectedProduct.categoryLabel && !selectedProduct.categoryLabel.toLowerCase().includes("sin asignaci")) ? selectedProduct.categoryLabel : "Bienestar"}
                   </span>
 
                   {selectedProduct.badge && (
-                    <span className="px-3 py-1 rounded-full bg-[#3d5a4c] text-[#dfc89f] text-xs font-bold shadow-xs">
+                    <span className="px-3 py-1 rounded-full bg-[#2f9a3b] text-[#dfc89f] text-xs font-bold shadow-xs">
                       {selectedProduct.badge}
                     </span>
                   )}
@@ -1727,7 +1727,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
 
                 {/* Precio */}
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-serif font-bold text-[#3d5a4c]">
+                  <span className="text-3xl font-serif font-bold text-[#2f9a3b]">
                     {selectedProduct.price.toFixed(2)}€
                   </span>
                   {selectedProduct.originalPrice &&
@@ -1795,13 +1795,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                         <div className={`grid gap-2.5 pt-2 text-xs text-gray-700 ${camposAMostrar.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
                           {camposAMostrar.map((campo, idx) => (
                             <div key={campo.id || idx} className="p-3 bg-white rounded-2xl border border-[#ebdcca] shadow-2xs">
-                              <p className="font-bold text-[#3d5a4c] flex items-center gap-1.5 mb-0.5">
+                              <p className="font-bold text-[#2f9a3b] flex items-center gap-1.5 mb-0.5">
                                 {campo.icono ? (
                                   <span className="text-sm shrink-0 leading-none">{campo.icono}</span>
                                 ) : idx % 2 === 0 ? (
                                   <Sparkles className="w-3.5 h-3.5 text-[#b08d4b]" />
                                 ) : (
-                                  <Store className="w-3.5 h-3.5 text-[#3d5a4c]" />
+                                  <Store className="w-3.5 h-3.5 text-[#2f9a3b]" />
                                 )}
                                 <span>{campo.etiqueta}</span>
                               </p>
@@ -1837,13 +1837,13 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       setSelectedProduct(null);
                       handleOpenBooking(name);
                     }}
-                    className="w-full py-4 rounded-2xl bg-[#3d5a4c] hover:bg-[#2d473b] text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-4 rounded-2xl bg-[#2f9a3b] hover:bg-[#237a2d] text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Calendar className="w-4 h-4 text-[#dfc89f]" />
                     <span>Reservar Cita Presencial</span>
                   </button>
                 ) : !PURCHASES_ENABLED ? (
-                  <div className="p-4 rounded-2xl bg-[#fbf9f5] border border-[#ece4d8] text-center space-y-1">
+                  <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] text-center space-y-1">
                     <p className="text-sm font-semibold text-[#212924]">Compra online próximamente</p>
                     <p className="text-xs text-[#6e7d73]">Estamos terminando de cargar el catálogo. Consúltanos en tienda o por WhatsApp.</p>
                   </div>
@@ -1882,7 +1882,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                           ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                           : modalJustAdded
                           ? "bg-[#25D366] text-white scale-102"
-                          : "bg-[#3d5a4c] hover:bg-[#2d473b] text-white"
+                          : "bg-[#2f9a3b] hover:bg-[#237a2d] text-white"
                       }`}
                     >
                       {modalJustAdded ? (
@@ -1912,7 +1912,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#3d5a4c] font-bold underline"
+                      className="text-[#2f9a3b] font-bold underline"
                     >
                       Habla con Pepi por WhatsApp
                     </a>

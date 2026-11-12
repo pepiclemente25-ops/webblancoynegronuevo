@@ -58,14 +58,14 @@ export default async function SobreMiPage() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-28 sm:px-6">
         <JsonLd data={persona} />
         <JsonLd data={migas} />
-        <nav aria-label="Migas de pan" className="mb-6 text-sm text-[#4a6b5d]">
+        <nav aria-label="Migas de pan" className="mb-6 text-sm text-[#2f9a3b]">
           <Link href="/" className="hover:underline">Inicio</Link> · <span className="text-[#212924]">Sobre mí</span>
         </nav>
 
         <h1 className="font-serif text-3xl font-bold text-[#212924] sm:text-4xl">
           {TERAPEUTA_NOMBRE_COMPLETO}
         </h1>
-        <p className="mt-2 text-lg text-[#4a6b5d]">Terapeuta holística en {c.city || "Boiro"} · {c.name}</p>
+        <p className="mt-2 text-lg text-[#2f9a3b]">Terapeuta holística en {c.city || "Boiro"} · {c.name}</p>
 
         <section className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-start">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -105,7 +105,7 @@ export default async function SobreMiPage() {
           {terapias.length > 0 ? (
             <ul className="mt-4 grid gap-1 sm:grid-cols-2">
               {terapias.map(({ slug, item }) => (
-                <li key={slug}><Link href={`/terapia/${slug}`} className="text-[#4a6b5d] hover:underline">{item.title}</Link></li>
+                <li key={slug}><Link href={`/terapia/${slug}`} className="text-[#2f9a3b] hover:underline">{item.title}</Link></li>
               ))}
             </ul>
           ) : null}
@@ -137,9 +137,9 @@ export default async function SobreMiPage() {
             className="mt-6 h-auto w-full rounded-2xl shadow-md"
           />
           <p className="mt-4">
-            <Link href="/#carta-terapias" className="font-semibold text-[#4a6b5d] hover:underline">Ver terapias y reservar</Link>
+            <Link href="/#carta-terapias" className="font-semibold text-[#2f9a3b] hover:underline">Ver terapias y reservar</Link>
             {" · "}
-            <Link href="/" className="font-semibold text-[#4a6b5d] hover:underline">Volver al inicio</Link>
+            <Link href="/" className="font-semibold text-[#2f9a3b] hover:underline">Volver al inicio</Link>
           </p>
         </section>
 

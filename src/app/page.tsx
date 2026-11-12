@@ -45,17 +45,17 @@ export default async function Home() {
       <JsonLd data={sitio} />
       <MainPageClient data={data} />
       {/* Enlaces rastreables a cada ficha, para que Google y los asistentes de IA las encuentren */}
-      <section aria-label="Catálogo completo" className="bg-[#fbf9f5] px-4 py-12 text-[#212924]">
+      <section aria-label="Catálogo completo" className="bg-[#fbf8ee] px-4 py-12 text-[#212924]">
         <div className="mx-auto max-w-7xl">
           <p className="mb-6">
-            <Link href="/sobre-mi" className="font-semibold text-[#4a6b5d] hover:underline">Conoce a la terapeuta: Sobre mí</Link>
+            <Link href="/sobre-mi" className="font-semibold text-[#2f9a3b] hover:underline">Conoce a la terapeuta: Sobre mí</Link>
           </p>
           {terapias.length > 0 ? (
             <>
               <h2 className="font-serif text-2xl font-bold">Nuestras terapias</h2>
               <ul className="mt-3 grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
                 {terapias.map(({ slug, item }) => (
-                  <li key={slug}><Link href={`/terapia/${slug}`} className="text-[#4a6b5d] hover:underline">{item.title}</Link></li>
+                  <li key={slug}><Link href={`/terapia/${slug}`} className="text-[#2f9a3b] hover:underline">{item.title}</Link></li>
                 ))}
               </ul>
             </>
@@ -65,7 +65,7 @@ export default async function Home() {
               <h2 className="mt-8 font-serif text-2xl font-bold">Productos de la tienda</h2>
               <ul className="mt-3 grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
                 {productos.map(({ slug, item }) => (
-                  <li key={slug}><Link href={`/producto/${slug}`} className="text-[#4a6b5d] hover:underline">{item.name}</Link></li>
+                  <li key={slug}><Link href={`/producto/${slug}`} className="text-[#2f9a3b] hover:underline">{item.name}</Link></li>
                 ))}
               </ul>
             </>
