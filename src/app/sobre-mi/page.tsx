@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await getCatalogoSeo();
   const descripcion = recortar(
-    `Conoce a ${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta holística en ${data.config.city || "Boiro"}: quiromasaje, Reiki, Registros Akáshicos y respiración consciente en Blanco y Negro.`,
+    `Conoce a ${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta holística en ${data.config.city || "Boiro"}: quiromasaje, Reiki, Registros Akáshicos y respiración consciente en Blanco Negro.`,
     160
   );
   return {
@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: descripcion,
       url: `${SITE_URL}/sobre-mi`,
       type: "profile",
-      images: [{ url: "/sobre-mi/josefa-clemente-pepi.jpg", width: 900, height: 900, alt: `${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta de Blanco y Negro` }],
+      images: [{ url: "/sobre-mi/josefa-clemente-pepi.jpg", width: 900, height: 900, alt: `${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta de Blanco Negro` }],
     },
     twitter: { card: "summary_large_image", images: ["/sobre-mi/josefa-clemente-pepi.jpg"] },
   };

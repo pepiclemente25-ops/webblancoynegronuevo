@@ -55,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-transparent overflow-hidden shadow-md flex items-center justify-center transition-transform group-hover:scale-105 flex-shrink-0">
               <Image
                 src="/brand/logo-tarjeta.png"
-                alt="Logo Blanco y Negro - Yin Yang"
+                alt="Logo Blanco Negro - Yin Yang"
                 width={44}
                 height={44}
                 className="w-full h-full object-cover"
@@ -65,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
             <div className="min-w-0">
               {/* En móvil mostramos el nombre de marca conciso para evitar que ocupe múltiples líneas */}
               <span className="sm:hidden font-[family-name:var(--font-marca)] text-base tracking-wide text-[#212924] block leading-tight truncate">
-                Blanco y Negro
+                Blanco Negro
               </span>
               <span className="hidden sm:block font-[family-name:var(--font-marca)] text-xl sm:text-2xl tracking-wide text-[#212924] leading-tight truncate">
                 {config.name}

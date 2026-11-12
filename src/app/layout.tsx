@@ -27,7 +27,7 @@ const marca = Shojumaru({
   display: "swap",
 });
 
-const TITULO = "Blanco y Negro - Terapias Holísticas y Bienestar";
+const TITULO = "Blanco Negro - Terapias Holísticas y Bienestar";
 
 export async function generateMetadata(): Promise<Metadata> {
   // Solo blanconegro.es se indexa; cualquier otra dirección (p. ej. *.workers.dev) lleva noindex para no duplicar contenido
@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: { default: TITULO, template: "%s | Blanco y Negro" },
+    title: { default: TITULO, template: "%s | Blanco Negro" },
     description:
       "Espacio de sanación y bienestar integral: Quiromasaje terapéutico, Reiki Usui, Registros Akáshicos, Respiración consciente, talleres y armonización energética.",
     keywords: [
@@ -57,10 +57,10 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "es_ES",
       url: SITE_URL,
-      siteName: "Blanco y Negro",
-      images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Fachada de la tienda Blanco y Negro en Boiro" }],
+      siteName: "Blanco Negro",
+      images: [{ url: "/og-blanco-y-negro.jpg", width: 1200, height: 630, alt: "Fachada de la tienda Blanco Negro en Boiro" }],
     },
-    twitter: { card: "summary_large_image", title: TITULO, images: ["/og-image.jpg"] },
+    twitter: { card: "summary_large_image", title: TITULO, images: ["/og-blanco-y-negro.jpg"] },
   };
 }
 

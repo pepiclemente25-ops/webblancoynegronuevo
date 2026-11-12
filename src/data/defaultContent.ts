@@ -3,7 +3,7 @@ import { defaultShopProducts } from "@/data/shopProducts";
 
 export const defaultWebData: WebData = {
   config: {
-    name: "Blanco y Negro",
+    name: "Blanco Negro",
     tagline: "Terapias Holísticas y Bienestar",
     description:
       "Unos santuarios de calma y equilibrio en el que reconectar con tu esencia natural a través del quiromasaje, la energía Reiki, las lecturas de Registros Akáshicos y la respiración consciente.",
@@ -246,7 +246,7 @@ export const defaultWebData: WebData = {
       author: "David Serrano",
       service: "Reiki Usui & Chakras",
       rating: 5,
-      text: "Era muy escéptico con el tema energético hasta que probé una sesión de Reiki en Blanco y Negro - Terapias Holísticas y Bienestar. La sensación de calor en el pecho, la calma mental que experimenté y cómo descansé esa misma noche me dejaron impresionado. Totalmente recomendable para desconectar del estrés.",
+      text: "Era muy escéptico con el tema energético hasta que probé una sesión de Reiki en Blanco Negro - Terapias Holísticas y Bienestar. La sensación de calor en el pecho, la calma mental que experimenté y cómo descansé esa misma noche me dejaron impresionado. Totalmente recomendable para desconectar del estrés.",
       date: "Hace 3 semanas",
       verified: true,
     },

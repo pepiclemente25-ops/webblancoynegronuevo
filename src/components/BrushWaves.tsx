@@ -1,6 +1,6 @@
 import React from "react";
 
-/** Ondas de pincel verde y turquesa, como en la tarjeta de Blanco y Negro. Decorativas. */
+/** Ondas de pincel verde y turquesa, como en la tarjeta de Blanco Negro. Decorativas. */
 export const BrushWaves: React.FC<{ className?: string; flip?: boolean }> = ({ className = "", flip = false }) => (
   <svg
     aria-hidden="true"
