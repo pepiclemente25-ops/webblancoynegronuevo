@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, MOSTRAR_AVISO_PRUEBAS } from "@/lib/site";
+import { AvisoPruebas } from "@/components/AvisoPruebas";
 import { Playfair_Display, Plus_Jakarta_Sans, Shojumaru } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
@@ -70,7 +71,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${plusJakarta.variable} ${playfair.variable} ${marca.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans bg-[#f7fbef] text-[#212924] selection:bg-[#2f9a3b]/20 selection:text-[#237a2d]">
+      <body data-aviso={MOSTRAR_AVISO_PRUEBAS ? "1" : undefined} className="min-h-full flex flex-col font-sans bg-[#f7fbef] text-[#212924] selection:bg-[#2f9a3b]/20 selection:text-[#237a2d]">
+        <AvisoPruebas />
         <CartProvider>
           {children}
           <CartDrawer />

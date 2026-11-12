@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      className={`fixed top-[var(--aviso-h)] left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
           ? "bg-[#f7fbef]/95 backdrop-blur-md shadow-sm py-2.5 sm:py-3 border-b border-[#d3ebcf]/80"
           : "bg-[#f7fbef]/90 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none py-2.5 sm:py-5 border-b border-[#d3ebcf]/60 sm:border-b-0"

@@ -34,3 +34,10 @@ export function conSlugs<T>(
 
 // Nombre completo de la terapeuta (el TPV aún no lo envía a la web). El nombre corto ("Pepi") sale de la configuración.
 export const TERAPEUTA_NOMBRE_COMPLETO = "Josefa Clemente Martínez";
+
+/**
+ * Aviso temporal de "web en actualización". Para quitarlo: cambiar a false (o borrar este bloque
+ * y el componente AvisoPruebas) y publicar.
+ */
+export const MOSTRAR_AVISO_PRUEBAS = true;
+export const TEXTO_AVISO_PRUEBAS = "Web en pruebas: tratamientos y productos pueden ser erróneos";
