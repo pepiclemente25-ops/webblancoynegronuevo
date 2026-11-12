@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
                 />
               </div>
               <div>
-                <span className="font-[family-name:var(--font-marca)] text-3xl text-white tracking-wide block leading-tight">
+                <span className="font-[family-name:var(--font-marca)] text-2xl text-white tracking-wide block leading-tight">
                   {nombre}
                 </span>
                 <span className="text-[11px] text-[#dfc89f] tracking-wider uppercase font-medium block">
