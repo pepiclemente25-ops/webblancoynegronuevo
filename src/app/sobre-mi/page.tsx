@@ -18,7 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
     title: `Sobre mí: ${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta holística en ${data.config.city || "Boiro"}`,
     description: descripcion,
     alternates: { canonical: "/sobre-mi" },
-    openGraph: { title: `Sobre mí | ${data.config.name}`, description: descripcion, url: `${SITE_URL}/sobre-mi`, type: "profile" },
+    openGraph: {
+      title: `Sobre mí | ${data.config.name}`,
+      description: descripcion,
+      url: `${SITE_URL}/sobre-mi`,
+      type: "profile",
+      images: [{ url: "/sobre-mi/josefa-clemente-pepi.jpg", width: 900, height: 900, alt: `${TERAPEUTA_NOMBRE_COMPLETO}, terapeuta de Blanco y Negro` }],
+    },
+    twitter: { card: "summary_large_image", images: ["/sobre-mi/josefa-clemente-pepi.jpg"] },
   };
 }
 

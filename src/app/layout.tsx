@@ -60,13 +60,6 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Fachada de la tienda Blanco y Negro en Boiro" }],
     },
     twitter: { card: "summary_large_image", title: TITULO, images: ["/og-image.jpg"] },
-    icons: {
-      icon: [
-        { url: "/icon.svg", type: "image/svg+xml" },
-        { url: "/favicon.ico", sizes: "any" },
-      ],
-      apple: "/icon.png",
-    },
   };
 }
 
