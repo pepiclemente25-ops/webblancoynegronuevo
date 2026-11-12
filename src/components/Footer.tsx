@@ -27,16 +27,16 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
 
   return (
     <>
-    <div className="bg-[#fbf8ee]"><BrushWaves /></div>
-    <footer className="bg-[#212924] text-[#cfd6d1] pt-16 pb-12 border-t border-[#313c35]">
+    <div className="bg-[#f7fbef]"><BrushWaves /></div>
+    <footer className="bg-[#14392a] text-[#cfd6d1] pt-16 pb-12 border-t border-[#235a42]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#313c35]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#235a42]">
           
           {/* Logo y lema */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#f6f2ea] border border-[#dfc89f]/40 overflow-hidden flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#f1faea] border border-[#7fd6c2]/40 overflow-hidden flex items-center justify-center flex-shrink-0">
                 <Image
                   src="/brand/logo-tarjeta.png"
                   alt={`Logo ${nombre}`}
@@ -49,7 +49,7 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
                 <span className="font-[family-name:var(--font-marca)] text-2xl text-white tracking-wide block leading-tight">
                   {nombre}
                 </span>
-                <span className="text-[11px] text-[#dfc89f] tracking-wider uppercase font-medium block">
+                <span className="text-[11px] text-[#7fd6c2] tracking-wider uppercase font-medium block">
                   {tagline}
                 </span>
               </div>
@@ -61,7 +61,7 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
 
           {/* Enlaces de navegación */}
           <div className="md:col-span-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#dfc89f] mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#7fd6c2] mb-4">
               Navegación Rápida
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
@@ -97,7 +97,7 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#dfc89f] hover:text-white transition-colors font-medium flex items-center gap-1 mt-3"
+                  className="text-[#7fd6c2] hover:text-white transition-colors font-medium flex items-center gap-1 mt-3"
                 >
                   <span>Pedir Cita por WhatsApp →</span>
                 </a>
@@ -107,26 +107,26 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
 
           {/* Contacto directo */}
           <div className="md:col-span-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#dfc89f] mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#7fd6c2] mb-4">
               Visitas y Citas
             </h4>
             <p className="text-xs sm:text-sm text-[#cfd6d1] mb-1">{direccion}</p>
             <p className="text-xs text-[#95a39a] mb-3">{ciudad}</p>
             {horario && (
-              <p className="text-xs text-[#dfc89f]/90 mb-3 bg-[#2a352e] p-2 rounded-lg border border-[#37453d]">
+              <p className="text-xs text-[#7fd6c2]/90 mb-3 bg-[#2a352e] p-2 rounded-lg border border-[#37453d]">
                 <strong className="text-white block mb-0.5">Horario:</strong>
                 {horario}
               </p>
             )}
             <p className="text-xs text-[#95a39a] mb-1">
               Teléfono:{" "}
-              <a href={`tel:${telefono.replace(/\s+/g, '')}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
+              <a href={`tel:${telefono.replace(/\s+/g, '')}`} className="text-white hover:text-[#7fd6c2] transition-colors font-bold">
                 {telefono}
               </a>
             </p>
             <p className="text-xs text-[#95a39a]">
               Email:{" "}
-              <a href={`mailto:${email}`} className="text-white hover:text-[#dfc89f] transition-colors font-bold">
+              <a href={`mailto:${email}`} className="text-white hover:text-[#7fd6c2] transition-colors font-bold">
                 {email}
               </a>
             </p>
@@ -135,7 +135,7 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
         </div>
 
         {/* Disclaimer médico / holístico ético */}
-        <div className="py-6 border-b border-[#313c35] text-[11px] text-[#7a8880] leading-relaxed">
+        <div className="py-6 border-b border-[#235a42] text-[11px] text-[#7a8880] leading-relaxed">
           <p>
             <strong className="text-[#a1b0a7]">Aviso Legal Terapéutico:</strong>{" "}
             {disclaimerLegal}
@@ -147,7 +147,7 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
           <p>© {new Date().getFullYear()} {nombre}. Todos los derechos reservados.</p>
           <div className="flex items-center gap-1">
             <span>Hecho con</span>
-            <Heart className="w-3.5 h-3.5 text-[#dfc89f] fill-[#dfc89f]" />
+            <Heart className="w-3.5 h-3.5 text-[#7fd6c2] fill-[#7fd6c2]" />
             <span>para el bienestar consciente</span>
           </div>
         </div>

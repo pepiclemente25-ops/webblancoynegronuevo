@@ -62,7 +62,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         {/* Cabecera del modal */}
         <div className="bg-[#2f9a3b] px-6 py-5 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#f6f2ea] border border-[#dfc89f]/40 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-xs">
+            <div className="w-10 h-10 rounded-full bg-[#f1faea] border border-[#7fd6c2]/40 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-xs">
               <Image
                 src="/brand/logo-tarjeta.png"
                 alt="Logo Blanco y Negro"
@@ -89,7 +89,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-6">
           
           {/* Mensaje de cortesía */}
-          <div className="bg-[#fbf8ee] border border-[#ece4d8] rounded-2xl p-4 text-xs sm:text-sm text-[#46544c] flex items-start gap-3">
+          <div className="bg-[#f7fbef] border border-[#d3ebcf] rounded-2xl p-4 text-xs sm:text-sm text-[#46544c] flex items-start gap-3">
             <Sparkles className="w-4 h-4 text-[#b5935b] flex-shrink-0 mt-0.5" />
             <p>
               Elige la terapia y tu franja preferida. Te confirmaremos hueco disponible al instante y sin esperas.
@@ -135,8 +135,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     onClick={() => setPreferredSlot(slot)}
                     className={`px-3 py-2.5 rounded-xl text-xs font-medium border text-left flex items-center justify-between cursor-pointer transition-all ${
                       preferredSlot === slot
-                        ? "bg-[#eaf0ec] border-[#2f9a3b] text-[#237a2d] font-semibold"
-                        : "bg-white border-[#e0d8cc] text-[#4f5d54] hover:bg-[#faf8f5]"
+                        ? "bg-[#e3f5e0] border-[#2f9a3b] text-[#237a2d] font-semibold"
+                        : "bg-white border-[#cfe6cb] text-[#4f5d54] hover:bg-[#faf8f5]"
                     }`}
                   >
                     <span>{slot}</span>

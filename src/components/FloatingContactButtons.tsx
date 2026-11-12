@@ -44,12 +44,12 @@ export const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({ 
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Agendar cita por WhatsApp"
-        className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-[#2f9a3b] text-white shadow-lg hover:bg-[#237a2d] hover:scale-110 active:scale-95 transition-all duration-200 border-2 border-[#dfc89f]/40"
+        className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-[#2f9a3b] text-white shadow-lg hover:bg-[#237a2d] hover:scale-110 active:scale-95 transition-all duration-200 border-2 border-[#7fd6c2]/40"
       >
         <span className="absolute right-14 whitespace-nowrap bg-[#212924] text-white text-xs font-semibold px-3 py-1.5 rounded-xl shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none border border-white/10">
           Agendar Cita
         </span>
-        <Mail className="w-5 h-5 text-[#dfc89f]" />
+        <Mail className="w-5 h-5 text-[#7fd6c2]" />
       </a>
 
       {/* Botón WhatsApp Flotante */}

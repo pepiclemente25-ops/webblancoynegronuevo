@@ -150,7 +150,7 @@ export default async function SobreMiPage() {
           </p>
         </section>
 
-        <p className="mt-10 border-t border-[#ebdcca] pt-6 text-sm text-gray-600">
+        <p className="mt-10 border-t border-[#d3ebcf] pt-6 text-sm text-gray-600">
           {c.disclaimerLegal ||
             "Las terapias y actividades ofrecidas son herramientas de bienestar, relajación y desarrollo personal. En ningún caso constituyen un acto médico ni sustituyen tratamientos médicos o psicológicos."}
         </p>
