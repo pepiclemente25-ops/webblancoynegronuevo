@@ -46,7 +46,6 @@ export async function getEscanerEstado(): Promise<EstadoEscanerResponse> {
       };
     }
 
-    const ahora = Date.now();
     const tiempoHeartbeat = new Date(valHeartbeat).getTime();
     const ahora = Date.now();
     const diff = ahora - tiempoHeartbeat;
