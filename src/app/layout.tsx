@@ -50,9 +50,9 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "es_ES",
       url: SITE_URL,
       siteName: "Blanco y Negro",
-      images: [{ url: "/icon.png", width: 192, height: 192, alt: "Blanco y Negro" }],
+      images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Fachada de la tienda Blanco y Negro en Boiro" }],
     },
-    twitter: { card: "summary", title: TITULO },
+    twitter: { card: "summary_large_image", title: TITULO, images: ["/og-image.jpg"] },
     icons: {
       icon: [
         { url: "/icon.svg", type: "image/svg+xml" },

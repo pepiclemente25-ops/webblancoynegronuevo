@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // www.blanconegro.es -> blanconegro.es (una sola web para Google). Se excluye /api para no tocar al TPV ni al escáner.
+  async redirects() {
+    return [
+      {
+        source: "/:path((?!api/).*)",
+        has: [{ type: "host", value: "www.blanconegro.es" }],
+        destination: "https://blanconegro.es/:path",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
