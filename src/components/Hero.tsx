@@ -72,7 +72,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
       {/* SECCIÓN 1: HERO PRINCIPAL */}
       <section
         id="inicio"
-        className="relative pt-32 pb-20 sm:pt-36 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-[#f1fae6] via-[#e9f8f2] to-[#fbf8ee] border-b border-[#d6ebd0]"
+        className="relative pt-32 pb-20 sm:pt-36 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-[#f1fae6] via-[#e9f8f2] to-[#f7fbef] border-b border-[#d6ebd0]"
       >
         <div className="absolute bottom-0 inset-x-0 z-0"><BrushWaves /></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -83,7 +83,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                 <span>{lema}</span>
               </div>
 
-              <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-[#1a251e] leading-[1.2] mb-5 tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-[#103324] leading-[1.2] mb-5 tracking-tight">
                 {titulo}
               </h1>
 
@@ -97,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                   className="px-7 sm:px-8 py-3.5 rounded-full bg-[#2f9a3b] hover:bg-[#1f6b29] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 group cursor-pointer"
                 >
                   <span>{boton1Texto}</span>
-                  <ChevronDown className="w-4 h-4 text-[#dfc89f] group-hover:translate-y-0.5 transition-transform" />
+                  <ChevronDown className="w-4 h-4 text-[#7fd6c2] group-hover:translate-y-0.5 transition-transform" />
                 </a>
                 <a
                   href={boton2Link}
@@ -110,14 +110,14 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
 
               {/* Chips informativos inferiores del Hero */}
               {chips.length > 0 && (
-                <div className="pt-6 border-t border-[#ebdcca] grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                <div className="pt-6 border-t border-[#d3ebcf] grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
                   {chips.map((chip, idx) => (
-                    <div key={idx} className="p-3.5 rounded-2xl bg-white/75 border border-[#ebdcca] shadow-2xs flex items-center gap-3">
+                    <div key={idx} className="p-3.5 rounded-2xl bg-white/75 border border-[#d3ebcf] shadow-2xs flex items-center gap-3">
                       <span className="w-8 h-8 rounded-xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center text-sm font-bold shrink-0">
                         {chip.icono || (idx === 0 ? "🌿" : idx === 1 ? "🕯️" : "✨")}
                       </span>
                       <div>
-                        <h4 className="font-bold text-xs text-[#1a251e] leading-tight">{chip.titulo}</h4>
+                        <h4 className="font-bold text-xs text-[#103324] leading-tight">{chip.titulo}</h4>
                         <p className="text-[11px] text-[#55695e] leading-tight mt-0.5">{chip.desc}</p>
                       </div>
                     </div>
@@ -141,7 +141,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <p className="text-[11px] font-semibold uppercase tracking-widest text-[#dfc89f]">
+                    <p className="text-[11px] font-semibold uppercase tracking-widest text-[#7fd6c2]">
                       {subtituloFoto}
                     </p>
                     <p className="text-base font-bold font-serif">
@@ -151,7 +151,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                 </div>
 
                 {/* Badge Flotante */}
-                <div className="absolute -bottom-5 -left-3 sm:-left-6 bg-white p-3.5 sm:p-4 rounded-2xl shadow-xl border border-[#ebdcca] flex items-center gap-3 animate-zen-float max-w-[260px]">
+                <div className="absolute -bottom-5 -left-3 sm:-left-6 bg-white p-3.5 sm:p-4 rounded-2xl shadow-xl border border-[#d3ebcf] flex items-center gap-3 animate-zen-float max-w-[260px]">
                   <div className="w-10 h-10 rounded-xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center font-bold text-lg shrink-0">
                     {tarjetaFlotanteIcono}
                   </div>
@@ -170,7 +170,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
 
       {/* BANDA DE GARANTÍAS (sec-garantias) */}
       {showGarantias && tarjetasGarantias.length > 0 && (
-        <div id="garantias" className="bg-white border-b border-[#ebdcca] py-4 relative z-10">
+        <div id="garantias" className="bg-white border-b border-[#d3ebcf] py-4 relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className={`grid gap-4 text-center md:text-left ${
               tarjetasGarantias.length <= 2 ? "grid-cols-2" : tarjetasGarantias.length === 3 ? "grid-cols-1 sm:grid-cols-3" : "grid-cols-2 md:grid-cols-4"
@@ -181,7 +181,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                     {g.icono || "✨"}
                   </span>
                   <div>
-                    <h4 className="text-xs font-bold text-[#1e2822]">{g.titulo}</h4>
+                    <h4 className="text-xs font-bold text-[#123828]">{g.titulo}</h4>
                     <p className="text-[11px] text-gray-500">{g.desc}</p>
                   </div>
                 </div>

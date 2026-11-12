@@ -498,9 +498,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   const tiendaSection = sections?.find((s) => s.tipoPlantilla === "tienda" || s.idSeccion === "sec-tienda");
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#fbf8ee] text-[#212924] scroll-smooth">
+    <div className="relative min-h-screen flex flex-col bg-[#f7fbef] text-[#212924] scroll-smooth">
       {/* Cañas de bambú zen ambientales fijas en los bordes */}
-      <div className="hidden lg:block fixed inset-y-0 left-0 w-32 xl:w-44 pointer-events-none z-0 opacity-15 xl:opacity-20 overflow-hidden select-none">
+      <div className="hidden lg:block fixed inset-y-0 left-0 w-32 xl:w-44 pointer-events-none z-0 opacity-25 xl:opacity-35 overflow-hidden select-none [filter:sepia(1)_hue-rotate(55deg)_saturate(3.2)]">
         <Image
           src="/brand/bamboo-left.webp"
           alt=""
@@ -509,7 +509,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           priority
         />
       </div>
-      <div className="hidden lg:block fixed inset-y-0 right-0 w-32 xl:w-44 pointer-events-none z-0 opacity-15 xl:opacity-20 overflow-hidden select-none">
+      <div className="hidden lg:block fixed inset-y-0 right-0 w-32 xl:w-44 pointer-events-none z-0 opacity-25 xl:opacity-35 overflow-hidden select-none [filter:sepia(1)_hue-rotate(55deg)_saturate(3.2)]">
         <Image
           src="/brand/bamboo-right.webp"
           alt=""
@@ -528,10 +528,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({
         className="fixed right-4 sm:right-6 bottom-6 sm:bottom-8 z-40 flex items-center gap-2.5 px-4 sm:px-5 py-3 rounded-full bg-[#2f9a3b] hover:bg-[#237a2d] text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group"
         title="Abrir filtros avanzados"
       >
-        <SlidersHorizontal className="w-4 h-4 text-[#dfc89f] group-hover:rotate-45 transition-transform duration-300" />
+        <SlidersHorizontal className="w-4 h-4 text-[#7fd6c2] group-hover:rotate-45 transition-transform duration-300" />
         <span className="text-xs font-semibold tracking-wide hidden sm:inline">Filtros</span>
         {totalActiveFilters > 0 && (
-          <span className="w-5 h-5 rounded-full bg-[#dfc89f] text-[#24352b] text-[11px] font-black flex items-center justify-center shadow-xs">
+          <span className="w-5 h-5 rounded-full bg-[#7fd6c2] text-[#16402f] text-[11px] font-black flex items-center justify-center shadow-xs">
             {totalActiveFilters}
           </span>
         )}
@@ -548,10 +548,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             <span className="text-[#2f9a3b] font-semibold">Tienda Holística</span>
           </nav>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#ece4d8]">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#d3ebcf]">
             <div className="space-y-1.5 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f2ecdf] border border-[#e0d8ca] text-[11px] font-semibold text-[#2f9a3b] uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-[#b08d4b]" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#eaf7e3] border border-[#cfe6cb] text-[11px] font-semibold text-[#2f9a3b] uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-[#1fa5bd]" />
                 <span>{tiendaSection?.contenido?.badge || "Autocuidado & Bienestar en Casa"}</span>
               </div>
               <h1 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-[#212924]">
@@ -566,8 +566,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             </div>
 
             {/* Micro-aviso de compra rápida */}
-            <div className="hidden sm:flex items-center gap-3 p-3 rounded-2xl bg-white border border-[#e8ded0] text-xs shadow-2xs">
-              <div className="w-8 h-8 rounded-xl bg-[#eaf4ee] text-[#2f9a3b] flex items-center justify-center font-bold">
+            <div className="hidden sm:flex items-center gap-3 p-3 rounded-2xl bg-white border border-[#d3ebcf] text-xs shadow-2xs">
+              <div className="w-8 h-8 rounded-xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center font-bold">
                 <Store className="w-4 h-4" />
               </div>
               <div className="text-[11px] leading-tight">
@@ -598,15 +598,15 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           </div>
 
           {/* Contenedor adaptativo: Carrusel deslizante suave en móvil + Rejilla uniforme bien alineada en desktop */}
-          <div className="w-full bg-[#eae2d5] rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 shadow-inner">
+          <div className="w-full bg-[#d3ebcf] rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 shadow-inner">
             <div className="flex sm:flex-wrap items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-0.5 px-0.5 scroll-smooth">
               <button
                 type="button"
                 onClick={() => setSelectedFamilia("all")}
                 className={`px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 sm:shrink ${
                   selectedFamilia === "all"
-                    ? "bg-white text-[#1c2720] shadow-sm"
-                    : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
+                    ? "bg-white text-[#103324] shadow-sm"
+                    : "text-[#4a584f] hover:text-[#103324] hover:bg-white/40"
                 }`}
               >
                 <span className="whitespace-nowrap">Todos</span>
@@ -623,8 +623,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     onClick={() => setSelectedFamilia(fam.id)}
                     className={`px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 sm:shrink ${
                       isSelected
-                        ? "bg-white text-[#1c2720] shadow-sm"
-                        : "text-[#4a584f] hover:text-[#1c2720] hover:bg-white/40"
+                        ? "bg-white text-[#103324] shadow-sm"
+                        : "text-[#4a584f] hover:text-[#103324] hover:bg-white/40"
                     }`}
                   >
                     <span className="whitespace-nowrap">{fam.nombre}</span>
@@ -636,7 +636,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           </div>
 
           {/* Fila de Controles: Buscador + Limpiar Filtros + Ordenación + Botón Filtros Laterales */}
-          <div className="bg-white rounded-2xl border border-[#ece4d8] p-3 sm:p-4 shadow-2xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          <div className="bg-white rounded-2xl border border-[#d3ebcf] p-3 sm:p-4 shadow-2xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
             {/* Buscador directo y botón Limpiar Filtros a su derecha */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-xl">
               <div className="relative flex-1">
@@ -646,7 +646,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar por nombre, categoría o beneficio..."
-                  className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#fbf8ee] border border-[#d8d0c2] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2f9a3b]"
+                  className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-[#f7fbef] border border-[#c5e0c1] text-[#212924] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2f9a3b]"
                 />
                 {searchQuery && (
                   <button
@@ -665,7 +665,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#2f9a3b] text-white font-medium text-xs shadow-sm hover:bg-[#237a2d] hover:shadow transition-all duration-200 cursor-pointer shrink-0 animate-fadeIn"
                   title="Limpiar todos los filtros"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 text-[#dfc89f]" />
+                  <RotateCcw className="w-3.5 h-3.5 text-[#7fd6c2]" />
                   <span>Limpiar filtros</span>
                 </button>
               )}
@@ -675,7 +675,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
 
               {/* Selector de Ordenación */}
-              <div className="flex items-center gap-1.5 bg-[#fbf8ee] border border-[#d8d0c2] px-3 py-1.5 rounded-xl">
+              <div className="flex items-center gap-1.5 bg-[#f7fbef] border border-[#c5e0c1] px-3 py-1.5 rounded-xl">
                 <ArrowUpDown className="w-3.5 h-3.5 text-[#2f9a3b]" />
                 <select
                   value={sortBy}
@@ -695,22 +695,22 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 onClick={() => setIsFilterDrawerOpen(true)}
                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#2f9a3b] text-white hover:bg-[#237a2d] font-semibold text-xs shadow-2xs transition-all cursor-pointer"
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#dfc89f]" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#7fd6c2]" />
                 <span>Filtros Laterales</span>
                 {totalActiveFilters > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-[#dfc89f] text-[#24352b] text-[10px] font-black flex items-center justify-center">
+                  <span className="w-4 h-4 rounded-full bg-[#7fd6c2] text-[#16402f] text-[10px] font-black flex items-center justify-center">
                     {totalActiveFilters}
                   </span>
                 )}
               </button>
 
               {/* Selector por página */}
-              <div className="hidden sm:flex items-center gap-1.5 text-[#6e7d73] pl-2 border-l border-[#e8ded0]">
+              <div className="hidden sm:flex items-center gap-1.5 text-[#6e7d73] pl-2 border-l border-[#d3ebcf]">
                 <span>Ver:</span>
                 <select
                   value={itemsPerPage}
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="bg-[#fbf8ee] border border-[#d8d0c2] rounded-lg px-2 py-1 text-xs text-[#212924] focus:outline-none cursor-pointer font-medium"
+                  className="bg-[#f7fbef] border border-[#c5e0c1] rounded-lg px-2 py-1 text-xs text-[#212924] focus:outline-none cursor-pointer font-medium"
                 >
                   <option value={8}>8</option>
                   <option value={12}>12</option>
@@ -739,7 +739,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 return (
                   <span
                     key={bId}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#f2ecdf] border border-[#e0d8ca] text-[#2f9a3b] font-medium text-[11px]"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#eaf7e3] border border-[#cfe6cb] text-[#2f9a3b] font-medium text-[11px]"
                   >
                     <span>Bienestar: {bObj?.nombre || bId}</span>
                     <button
@@ -759,7 +759,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 return (
                   <span
                     key={fId}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#eaf4ee] border border-[#cdeccb] text-[#237a2d] font-medium text-[11px]"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#e3f5e0] border border-[#cdeccb] text-[#237a2d] font-medium text-[11px]"
                   >
                     <span>Familia: {fObj?.nombre || fId}</span>
                     <button
@@ -781,7 +781,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 className="text-[#2f9a3b] font-semibold hover:underline cursor-pointer flex items-center gap-1"
               >
                 <span>Limpiar todos los filtros</span>
-                <span className="text-[10px] bg-[#eaf0ec] text-[#2f9a3b] px-1.5 py-0.2 rounded-full">
+                <span className="text-[10px] bg-[#e3f5e0] text-[#2f9a3b] px-1.5 py-0.2 rounded-full">
                   ✕
                 </span>
               </button>
@@ -792,8 +792,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
         {/* ================= REJILLA DE ARTÍCULOS ================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           {products.length === 0 ? (
-            <div className="text-center py-20 bg-white rounded-3xl border border-[#ece4d8] p-8 sm:p-12 max-w-lg mx-auto space-y-4 shadow-2xs">
-              <div className="w-16 h-16 rounded-3xl bg-[#f4efe5] text-[#2f9a3b] mx-auto flex items-center justify-center shadow-inner">
+            <div className="text-center py-20 bg-white rounded-3xl border border-[#d3ebcf] p-8 sm:p-12 max-w-lg mx-auto space-y-4 shadow-2xs">
+              <div className="w-16 h-16 rounded-3xl bg-[#eff9e6] text-[#2f9a3b] mx-auto flex items-center justify-center shadow-inner">
                 <Sparkles className="w-8 h-8 text-[#2f9a3b]" />
               </div>
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#212924]">
@@ -825,8 +825,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
             </div>
           ) : totalItems === 0 ? (
-            <div className="text-center py-20 bg-white rounded-3xl border border-[#ece4d8] p-8 max-w-md mx-auto space-y-3 shadow-2xs">
-              <div className="w-14 h-14 rounded-full bg-[#f4efe5] text-[#2f9a3b] mx-auto flex items-center justify-center">
+            <div className="text-center py-20 bg-white rounded-3xl border border-[#d3ebcf] p-8 max-w-md mx-auto space-y-3 shadow-2xs">
+              <div className="w-14 h-14 rounded-full bg-[#eff9e6] text-[#2f9a3b] mx-auto flex items-center justify-center">
                 <Search className="w-6 h-6 opacity-60" />
               </div>
               <h3 className="font-serif text-lg font-semibold text-[#212924]">
@@ -856,10 +856,10 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   <article
                     key={product.id}
                     onClick={() => handleOpenProduct(product)}
-                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#ece4d8] shadow-2xs hover:shadow-md hover:border-[#cdeccb] transition-all duration-300 cursor-pointer"
+                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#d3ebcf] shadow-2xs hover:shadow-md hover:border-[#cdeccb] transition-all duration-300 cursor-pointer"
                   >
                     {/* Imagen del producto con badge y overlay de clic */}
-                    <div className="relative aspect-4/3 overflow-hidden bg-[#f4efe5]">
+                    <div className="relative aspect-4/3 overflow-hidden bg-[#eff9e6]">
                       <Image
                         src={cardImgSrc}
                         alt={product.name}
@@ -881,7 +881,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       {/* Badges superiores */}
                       <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                         {product.badge ? (
-                          <span className="px-2.5 py-1 rounded-full bg-[#2f9a3b]/90 backdrop-blur-xs text-[#dfc89f] text-[10px] font-bold shadow-xs">
+                          <span className="px-2.5 py-1 rounded-full bg-[#2f9a3b]/90 backdrop-blur-xs text-[#7fd6c2] text-[10px] font-bold shadow-xs">
                             {product.badge}
                           </span>
                         ) : product.esServicio ? (
@@ -920,7 +920,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
                         {/* Beneficios clave */}
                         {product.benefits && product.benefits.length > 0 && (
-                          <div className="pt-2 border-t border-[#f4efe5] space-y-1">
+                          <div className="pt-2 border-t border-[#eff9e6] space-y-1">
                             {product.benefits.slice(0, 2).map((b, i) => (
                               <div
                                 key={i}
@@ -935,7 +935,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       </div>
 
                       {/* Precio y Botón Añadir / Reservar */}
-                      <div className="pt-3 border-t border-[#ece4d8] flex items-center justify-between gap-3">
+                      <div className="pt-3 border-t border-[#d3ebcf] flex items-center justify-between gap-3">
                         <div>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-lg sm:text-xl font-serif font-bold text-[#212924]">
@@ -958,7 +958,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                               e.stopPropagation();
                               handleOpenBooking(product.name);
                             }}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#f4efe5] hover:bg-[#eae3d5] text-[#2f9a3b] font-semibold text-xs transition-all cursor-pointer border border-[#e5dcce]"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#eff9e6] hover:bg-[#d3ebcf] text-[#2f9a3b] font-semibold text-xs transition-all cursor-pointer border border-[#d3ebcf]"
                           >
                             <Calendar className="w-3.5 h-3.5" />
                             <span>Reservar</span>
@@ -985,7 +985,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                               </>
                             ) : (
                               <>
-                                <ShoppingBag className="w-4 h-4 text-[#dfc89f]" />
+                                <ShoppingBag className="w-4 h-4 text-[#7fd6c2]" />
                                 <span>Añadir</span>
                               </>
                             )}
@@ -1001,7 +1001,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
           {/* Paginación */}
           {totalPages > 1 && (
-            <div className="mt-12 pt-6 border-t border-[#ece4d8] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="mt-12 pt-6 border-t border-[#d3ebcf] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs text-[#6e7d73] flex items-center gap-2">
                 <span>
                   Página <strong className="text-[#212924] font-bold">{currentPage}</strong> de{" "}
@@ -1021,7 +1021,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       setCurrentPage(1);
                       window.scrollTo({ top: 350, behavior: "smooth" });
                     }}
-                    className="hidden sm:flex p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] transition-colors cursor-pointer"
+                    className="hidden sm:flex p-2 rounded-xl border border-[#cfe6cb] bg-white text-[#4a584f] hover:bg-[#f1faea] transition-colors cursor-pointer"
                     title="Primera página"
                   >
                     <ChevronsLeft className="w-4 h-4" />
@@ -1034,7 +1034,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     window.scrollTo({ top: 350, behavior: "smooth" });
                   }}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="p-2 rounded-xl border border-[#cfe6cb] bg-white text-[#4a584f] hover:bg-[#f1faea] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   title="Página anterior"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -1076,7 +1076,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                         className={`w-7 sm:w-8 h-8 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                           isCur
                             ? "bg-[#2f9a3b] text-white shadow-2xs scale-105"
-                            : "bg-white border border-[#e0d8cc] text-[#4a584f] hover:bg-[#f6f2ea]"
+                            : "bg-white border border-[#cfe6cb] text-[#4a584f] hover:bg-[#f1faea]"
                         }`}
                       >
                         {p}
@@ -1091,7 +1091,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     window.scrollTo({ top: 350, behavior: "smooth" });
                   }}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="p-2 rounded-xl border border-[#cfe6cb] bg-white text-[#4a584f] hover:bg-[#f1faea] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   title="Página siguiente"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -1103,7 +1103,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       setCurrentPage(totalPages);
                       window.scrollTo({ top: 350, behavior: "smooth" });
                     }}
-                    className="hidden sm:flex p-2 rounded-xl border border-[#e0d8cc] bg-white text-[#4a584f] hover:bg-[#f6f2ea] transition-colors cursor-pointer"
+                    className="hidden sm:flex p-2 rounded-xl border border-[#cfe6cb] bg-white text-[#4a584f] hover:bg-[#f1faea] transition-colors cursor-pointer"
                     title="Última página"
                   >
                     <ChevronsRight className="w-4 h-4" />
@@ -1117,14 +1117,14 @@ export const ShopClient: React.FC<ShopClientProps> = ({
         {/* ================= SECCIÓN 2: BIENESTAR PROPÓSITOS (TARJETAS DE GUÍA) ================= */}
         <section
           id="bienestar"
-          className="py-16 bg-gradient-to-b from-white via-[#f7f3eb] to-white border-y border-[#ebdcca] mb-16"
+          className="py-16 bg-gradient-to-b from-white via-[#f1faea] to-white border-y border-[#d3ebcf] mb-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3.5 py-1.5 rounded-full">
                 Guía de Bienestar Consciente
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#103324] mt-3">
                 Cómo integrar las herramientas de autocuidado en tu rutina
               </h2>
               <p className="text-xs sm:text-sm text-[#5f7467] mt-2.5 leading-relaxed">
@@ -1136,11 +1136,11 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               {activeBienestares.map((bienestar) => (
                 <div
                   key={bienestar.id}
-                  className="bg-white rounded-3xl border border-[#ebdcca] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
+                  className="bg-white rounded-3xl border border-[#d3ebcf] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
                 >
                   <div>
                     {/* Imagen con badge */}
-                    <div className="aspect-16/10 w-full relative overflow-hidden bg-[#faf7f2]">
+                    <div className="aspect-16/10 w-full relative overflow-hidden bg-[#f1faea]">
                       {(() => {
                         const isInvalidUrl = !bienestar.imagenUrl || bienestar.imagenUrl.startsWith('/imagenes/') || bienestar.imagenUrl.startsWith('http://localhost');
                         const imgSrc = failedImages[`bienestar-${bienestar.id}`] || isInvalidUrl
@@ -1162,12 +1162,12 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       })()}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
                       <div className="absolute top-3 left-3">
-                        <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-[#2a4537] text-[10px] font-bold shadow-xs">
+                        <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-[#1b4a37] text-[10px] font-bold shadow-xs">
                           {bienestar.subtitulo}
                         </span>
                       </div>
                       <div className="absolute bottom-3 left-3 right-3 text-white">
-                        <p className="text-[11px] text-[#dfc89f] font-semibold uppercase tracking-wider">
+                        <p className="text-[11px] text-[#7fd6c2] font-semibold uppercase tracking-wider">
                           Propósito Vital
                         </p>
                         <p className="text-sm font-bold font-serif drop-shadow-xs">
@@ -1190,7 +1190,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   <div className="p-5 sm:p-6 pt-0">
                     <button
                       onClick={() => handleSelectBienestarCard(bienestar.id)}
-                      className="w-full py-2.5 rounded-2xl bg-[#f5f1eb] hover:bg-[#2f9a3b] text-[#2f9a3b] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
+                      className="w-full py-2.5 rounded-2xl bg-[#f1faea] hover:bg-[#2f9a3b] text-[#2f9a3b] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
                     >
                       <span>Ver elementos en la tienda</span>
                       <span className="text-sm">→</span>
@@ -1205,14 +1205,14 @@ export const ShopClient: React.FC<ShopClientProps> = ({
         {/* ================= SECCIÓN 3: CARTA OFICIAL DE TERAPIAS & CUIDADOS (2 COLUMNAS) ================= */}
         <section
           id="carta-terapias"
-          className="py-16 md:py-20 bg-white border-b border-[#ebdcca] mb-16"
+          className="py-16 md:py-20 bg-white border-b border-[#d3ebcf] mb-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-14">
               <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3.5 py-1.5 rounded-full">
                 Centro Holístico en Boiro (A Coruña)
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1a251e] mt-3">
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#103324] mt-3">
                 Carta de Terapias & Cuidados
               </h2>
               <p className="text-xs sm:text-sm text-gray-600 mt-2.5 leading-relaxed">
@@ -1223,14 +1223,14 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             {/* Desglose temático en 2 Columnas con Fotografías */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
               {/* Columna 1: Sanación Energética & Reiki (Terapias) */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#faf7f2] border border-[#ebdcca] shadow-sm flex flex-col justify-between">
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#f1faea] border border-[#d3ebcf] shadow-sm flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
+                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#d3ebcf]">
                     <span className="w-10 h-10 rounded-2xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center text-xl font-bold">
                       ✨
                     </span>
                     <div>
-                      <h3 className="font-serif font-bold text-lg text-[#1e2822]">
+                      <h3 className="font-serif font-bold text-lg text-[#123828]">
                         Canalización Energética & Reiki
                       </h3>
                       <p className="text-[11px] text-gray-500">
@@ -1243,9 +1243,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     {terapiasHolisticas.map((terapia) => (
                       <div
                         key={terapia.id}
-                        className="flex items-center gap-4 pb-5 border-b border-[#ebdcca]/60 last:border-b-0 last:pb-0 group"
+                        className="flex items-center gap-4 pb-5 border-b border-[#d3ebcf]/60 last:border-b-0 last:pb-0 group"
                       >
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-white relative bg-[#eae2d5]">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-white relative bg-[#d3ebcf]">
                           <Image
                             src={terapia.imageUrl || DEFAULT_FALLBACK_IMG}
                             alt={terapia.name}
@@ -1275,7 +1275,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                             </span>
                             <button
                               onClick={() => handleOpenBooking(terapia.name)}
-                              className="px-3.5 py-1.5 bg-[#2f9a3b] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer"
+                              className="px-3.5 py-1.5 bg-[#2f9a3b] hover:bg-[#1b4a37] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer"
                             >
                               Reservar Cita
                             </button>
@@ -1288,14 +1288,14 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
 
               {/* Columna 2: Terapias Manuales & Cuidados (Cuidados) */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#faf7f2] border border-[#ebdcca] shadow-sm flex flex-col justify-between">
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#f1faea] border border-[#d3ebcf] shadow-sm flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5ded3]">
+                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#d3ebcf]">
                     <span className="w-10 h-10 rounded-2xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center text-xl font-bold">
                       🌿
                     </span>
                     <div>
-                      <h3 className="font-serif font-bold text-lg text-[#1e2822]">
+                      <h3 className="font-serif font-bold text-lg text-[#123828]">
                         Terapias Manuales & Cuidados
                       </h3>
                       <p className="text-[11px] text-gray-500">
@@ -1308,9 +1308,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     {cuidadosManuales.map((cuidado) => (
                       <div
                         key={cuidado.id}
-                        className="flex items-center gap-4 pb-5 border-b border-[#ebdcca]/60 last:border-b-0 last:pb-0 group"
+                        className="flex items-center gap-4 pb-5 border-b border-[#d3ebcf]/60 last:border-b-0 last:pb-0 group"
                       >
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-white relative bg-[#eae2d5]">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-white relative bg-[#d3ebcf]">
                           <Image
                             src={cuidado.imageUrl || DEFAULT_FALLBACK_IMG}
                             alt={cuidado.name}
@@ -1340,7 +1340,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                             </span>
                             <button
                               onClick={() => handleOpenBooking(cuidado.name)}
-                              className="px-3.5 py-1.5 bg-[#2f9a3b] hover:bg-[#283b32] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer"
+                              className="px-3.5 py-1.5 bg-[#2f9a3b] hover:bg-[#1b4a37] text-white rounded-xl font-bold text-[11px] shadow-2xs transition cursor-pointer"
                             >
                               Reservar Cita
                             </button>
@@ -1354,7 +1354,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             </div>
 
             {/* ================= EXPERIENCIA ESTRELLA BANNER ================= */}
-            <div className="rounded-3xl bg-[#24352b] text-white shadow-xl overflow-hidden relative border border-[#2f9a3b]">
+            <div className="rounded-3xl bg-[#16402f] text-white shadow-xl overflow-hidden relative border border-[#2f9a3b]">
               <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <Image
                   src={activeExperienciaEstrella.imagenFondoUrl || DEFAULT_FALLBACK_IMG}
@@ -1365,7 +1365,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
               <div className="relative z-10 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="max-w-xl text-center md:text-left">
-                  <span className="px-3.5 py-1 rounded-full bg-[#dfc89f] text-[#24352b] text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1.5">
+                  <span className="px-3.5 py-1 rounded-full bg-[#7fd6c2] text-[#16402f] text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1.5">
                     <span>★</span>
                     <span>{activeExperienciaEstrella.badge || "Nuestra Experiencia Estrella"}</span>
                   </span>
@@ -1378,12 +1378,12 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 </div>
                 <div className="text-center md:text-right shrink-0">
                   <div className="text-[11px] text-gray-300 mb-0.5">Precio de la sesión</div>
-                  <span className="font-serif font-bold text-3xl sm:text-4xl text-[#dfc89f]">
+                  <span className="font-serif font-bold text-3xl sm:text-4xl text-[#7fd6c2]">
                     {activeExperienciaEstrella.precio.toFixed(2)} €
                   </span>
                   <button
                     onClick={() => handleOpenBooking(activeExperienciaEstrella.titulo)}
-                    className="block mt-3 px-7 py-3.5 bg-[#dfc89f] hover:bg-white text-[#1f2d24] rounded-2xl font-bold text-xs shadow-lg transition hover:scale-105 cursor-pointer"
+                    className="block mt-3 px-7 py-3.5 bg-[#7fd6c2] hover:bg-white text-[#133a2a] rounded-2xl font-bold text-xs shadow-lg transition hover:scale-105 cursor-pointer"
                   >
                     {activeExperienciaEstrella.botonTexto || "Reservar Experiencia"}
                   </button>
@@ -1395,13 +1395,13 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
         {/* Sección Discreta: ¿Cómo comprar y métodos de pago? (Bizum, Tienda y Envío) */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="bg-white rounded-3xl border border-[#ece4d8] overflow-hidden shadow-2xs">
+          <div className="bg-white rounded-3xl border border-[#d3ebcf] overflow-hidden shadow-2xs">
             <button
               onClick={() => setIsFaqOpen(!isFaqOpen)}
-              className="w-full p-6 sm:p-7 flex items-center justify-between text-left hover:bg-[#faf7f2] transition-colors cursor-pointer"
+              className="w-full p-6 sm:p-7 flex items-center justify-between text-left hover:bg-[#f1faea] transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#f4efe5] text-[#2f9a3b] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-[#eff9e6] text-[#2f9a3b] flex items-center justify-center">
                   <HelpCircle className="w-5 h-5" />
                 </div>
                 <div>
@@ -1414,7 +1414,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 </div>
               </div>
 
-              <div className="p-2 rounded-xl bg-[#fbf8ee] text-[#2f9a3b] border border-[#e5dcce]">
+              <div className="p-2 rounded-xl bg-[#f7fbef] text-[#2f9a3b] border border-[#d3ebcf]">
                 <ChevronDown
                   className={`w-4 h-4 transition-transform duration-300 ${
                     isFaqOpen ? "rotate-180" : ""
@@ -1424,9 +1424,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             </button>
 
             {isFaqOpen && (
-              <div className="p-6 sm:p-8 pt-0 border-t border-[#f4efe5] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
+              <div className="p-6 sm:p-8 pt-0 border-t border-[#eff9e6] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#d3ebcf] space-y-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#7fd6c2] font-serif font-bold text-xs flex items-center justify-center">
                     1
                   </div>
                   <h4 className="font-serif font-semibold text-xs text-[#212924]">
@@ -1437,8 +1437,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
+                <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#d3ebcf] space-y-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#7fd6c2] font-serif font-bold text-xs flex items-center justify-center">
                     2
                   </div>
                   <h4 className="font-serif font-semibold text-xs text-[#212924]">
@@ -1450,8 +1450,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
+                <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#d3ebcf] space-y-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#7fd6c2] font-serif font-bold text-xs flex items-center justify-center">
                     3
                   </div>
                   <h4 className="font-serif font-semibold text-xs text-[#212924]">
@@ -1462,8 +1462,8 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#dfc89f] font-serif font-bold text-xs flex items-center justify-center">
+                <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#d3ebcf] space-y-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#2f9a3b] text-[#7fd6c2] font-serif font-bold text-xs flex items-center justify-center">
                     4
                   </div>
                   <h4 className="font-serif font-semibold text-xs text-[#212924]">
@@ -1482,7 +1482,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-8 sm:p-10 rounded-3xl bg-[#2f9a3b] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden">
             <div className="relative z-10 max-w-xl space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs text-[#dfc89f] font-semibold uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs text-[#7fd6c2] font-semibold uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Experiencia Integral</span>
               </div>
@@ -1497,7 +1497,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <button
                 onClick={() => handleOpenBooking()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#237a2d] font-semibold text-sm shadow hover:bg-[#f6f2ea] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#237a2d] font-semibold text-sm shadow hover:bg-[#f1faea] transition-all cursor-pointer"
               >
                 <Calendar className="w-4 h-4 text-[#2f9a3b]" />
                 <span>Pedir Cita Presencial</span>
@@ -1528,7 +1528,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           {/* Panel deslizante */}
           <div className="relative w-full max-w-md bg-white h-full shadow-2xl z-10 flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-300">
             {/* Cabecera del Drawer */}
-            <div className="p-5 sm:p-6 bg-[#faf7f2] border-b border-[#ece4d8] flex items-center justify-between">
+            <div className="p-5 sm:p-6 bg-[#f1faea] border-b border-[#d3ebcf] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="w-5 h-5 text-[#2f9a3b]" />
                 <h3 className="font-serif font-bold text-base sm:text-lg text-[#212924]">
@@ -1546,7 +1546,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 )}
                 <button
                   onClick={() => setIsFilterDrawerOpen(false)}
-                  className="w-8 h-8 rounded-full bg-white text-gray-600 hover:text-gray-900 border border-[#e0d8cc] flex items-center justify-center cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-white text-gray-600 hover:text-gray-900 border border-[#cfe6cb] flex items-center justify-center cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1577,7 +1577,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     return (
                       <label
                         key={fam.id}
-                        className="flex items-center justify-between p-2.5 rounded-xl border border-[#e8ded0] bg-[#fbf8ee] hover:bg-white hover:border-[#cdeccb] cursor-pointer transition-all"
+                        className="flex items-center justify-between p-2.5 rounded-xl border border-[#d3ebcf] bg-[#f7fbef] hover:bg-white hover:border-[#cdeccb] cursor-pointer transition-all"
                       >
                         <div className="flex items-center gap-2.5">
                           <input
@@ -1588,7 +1588,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                                 isChecked ? prev.filter((id) => id !== fam.id) : [...prev, fam.id]
                               );
                             }}
-                            className="rounded border-[#d8d0c2] text-[#2f9a3b] focus:ring-[#2f9a3b] w-4 h-4"
+                            className="rounded border-[#c5e0c1] text-[#2f9a3b] focus:ring-[#2f9a3b] w-4 h-4"
                           />
                           <span className="text-gray-800 font-medium">{fam.nombre}</span>
                         </div>
@@ -1600,7 +1600,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
 
               {/* 2. Bienestar & Propósito (Multi-select) */}
-              <div className="space-y-3 pt-4 border-t border-[#f4efe5]">
+              <div className="space-y-3 pt-4 border-t border-[#eff9e6]">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-gray-800 uppercase tracking-wider text-[11px]">
                     Bienestar & Propósito
@@ -1621,7 +1621,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     return (
                       <label
                         key={bienestar.id}
-                        className="flex items-center justify-between p-2.5 rounded-xl border border-[#e8ded0] bg-[#fbf8ee] hover:bg-white hover:border-[#cdeccb] cursor-pointer transition-all"
+                        className="flex items-center justify-between p-2.5 rounded-xl border border-[#d3ebcf] bg-[#f7fbef] hover:bg-white hover:border-[#cdeccb] cursor-pointer transition-all"
                       >
                         <div className="flex items-center gap-2.5">
                           <input
@@ -1634,7 +1634,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                                   : [...prev, bienestar.id]
                               );
                             }}
-                            className="rounded border-[#d8d0c2] text-[#2f9a3b] focus:ring-[#2f9a3b] w-4 h-4"
+                            className="rounded border-[#c5e0c1] text-[#2f9a3b] focus:ring-[#2f9a3b] w-4 h-4"
                           />
                           <div>
                             <span className="text-gray-800 font-medium block">
@@ -1653,7 +1653,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
 
               {/* 3. Tipo de Artículo */}
-              <div className="space-y-2 pt-4 border-t border-[#f4efe5]">
+              <div className="space-y-2 pt-4 border-t border-[#eff9e6]">
                 <span className="font-bold text-gray-800 uppercase tracking-wider text-[11px] block">
                   Tipo de Artículo
                 </span>
@@ -1663,7 +1663,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     className={`py-2 rounded-xl text-xs font-semibold cursor-pointer border transition-all ${
                       filterType === "all"
                         ? "bg-[#2f9a3b] text-white border-[#2f9a3b]"
-                        : "bg-white text-gray-700 border-[#e0d8cc] hover:bg-[#f6f2ea]"
+                        : "bg-white text-gray-700 border-[#cfe6cb] hover:bg-[#f1faea]"
                     }`}
                   >
                     Todos
@@ -1673,7 +1673,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     className={`py-2 rounded-xl text-xs font-semibold cursor-pointer border transition-all ${
                       filterType === "products"
                         ? "bg-[#2f9a3b] text-white border-[#2f9a3b]"
-                        : "bg-white text-gray-700 border-[#e0d8cc] hover:bg-[#f6f2ea]"
+                        : "bg-white text-gray-700 border-[#cfe6cb] hover:bg-[#f1faea]"
                     }`}
                   >
                     Productos
@@ -1683,7 +1683,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     className={`py-2 rounded-xl text-xs font-semibold cursor-pointer border transition-all ${
                       filterType === "services"
                         ? "bg-[#2f9a3b] text-white border-[#2f9a3b]"
-                        : "bg-white text-gray-700 border-[#e0d8cc] hover:bg-[#f6f2ea]"
+                        : "bg-white text-gray-700 border-[#cfe6cb] hover:bg-[#f1faea]"
                     }`}
                   >
                     Terapias
@@ -1692,9 +1692,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
 
               {/* 4. Tarjeta Pepi te Asesora */}
-              <div className="p-4 rounded-2xl bg-[#f2ecdf] border border-[#e0d8ca] space-y-2">
+              <div className="p-4 rounded-2xl bg-[#eaf7e3] border border-[#cfe6cb] space-y-2">
                 <div className="flex items-center gap-2 text-[#2f9a3b] font-bold">
-                  <Sparkles className="w-4 h-4 text-[#b08d4b]" />
+                  <Sparkles className="w-4 h-4 text-[#1fa5bd]" />
                   <span>¿Dudas sobre qué elegir?</span>
                 </div>
                 <p className="text-[11px] text-[#55645a] leading-relaxed">
@@ -1717,7 +1717,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             </div>
 
             {/* Pie del Drawer */}
-            <div className="p-5 sm:p-6 bg-[#faf7f2] border-t border-[#ece4d8]">
+            <div className="p-5 sm:p-6 bg-[#f1faea] border-t border-[#d3ebcf]">
               <button
                 onClick={() => setIsFilterDrawerOpen(false)}
                 className="w-full py-3.5 rounded-2xl bg-[#2f9a3b] hover:bg-[#237a2d] text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
@@ -1737,7 +1737,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
           onClick={() => setSelectedProduct(null)}
         >
           <div
-            className="relative bg-white rounded-3xl w-[96vw] max-w-5xl h-[92vh] sm:h-[88vh] max-h-[900px] overflow-hidden shadow-2xl border border-[#ebdcca] flex flex-col md:flex-row my-auto"
+            className="relative bg-white rounded-3xl w-[96vw] max-w-5xl h-[92vh] sm:h-[88vh] max-h-[900px] overflow-hidden shadow-2xl border border-[#d3ebcf] flex flex-col md:flex-row my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Botón Cerrar */}
@@ -1751,7 +1751,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             </button>
 
             {/* COLUMNA IZQUIERDA: Galería y Carrusel de Fotos */}
-            <div className="md:w-1/2 h-[40vh] sm:h-[45vh] md:h-full bg-[#f4efe5]/60 p-4 sm:p-6 md:p-8 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-[#ece4d8] select-none shrink-0 overflow-hidden">
+            <div className="md:w-1/2 h-[40vh] sm:h-[45vh] md:h-full bg-[#eff9e6]/60 p-4 sm:p-6 md:p-8 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-[#d3ebcf] select-none shrink-0 overflow-hidden">
               <div
                 className="relative w-full flex-1 max-h-[360px] md:max-h-none rounded-2xl overflow-hidden bg-white shadow-xs flex items-center justify-center group"
                 onMouseEnter={() => setIsCarouselPaused(true)}
@@ -1860,16 +1860,16 @@ export const ShopClient: React.FC<ShopClientProps> = ({
             </div>
 
             {/* COLUMNA DERECHA: Información y Acciones */}
-            <div className="p-5 sm:p-7 md:p-9 md:w-1/2 flex flex-col justify-between overflow-y-auto flex-1 bg-gradient-to-b from-white to-[#faf7f2]">
+            <div className="p-5 sm:p-7 md:p-9 md:w-1/2 flex flex-col justify-between overflow-y-auto flex-1 bg-gradient-to-b from-white to-[#f1faea]">
               <div className="space-y-4">
                 {/* Badges de Categoría y Stock */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-3 py-1 rounded-full bg-[#f4efe5] text-[#2f9a3b] text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-[#eff9e6] text-[#2f9a3b] text-xs font-semibold">
                     {(selectedProduct.familiaNombre && !selectedProduct.familiaNombre.toLowerCase().includes("sin asignaci")) ? selectedProduct.familiaNombre : (selectedProduct.categoryLabel && !selectedProduct.categoryLabel.toLowerCase().includes("sin asignaci")) ? selectedProduct.categoryLabel : "Bienestar"}
                   </span>
 
                   {selectedProduct.badge && (
-                    <span className="px-3 py-1 rounded-full bg-[#2f9a3b] text-[#dfc89f] text-xs font-bold shadow-xs">
+                    <span className="px-3 py-1 rounded-full bg-[#2f9a3b] text-[#7fd6c2] text-xs font-bold shadow-xs">
                       {selectedProduct.badge}
                     </span>
                   )}
@@ -1920,7 +1920,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                 {/* Descripción Completa */}
                 {selectedProduct.fullDescription &&
                   selectedProduct.fullDescription.trim() !== selectedProduct.shortDescription?.trim() && (
-                    <p className="text-xs text-[#6e7d73] leading-relaxed whitespace-pre-line border-t border-[#f4efe5] pt-3">
+                    <p className="text-xs text-[#6e7d73] leading-relaxed whitespace-pre-line border-t border-[#eff9e6] pt-3">
                       {selectedProduct.fullDescription}
                     </p>
                   )}
@@ -1933,7 +1933,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     </span>
                     {selectedProduct.benefits.map((benefit, i) => (
                       <div key={i} className="flex items-start gap-2 text-xs text-[#4a584f]">
-                        <Sparkles className="w-3.5 h-3.5 text-[#dfc89f] flex-shrink-0 mt-0.5" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#7fd6c2] flex-shrink-0 mt-0.5" />
                         <span>{benefit}</span>
                       </div>
                     ))}
@@ -1963,12 +1963,12 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                       {camposAMostrar.length > 0 && (
                         <div className={`grid gap-2.5 pt-2 text-xs text-gray-700 ${camposAMostrar.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
                           {camposAMostrar.map((campo, idx) => (
-                            <div key={campo.id || idx} className="p-3 bg-white rounded-2xl border border-[#ebdcca] shadow-2xs">
+                            <div key={campo.id || idx} className="p-3 bg-white rounded-2xl border border-[#d3ebcf] shadow-2xs">
                               <p className="font-bold text-[#2f9a3b] flex items-center gap-1.5 mb-0.5">
                                 {campo.icono ? (
                                   <span className="text-sm shrink-0 leading-none">{campo.icono}</span>
                                 ) : idx % 2 === 0 ? (
-                                  <Sparkles className="w-3.5 h-3.5 text-[#b08d4b]" />
+                                  <Sparkles className="w-3.5 h-3.5 text-[#1fa5bd]" />
                                 ) : (
                                   <Store className="w-3.5 h-3.5 text-[#2f9a3b]" />
                                 )}
@@ -1984,7 +1984,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
 
                       {/* Sello de confianza */}
                       {showCompromiso && Boolean(textoCompromiso) && (
-                        <div className="p-3.5 bg-[#f1f7f3] rounded-2xl border border-[#cbe3d2] flex items-center gap-3 text-xs text-[#284534]">
+                        <div className="p-3.5 bg-[#eefaec] rounded-2xl border border-[#cdeccb] flex items-center gap-3 text-xs text-[#1b4a37]">
                           <span className="text-lg">{selectedProduct.compromisoIcono || '🌿'}</span>
                           <p className="text-[11px] leading-tight whitespace-pre-line">
                             <strong>{compromisoEtiqueta}:</strong> {textoCompromiso}
@@ -1997,7 +1997,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
               </div>
 
               {/* Acciones de Compra / Reserva */}
-              <div className="pt-4 border-t border-[#ece4d8] space-y-2 mt-4">
+              <div className="pt-4 border-t border-[#d3ebcf] space-y-2 mt-4">
                 {selectedProduct.esServicio ? (
                   <button
                     type="button"
@@ -2008,18 +2008,18 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                     }}
                     className="w-full py-4 rounded-2xl bg-[#2f9a3b] hover:bg-[#237a2d] text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <Calendar className="w-4 h-4 text-[#dfc89f]" />
+                    <Calendar className="w-4 h-4 text-[#7fd6c2]" />
                     <span>Reservar Cita Presencial</span>
                   </button>
                 ) : !PURCHASES_ENABLED ? (
-                  <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8] text-center space-y-1">
+                  <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#d3ebcf] text-center space-y-1">
                     <p className="text-sm font-semibold text-[#212924]">Compra online próximamente</p>
                     <p className="text-xs text-[#6e7d73]">Estamos terminando de cargar el catálogo. Consúltanos en tienda o por WhatsApp.</p>
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
                     {/* Selector de cantidad */}
-                    <div className="flex items-center border border-[#d8cfc0] rounded-2xl bg-[#faf7f2] p-1">
+                    <div className="flex items-center border border-[#c5e0c1] rounded-2xl bg-[#f1faea] p-1">
                       <button
                         type="button"
                         onClick={() => setModalQuantity((q) => Math.max(1, q - 1))}
@@ -2061,7 +2061,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                         </>
                       ) : (
                         <>
-                          <ShoppingBag className="w-4 h-4 text-[#dfc89f]" />
+                          <ShoppingBag className="w-4 h-4 text-[#7fd6c2]" />
                           <span>
                             Añadir a la cesta •{" "}
                             {(selectedProduct.price * modalQuantity).toFixed(2)}€

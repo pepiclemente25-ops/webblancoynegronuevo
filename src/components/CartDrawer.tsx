@@ -179,7 +179,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col border-l border-[#e8ded0]">
+        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col border-l border-[#d3ebcf]">
           
           {/* ============================================================ */}
           {/* CABECERA DEL DRAWER */}
@@ -195,7 +195,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <ArrowLeft className="w-5 h-5" />
                 </button>
               ) : (
-                <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-[#dfc89f]">
+                <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-[#7fd6c2]">
                   <ShoppingBag className="w-5 h-5" />
                 </div>
               )}
@@ -231,7 +231,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 {items.length === 0 ? (
                   <div className="text-center py-16 space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-[#f4efe5] text-[#2f9a3b] mx-auto flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-[#eff9e6] text-[#2f9a3b] mx-auto flex items-center justify-center">
                       <ShoppingBag className="w-8 h-8 opacity-60" />
                     </div>
                     <h4 className="font-serif text-lg font-semibold text-[#212924]">Tu cesta está vacía</h4>
@@ -250,10 +250,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     {items.map((item) => (
                       <div
                         key={item.product.id}
-                        className="flex items-center gap-3.5 p-3 rounded-2xl bg-[#fbf8ee] border border-[#ece4d8]"
+                        className="flex items-center gap-3.5 p-3 rounded-2xl bg-[#f7fbef] border border-[#d3ebcf]"
                       >
                         {/* Miniatura */}
-                        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#e8ded0] flex-shrink-0">
+                        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#d3ebcf] flex-shrink-0">
                           <Image
                             src={item.product.imageUrl}
                             alt={item.product.name}
@@ -276,7 +276,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             <div className="inline-flex items-center border border-[#cdeccb] rounded-lg bg-white">
                               <button
                                 onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                                className="p-1 hover:bg-[#f3eee4] text-[#4a584f] cursor-pointer"
+                                className="p-1 hover:bg-[#eaf7e3] text-[#4a584f] cursor-pointer"
                                 aria-label="Restar una unidad"
                               >
                                 <Minus className="w-3 h-3" />
@@ -286,7 +286,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                                className="p-1 hover:bg-[#f3eee4] text-[#4a584f] cursor-pointer"
+                                className="p-1 hover:bg-[#eaf7e3] text-[#4a584f] cursor-pointer"
                                 aria-label="Añadir una unidad"
                               >
                                 <Plus className="w-3 h-3" />
@@ -317,7 +317,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               {/* Pie con Subtotal y Botón Tramitar */}
               {items.length > 0 && (
-                <div className="p-6 border-t border-[#ece4d8] bg-[#fbf8ee] space-y-4">
+                <div className="p-6 border-t border-[#d3ebcf] bg-[#f7fbef] space-y-4">
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs text-[#6e7d73]">
                       <span>Subtotal ({totalItems} productos)</span>
@@ -327,7 +327,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       <span>Entrega</span>
                       <span className="text-[#2f9a3b] font-semibold">Gratis en tienda (Boiro) / A consultar</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm font-bold text-[#212924] pt-1.5 border-t border-[#e8ded0]">
+                    <div className="flex items-center justify-between text-sm font-bold text-[#212924] pt-1.5 border-t border-[#d3ebcf]">
                       <span>Total</span>
                       <span className="text-base text-[#2f9a3b]">{totalPrice.toFixed(2)}€</span>
                     </div>
@@ -338,7 +338,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     className="w-full py-3.5 rounded-2xl bg-[#2f9a3b] hover:bg-[#237a2d] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
                   >
                     <span>Continuar y Tramitar Pedido</span>
-                    <ArrowRight className="w-4 h-4 text-[#dfc89f]" />
+                    <ArrowRight className="w-4 h-4 text-[#7fd6c2]" />
                   </button>
 
                   <div className="flex items-center justify-center gap-2 text-[11px] text-[#718276]">
@@ -358,7 +358,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="flex-1 overflow-y-auto p-6 space-y-5">
                 
                 {/* Resumen del pedido */}
-                <div className="p-3 rounded-xl bg-[#f4efe5] border border-[#e5dcce] flex items-center justify-between text-xs">
+                <div className="p-3 rounded-xl bg-[#eff9e6] border border-[#d3ebcf] flex items-center justify-between text-xs">
                   <span className="text-[#4a584f]">
                     Comprando <strong>{totalItems}</strong> {totalItems === 1 ? "artículo" : "artículos"}
                   </span>
@@ -424,7 +424,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* 2. Modalidad de Entrega */}
-                <div className="space-y-3 pt-2 border-t border-[#ece4d8]">
+                <div className="space-y-3 pt-2 border-t border-[#d3ebcf]">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b]">
                     2. Modalidad de Entrega
                   </h4>
@@ -434,8 +434,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       onClick={() => setDeliveryType("tienda")}
                       className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                         deliveryType === "tienda"
-                          ? "bg-[#eaf0ec] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
-                          : "bg-white border-[#e0d8cc] hover:bg-[#faf7f2]"
+                          ? "bg-[#e3f5e0] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
+                          : "bg-white border-[#cfe6cb] hover:bg-[#f1faea]"
                       }`}
                     >
                       <Store className="w-4 h-4 text-[#2f9a3b] mb-1.5" />
@@ -448,8 +448,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       onClick={() => setDeliveryType("envio")}
                       className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                         deliveryType === "envio"
-                          ? "bg-[#eaf0ec] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
-                          : "bg-white border-[#e0d8cc] hover:bg-[#faf7f2]"
+                          ? "bg-[#e3f5e0] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
+                          : "bg-white border-[#cfe6cb] hover:bg-[#f1faea]"
                       }`}
                     >
                       <Truck className="w-4 h-4 text-[#2f9a3b] mb-1.5" />
@@ -491,7 +491,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* 3. Método de Pago Preferido */}
-                <div className="space-y-3 pt-2 border-t border-[#ece4d8]">
+                <div className="space-y-3 pt-2 border-t border-[#d3ebcf]">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b]">
                     3. Método de Pago Preferido
                   </h4>
@@ -500,8 +500,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <label
                       className={`flex items-start gap-3 p-3 rounded-2xl border cursor-pointer transition-all ${
                         paymentMethod === "bizum"
-                          ? "bg-[#f5fbf7] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
-                          : "bg-white border-[#e0d8cc]"
+                          ? "bg-[#f0fbf6] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
+                          : "bg-white border-[#cfe6cb]"
                       }`}
                     >
                       <input
@@ -524,8 +524,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       <label
                         className={`flex items-start gap-3 p-3 rounded-2xl border cursor-pointer transition-all ${
                           paymentMethod === "tienda"
-                            ? "bg-[#f5fbf7] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
-                            : "bg-white border-[#e0d8cc]"
+                            ? "bg-[#f0fbf6] border-[#2f9a3b] ring-1 ring-[#2f9a3b]"
+                            : "bg-white border-[#cfe6cb]"
                         }`}
                       >
                         <input
@@ -545,7 +545,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     )}
 
                     {!BIZUM_ENABLED && deliveryType === "envio" && (
-                      <div className="flex items-start gap-3 p-3 rounded-2xl border bg-[#f5fbf7] border-[#2f9a3b] ring-1 ring-[#2f9a3b]">
+                      <div className="flex items-start gap-3 p-3 rounded-2xl border bg-[#f0fbf6] border-[#2f9a3b] ring-1 ring-[#2f9a3b]">
                         <div className="flex-1 text-xs">
                           <span className="font-semibold text-[#212924] block">Pago a convenir con la tienda</span>
                           <span className="text-[11px] text-[#6e7d73]">
@@ -558,7 +558,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* 4. Notas adicionales */}
-                <div className="pt-2 border-t border-[#ece4d8]">
+                <div className="pt-2 border-t border-[#d3ebcf]">
                   <label className="block text-[11px] font-medium text-[#4a584f] mb-1">
                     Notas o peticiones especiales (opcional)
                   </label>
@@ -574,7 +574,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </div>
 
               {/* Botón de Confirmación */}
-              <div className="p-6 border-t border-[#ece4d8] bg-[#fbf8ee] space-y-3">
+              <div className="p-6 border-t border-[#d3ebcf] bg-[#f7fbef] space-y-3">
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -582,12 +582,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin text-[#dfc89f]" />
+                      <Loader2 className="w-4 h-4 animate-spin text-[#7fd6c2]" />
                       <span>Registrando pedido...</span>
                     </>
                   ) : (
                     <>
-                      <CheckCircle2 className="w-4 h-4 text-[#dfc89f]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#7fd6c2]" />
                       <span>Confirmar Pedido ({totalPrice.toFixed(2)}€)</span>
                     </>
                   )}
@@ -609,7 +609,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 
                 {/* Cabecera de éxito */}
                 <div className="text-center pt-2 space-y-2">
-                  <div className="w-14 h-14 rounded-full bg-[#eaf4ee] text-[#2e7d32] mx-auto flex items-center justify-center shadow-xs">
+                  <div className="w-14 h-14 rounded-full bg-[#e3f5e0] text-[#2e7d32] mx-auto flex items-center justify-center shadow-xs">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h4 className="font-serif text-xl font-bold text-[#212924]">
@@ -621,7 +621,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* Tarjeta con Número de Pedido Oficial */}
-                <div className="p-4 rounded-2xl bg-[#f6f2ea] border border-[#dfc89f] text-center space-y-1">
+                <div className="p-4 rounded-2xl bg-[#f1faea] border border-[#7fd6c2] text-center space-y-1">
                   <span className="text-[10px] uppercase font-bold tracking-widest text-[#7c6332]">
                     Tu Número de Pedido
                   </span>
@@ -632,7 +632,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <button
                       type="button"
                       onClick={() => handleCopy(orderResult.orderId, "orderId")}
-                      className="p-1 rounded-lg hover:bg-[#eae3d5] text-[#2f9a3b] transition-colors cursor-pointer"
+                      className="p-1 rounded-lg hover:bg-[#d3ebcf] text-[#2f9a3b] transition-colors cursor-pointer"
                       title="Copiar código de pedido"
                     >
                       {copiedField === "orderId" ? (
@@ -649,7 +649,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                 {/* Instrucciones de Pago */}
                 {BIZUM_ENABLED && paymentMethod === "bizum" ? (
-                  <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#cdeccb] space-y-3">
+                  <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#cdeccb] space-y-3">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-[#2f9a3b]" />
                       <h5 className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b]">
@@ -658,7 +658,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </div>
 
                     <div className="space-y-2 text-xs">
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#e8ded0]">
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#d3ebcf]">
                         <div>
                           <span className="text-[10px] text-gray-500 block">Número de teléfono:</span>
                           <strong className="text-sm text-[#212924]">{phoneDisplay}</strong>
@@ -666,7 +666,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => handleCopy(bizumPhone, "bizumPhone")}
-                          className="px-2.5 py-1 rounded-lg bg-[#eaf0ec] hover:bg-[#d8e5dc] text-[#2f9a3b] text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg bg-[#e3f5e0] hover:bg-[#cdeccb] text-[#2f9a3b] text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
                         >
                           {copiedField === "bizumPhone" ? (
                             <>
@@ -682,7 +682,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         </button>
                       </div>
 
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#e8ded0]">
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#d3ebcf]">
                         <div>
                           <span className="text-[10px] text-gray-500 block">Concepto obligatorio:</span>
                           <strong className="text-sm font-mono text-[#2f9a3b]">{orderResult.orderId}</strong>
@@ -690,7 +690,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => handleCopy(orderResult.orderId, "concept")}
-                          className="px-2.5 py-1 rounded-lg bg-[#eaf0ec] hover:bg-[#d8e5dc] text-[#2f9a3b] text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg bg-[#e3f5e0] hover:bg-[#cdeccb] text-[#2f9a3b] text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
                         >
                           {copiedField === "concept" ? (
                             <>
@@ -706,7 +706,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         </button>
                       </div>
 
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#e8ded0]">
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#d3ebcf]">
                         <div>
                           <span className="text-[10px] text-gray-500 block">Importe exacto:</span>
                           <strong className="text-sm text-[#212924]">{orderResult.finalTotal.toFixed(2)}€</strong>
@@ -719,7 +719,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </p>
                   </div>
                 ) : paymentMethod === "a_convenir" ? (
-                  <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#cdeccb] space-y-2">
+                  <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#cdeccb] space-y-2">
                     <h5 className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b]">
                       Envío a Domicilio
                     </h5>
@@ -728,7 +728,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-2xl bg-[#fbf8ee] border border-[#cdeccb] space-y-2">
+                  <div className="p-4 rounded-2xl bg-[#f7fbef] border border-[#cdeccb] space-y-2">
                     <h5 className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b]">
                       Recogida en Tienda
                     </h5>
@@ -740,7 +740,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </div>
 
               {/* Botón de cierre */}
-              <div className="pt-4 border-t border-[#ece4d8] space-y-2">
+              <div className="pt-4 border-t border-[#d3ebcf] space-y-2">
                 <button
                   onClick={handleCloseAndReset}
                   className="w-full py-3 rounded-2xl bg-[#2f9a3b] hover:bg-[#237a2d] text-white font-semibold text-xs transition-all cursor-pointer"

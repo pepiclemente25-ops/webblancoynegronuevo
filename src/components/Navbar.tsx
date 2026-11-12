@@ -44,8 +44,8 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? "bg-[#fbf8ee]/95 backdrop-blur-md shadow-sm py-2.5 sm:py-3 border-b border-[#ece4d8]/80"
-          : "bg-[#fbf8ee]/90 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none py-2.5 sm:py-5 border-b border-[#ece4d8]/60 sm:border-b-0"
+          ? "bg-[#f7fbef]/95 backdrop-blur-md shadow-sm py-2.5 sm:py-3 border-b border-[#d3ebcf]/80"
+          : "bg-[#f7fbef]/90 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none py-2.5 sm:py-5 border-b border-[#d3ebcf]/60 sm:border-b-0"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,13 +106,13 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
             {PURCHASES_ENABLED && (
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2.5 rounded-full text-[#2f9a3b] hover:bg-[#eaf0ec] transition-colors cursor-pointer group"
+              className="relative p-2.5 rounded-full text-[#2f9a3b] hover:bg-[#e3f5e0] transition-colors cursor-pointer group"
               title="Ver Cesta de la Tienda"
               aria-label="Ver Cesta"
             >
               <ShoppingBag className="w-5 h-5 transition-transform group-hover:scale-110" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-[#2f9a3b] text-[#dfc89f] text-[11px] font-bold flex items-center justify-center shadow-md">
+                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-[#2f9a3b] text-[#7fd6c2] text-[11px] font-bold flex items-center justify-center shadow-md">
                   {totalItems}
                 </span>
               )}
@@ -124,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
               href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(`Hola ${config.name}, quisiera consultar información sobre tus terapias.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-full text-[#25D366] hover:bg-[#eaf0ec] transition-transform hover:scale-110"
+              className="p-2.5 rounded-full text-[#25D366] hover:bg-[#e3f5e0] transition-transform hover:scale-110"
               title="Contactar por WhatsApp"
             >
               <svg
@@ -145,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2f9a3b] text-white font-medium text-sm shadow-sm hover:bg-[#237a2d] hover:shadow transition-all duration-200 cursor-pointer"
             >
-              <Calendar className="w-4 h-4 text-[#dfc89f]" />
+              <Calendar className="w-4 h-4 text-[#7fd6c2]" />
               <span>Pedir Cita</span>
             </a>
           </div>
@@ -155,7 +155,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
             {PURCHASES_ENABLED && (
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2 rounded-full bg-[#eaf0ec] text-[#2f9a3b]"
+              className="relative p-2 rounded-full bg-[#e3f5e0] text-[#2f9a3b]"
               title="Ver Cesta"
               aria-label="Ver Cesta"
             >
@@ -175,12 +175,12 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
               className="p-2 rounded-full bg-[#2f9a3b] text-white"
               title="Pedir Cita por WhatsApp"
             >
-              <Calendar className="w-4 h-4 text-[#dfc89f]" />
+              <Calendar className="w-4 h-4 text-[#7fd6c2]" />
             </a>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#212924] rounded-lg hover:bg-[#f0ebe1]"
+              className="p-2 text-[#212924] rounded-lg hover:bg-[#eaf7e3]"
               aria-label="Abrir menú"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -190,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
 
         {/* Mobile dropdown */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-3 pt-3 pb-4 border-t border-[#ece4d8] bg-[#fbf8ee] rounded-2xl p-4 shadow-lg">
+          <div className="lg:hidden mt-3 pt-3 pb-4 border-t border-[#d3ebcf] bg-[#f7fbef] rounded-2xl p-4 shadow-lg">
             <nav className="flex flex-col gap-2">
               {navLinks.map((link) => {
                 const href = resolveHref(link.href);
@@ -199,20 +199,20 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                     key={link.name}
                     href={href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2 text-base font-medium text-[#237a2d] hover:bg-[#f0ebe1] rounded-lg flex items-center justify-between"
+                    className="px-3 py-2 text-base font-medium text-[#237a2d] hover:bg-[#eaf7e3] rounded-lg flex items-center justify-between"
                   >
                     <span>{link.name}</span>
                   </Link>
                 );
               })}
-              <div className="pt-3 border-t border-[#ece4d8] flex flex-col gap-2">
+              <div className="pt-3 border-t border-[#d3ebcf] flex flex-col gap-2">
                 {PURCHASES_ENABLED && (
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     setIsCartOpen(true);
                   }}
-                  className="w-full py-2.5 rounded-xl bg-[#eaf0ec] text-[#237a2d] font-medium text-sm flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-xl bg-[#e3f5e0] text-[#237a2d] font-medium text-sm flex items-center justify-center gap-2"
                 >
                   <ShoppingBag className="w-4 h-4 text-[#2f9a3b]" />
                   <span>Ver Cesta ({totalItems} {totalItems === 1 ? "artículo" : "artículos"})</span>
@@ -227,14 +227,14 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
                     }}
                     className="w-full py-2.5 rounded-xl bg-[#2f9a3b] text-white font-medium text-sm flex items-center justify-center gap-2"
                   >
-                    <Calendar className="w-4 h-4 text-[#dfc89f]" />
+                    <Calendar className="w-4 h-4 text-[#7fd6c2]" />
                     <span>Pedir Cita</span>
                   </button>
                 )}
 
                 <a
                   href={`tel:${config.phone}`}
-                  className="w-full py-2.5 rounded-xl bg-[#f0ebe1] text-[#237a2d] font-medium text-sm flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-xl bg-[#eaf7e3] text-[#237a2d] font-medium text-sm flex items-center justify-center gap-2"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Llamar: {config.phoneDisplay}</span>

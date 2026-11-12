@@ -70,7 +70,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${plusJakarta.variable} ${playfair.variable} ${marca.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans bg-[#fbf8ee] text-[#212924] selection:bg-[#2f9a3b]/20 selection:text-[#237a2d]">
+      <body className="min-h-full flex flex-col font-sans bg-[#f7fbef] text-[#212924] selection:bg-[#2f9a3b]/20 selection:text-[#237a2d]">
         <CartProvider>
           {children}
           <CartDrawer />
