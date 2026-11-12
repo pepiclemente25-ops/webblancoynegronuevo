@@ -13,7 +13,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ config, section }) => {
   const fContenido = section?.contenido || {};
-  const nombre = fContenido.nombre || config.name || "Blanco y Negro";
+  const nombre = fContenido.nombre || config.name || "Blanco Negro";
   const tagline = fContenido.tagline || config.tagline || "Terapias Holísticas y Bienestar · Boiro";
   const descripcion = fContenido.descripcion || config.description ||
     "Espacio dedicado a la reconexión profunda entre cuerpo, mente y alma. Terapias naturales, productos conscientes y bienestar integral.";

@@ -150,7 +150,7 @@ function mapNeonProducts(rows: any[]): ShopProduct[] {
       entregaUbicacionTexto: p.entrega_ubicacion_texto ? String(p.entrega_ubicacion_texto).trim() : (p.entregaUbicacionTexto ? String(p.entregaUbicacionTexto).trim() : undefined),
       compromisoTexto: p.compromiso_texto ? String(p.compromiso_texto).trim() : (p.compromisoTexto ? String(p.compromisoTexto).trim() : undefined),
       compromisoActivo: p.compromiso_activo !== undefined ? (p.compromiso_activo === true || p.compromiso_activo === 'true' || p.compromiso_activo === 1) : (p.compromisoActivo !== undefined ? Boolean(p.compromisoActivo) : true),
-      compromisoEtiqueta: p.compromiso_etiqueta || p.compromisoEtiqueta || 'Compromiso Blanco y Negro',
+      compromisoEtiqueta: p.compromiso_etiqueta || p.compromisoEtiqueta || 'Compromiso Blanco Negro',
       compromisoIcono: p.compromiso_icono || p.compromisoIcono || '🌿',
       camposFichaWeb: Array.isArray(p.campos_ficha_web) 
         ? p.campos_ficha_web 
@@ -293,7 +293,7 @@ function buildWebDataFromPayload(payload: any): WebData {
       entregaUbicacionTexto: p.entregaUbicacionTexto || p.entrega_ubicacion_texto ? String(p.entregaUbicacionTexto || p.entrega_ubicacion_texto).trim() : undefined,
       compromisoTexto: p.compromisoTexto || p.compromiso_texto ? String(p.compromisoTexto || p.compromiso_texto).trim() : undefined,
       compromisoActivo: p.compromisoActivo !== undefined ? Boolean(p.compromisoActivo) : (p.compromiso_activo !== undefined ? Boolean(p.compromiso_activo) : true),
-      compromisoEtiqueta: p.compromisoEtiqueta || p.compromiso_etiqueta || 'Compromiso Blanco y Negro',
+      compromisoEtiqueta: p.compromisoEtiqueta || p.compromiso_etiqueta || 'Compromiso Blanco Negro',
       camposFichaWeb: Array.isArray(p.camposFichaWeb)
         ? p.camposFichaWeb
         : (Array.isArray(p.campos_ficha_web)
@@ -337,7 +337,16 @@ function buildWebDataFromPayload(payload: any): WebData {
  * Carga los datos de la web directamente desde Neon Serverless Postgres.
  * Respaldo automático mediante Vercel Blob y datos por defecto.
  */
+const NOMBRE_MARCA = (t: string) => (t || "").replace(/blanco\s+y\s+negro/gi, "Blanco Negro");
+
+/** Datos de la web con el nombre comercial unificado como "Blanco Negro" (aunque el TPV aún lo envíe con "y"). */
 export async function getWebData(): Promise<WebData> {
+  const d = await getWebDataSinNormalizar();
+  const c = d.config;
+  return { ...d, config: { ...c, name: NOMBRE_MARCA(c.name), tagline: NOMBRE_MARCA(c.tagline), description: NOMBRE_MARCA(c.description) } };
+}
+
+async function getWebDataSinNormalizar(): Promise<WebData> {
   const sql = getDb();
 
   // 1. INTENTO PRINCIPAL: Neon Serverless Postgres

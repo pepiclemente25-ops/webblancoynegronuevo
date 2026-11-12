@@ -65,7 +65,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <div className="w-10 h-10 rounded-full bg-[#f1faea] border border-[#7fd6c2]/40 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-xs">
               <Image
                 src="/brand/logo-tarjeta.png"
-                alt="Logo Blanco y Negro"
+                alt="Logo Blanco Negro"
                 width={40}
                 height={40}
                 className="w-full h-full object-cover"

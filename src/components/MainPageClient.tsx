@@ -543,7 +543,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
     } else if (serviceTitle) {
       messageText = `Hola, me gustaría reservar una cita para "${serviceTitle}". ¿Qué disponibilidad tenéis?`;
     } else {
-      messageText = "Hola, me gustaría reservar una cita en Blanco y Negro. ¿Qué disponibilidad tenéis?";
+      messageText = "Hola, me gustaría reservar una cita en Blanco Negro. ¿Qué disponibilidad tenéis?";
     }
     const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`;
     window.open(url, "_blank");
@@ -1329,7 +1329,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
         </section>
         )}
 
-        {/* ================= SECCIÓN 7: EL ESPACIO BLANCO Y NEGRO (SOBRE MÍ) ================= */}
+        {/* ================= SECCIÓN 7: EL ESPACIO BLANCO NEGRO (SOBRE MÍ) ================= */}
         {aboutSection?.activo !== false && (
           <section id="sobre-mi" className="py-16 bg-[#f1faea] border-b border-[#d3ebcf]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1342,14 +1342,14 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       aboutSection?.contenido?.therapistImg ||
                       "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80"
                     }
-                    alt={aboutSection?.titulo || `Espacio Blanco y Negro en Boiro`}
+                    alt={aboutSection?.titulo || `Espacio Blanco Negro en Boiro`}
                     fill
                     className="object-cover"
                   />
                 </div>
                 <div className="lg:col-span-7 space-y-3">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#2f9a3b] bg-[#e3f5e0] px-3 py-1 rounded-full">
-                    {aboutSection?.contenido?.badge || "El Espacio Blanco y Negro"}
+                    {aboutSection?.contenido?.badge || "El Espacio Blanco Negro"}
                   </span>
                   <h2 className="font-serif text-3xl font-bold text-[#1b261f]">
                     {aboutSection?.titulo || "Un rincón de paz creado para reconectar contigo"}
@@ -1359,7 +1359,7 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                       aboutSection?.contenido?.bio ||
                       aboutSection?.contenido?.filosofia ||
                       aboutSection?.subtitulo ||
-                      "Situado en Boiro (A Coruña), Blanco y Negro nació como un templo de escucha, sanación y armonía. Aquí unimos las terapias energéticas y manuales con una selección honesta de cuarzos auténticos, velas naturales e inciensos consagrados."}
+                      "Situado en Boiro (A Coruña), Blanco Negro nació como un templo de escucha, sanación y armonía. Aquí unimos las terapias energéticas y manuales con una selección honesta de cuarzos auténticos, velas naturales e inciensos consagrados."}
                   </p>
                   {aboutSection?.contenido?.titulacion && (
                     <p className="text-xs font-semibold text-[#5e7065]">
@@ -1783,9 +1783,9 @@ export const MainPageClient: React.FC<MainPageClientProps> = ({ data }) => {
                         ...(selectedProduct.entregaUbicacionTexto?.trim() ? [{ id: 'ent', etiqueta: 'Entrega / Ubicación', valor: selectedProduct.entregaUbicacionTexto.trim(), icono: '🏪' }] : []),
                       ];
 
-                  // Compromiso Blanco y Negro: SOLO si compromisoActivo no es false
+                  // Compromiso Blanco Negro: SOLO si compromisoActivo no es false
                   const showCompromiso = selectedProduct.compromisoActivo !== false;
-                  const compromisoEtiqueta = (selectedProduct.compromisoEtiqueta || '').trim() || 'Compromiso Blanco y Negro';
+                  const compromisoEtiqueta = (selectedProduct.compromisoEtiqueta || '').trim() || 'Compromiso Blanco Negro';
                   const defaultCompromiso = 'Piezas auténticas seleccionadas y armonizadas con respeto hacia la naturaleza en nuestro centro de Boiro.';
                   const textoCompromiso = (selectedProduct.compromisoTexto || '').trim() || defaultCompromiso;
 

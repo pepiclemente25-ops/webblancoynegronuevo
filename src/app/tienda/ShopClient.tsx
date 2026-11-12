@@ -1952,9 +1952,9 @@ export const ShopClient: React.FC<ShopClientProps> = ({
                         ...(selectedProduct.entregaUbicacionTexto?.trim() ? [{ id: 'ent', etiqueta: 'Entrega / Ubicación', valor: selectedProduct.entregaUbicacionTexto.trim(), icono: '🏪' }] : []),
                       ];
 
-                  // Compromiso Blanco y Negro: SOLO si compromisoActivo no es false
+                  // Compromiso Blanco Negro: SOLO si compromisoActivo no es false
                   const showCompromiso = selectedProduct.compromisoActivo !== false;
-                  const compromisoEtiqueta = (selectedProduct.compromisoEtiqueta || '').trim() || 'Compromiso Blanco y Negro';
+                  const compromisoEtiqueta = (selectedProduct.compromisoEtiqueta || '').trim() || 'Compromiso Blanco Negro';
                   const defaultCompromiso = 'Piezas auténticas seleccionadas y armonizadas con respeto hacia la naturaleza en nuestro centro de Boiro.';
                   const textoCompromiso = (selectedProduct.compromisoTexto || '').trim() || defaultCompromiso;
 
