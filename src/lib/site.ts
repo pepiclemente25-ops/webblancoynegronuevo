@@ -40,4 +40,4 @@ export const TERAPEUTA_NOMBRE_COMPLETO = "Josefa Clemente Martínez";
  * y el componente AvisoPruebas) y publicar.
  */
 export const MOSTRAR_AVISO_PRUEBAS = true;
-export const TEXTO_AVISO_PRUEBAS = "Web en actualización: catálogo y precios pueden cambiar";
+export const TEXTO_AVISO_PRUEBAS = "Web en pruebas: tratamientos y productos pueden ser erróneos";

@@ -11,7 +11,10 @@ html {
 
 /* Hueco para el aviso temporal de arriba (ver AvisoPruebas) */
 :root { --aviso-h: 0px; }
-body[data-aviso] { --aviso-h: 2rem; padding-top: 2rem; }
+body[data-aviso] { --aviso-h: 2.75rem; padding-top: 2.75rem; }
+@media (min-width: 640px) {
+  body[data-aviso] { --aviso-h: 2rem; padding-top: 2rem; }
+}
 
 body {
   background-color: var(--background);

@@ -7,9 +7,9 @@ export const AvisoPruebas: React.FC = () => {
   return (
     <div
       role="status"
-      className="fixed top-0 inset-x-0 z-50 h-8 flex items-center justify-center px-3 bg-[#1fa5bd] text-white text-[11px] sm:text-xs font-semibold tracking-wide text-center"
+      className="fixed top-0 inset-x-0 z-50 h-11 sm:h-8 flex items-center justify-center px-3 bg-[#1fa5bd] text-white text-[11px] sm:text-xs font-bold tracking-normal sm:tracking-wide text-center"
     >
-      <span className="truncate">{TEXTO_AVISO_PRUEBAS}</span>
+      <span className="leading-tight">{TEXTO_AVISO_PRUEBAS}</span>
     </div>
   );
 };
