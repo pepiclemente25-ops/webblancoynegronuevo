@@ -75,16 +75,16 @@ export default async function TerapiaPage({ params }: Props) {
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-16 pt-28 sm:px-6">
         <JsonLd data={jsonLd} />
         <JsonLd data={migas} />
-        <nav aria-label="Migas de pan" className="mb-6 text-sm text-[#4a6b5d]">
+        <nav aria-label="Migas de pan" className="mb-6 text-sm text-[#2f9a3b]">
           <Link href="/" className="hover:underline">Inicio</Link> · <span className="text-[#212924]">{t.title}</span>
         </nav>
         <article className="grid gap-8 md:grid-cols-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={t.imageUrl} alt={t.title} className="w-full rounded-2xl object-cover shadow-sm" />
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#4a6b5d]">{t.categoryLabel}</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-[#2f9a3b]">{t.categoryLabel}</p>
             <h1 className="mt-1 font-serif text-3xl font-bold text-[#212924] sm:text-4xl">{t.title}</h1>
-            <p className="mt-2 text-[#4a6b5d]">{t.subtitle}</p>
+            <p className="mt-2 text-[#2f9a3b]">{t.subtitle}</p>
             <p className="mt-4 text-sm text-gray-700">Duración: {t.duration}{t.priceNote ? ` · ${t.priceNote}` : ""}</p>
             <p className="mt-5 whitespace-pre-line text-[#3b4740]">{t.fullDescription || t.shortDescription}</p>
             {t.benefits.length > 0 ? (
@@ -94,11 +94,11 @@ export default async function TerapiaPage({ params }: Props) {
             ) : null}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               {whatsapp ? (
-                <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full bg-[#4a6b5d] px-6 py-3 font-semibold text-white transition hover:bg-[#2d473b]">
+                <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full bg-[#2f9a3b] px-6 py-3 font-semibold text-white transition hover:bg-[#237a2d]">
                   Reservar por WhatsApp
                 </a>
               ) : null}
-              <Link href="/#carta-terapias" className="font-semibold text-[#4a6b5d] hover:underline">Ver todas las terapias</Link>
+              <Link href="/#carta-terapias" className="font-semibold text-[#2f9a3b] hover:underline">Ver todas las terapias</Link>
             </div>
           </div>
         </article>

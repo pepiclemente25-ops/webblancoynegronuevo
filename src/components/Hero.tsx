@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { BrushWaves } from "./BrushWaves";
 import { SiteConfig, WebSectionItem } from "@/types/content";
 import { Sparkles, Calendar, ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -71,13 +72,14 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
       {/* SECCIÓN 1: HERO PRINCIPAL */}
       <section
         id="inicio"
-        className="relative pt-32 pb-14 sm:pt-36 md:pt-40 md:pb-20 overflow-hidden bg-gradient-to-b from-[#faf7f2] via-[#f4eee4] to-[#faf7f2] border-b border-[#ebdcca]"
+        className="relative pt-32 pb-20 sm:pt-36 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-[#f1fae6] via-[#e9f8f2] to-[#fbf8ee] border-b border-[#d6ebd0]"
       >
+        <div className="absolute bottom-0 inset-x-0 z-0"><BrushWaves /></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Columna Izquierda: Textos y CTAs */}
             <div className="lg:col-span-7 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#e8efe9] border border-[#cbdbd0] text-[#2f4d3e] text-xs font-semibold uppercase tracking-wider mb-5">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#e3f5e0] border border-[#cdeccb] text-[#237a2d] text-xs font-semibold uppercase tracking-wider mb-5">
                 <span>{lema}</span>
               </div>
 
@@ -92,16 +94,16 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8">
                 <a
                   href={boton1Link}
-                  className="px-7 sm:px-8 py-3.5 rounded-full bg-[#3d5a4c] hover:bg-[#2a3d34] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 group cursor-pointer"
+                  className="px-7 sm:px-8 py-3.5 rounded-full bg-[#2f9a3b] hover:bg-[#1f6b29] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 group cursor-pointer"
                 >
                   <span>{boton1Texto}</span>
                   <ChevronDown className="w-4 h-4 text-[#dfc89f] group-hover:translate-y-0.5 transition-transform" />
                 </a>
                 <a
                   href={boton2Link}
-                  className="px-6 sm:px-7 py-3.5 rounded-full bg-white border border-[#cbdbd0] hover:bg-[#f1f6f2] text-[#2d473b] text-sm font-bold shadow-xs transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-6 sm:px-7 py-3.5 rounded-full bg-white border border-[#cdeccb] hover:bg-[#eefaec] text-[#237a2d] text-sm font-bold shadow-xs transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Calendar className="w-4 h-4 text-[#3d5a4c]" />
+                  <Calendar className="w-4 h-4 text-[#2f9a3b]" />
                   <span>{boton2Texto}</span>
                 </a>
               </div>
@@ -111,7 +113,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
                 <div className="pt-6 border-t border-[#ebdcca] grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
                   {chips.map((chip, idx) => (
                     <div key={idx} className="p-3.5 rounded-2xl bg-white/75 border border-[#ebdcca] shadow-2xs flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
+                      <span className="w-8 h-8 rounded-xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center text-sm font-bold shrink-0">
                         {chip.icono || (idx === 0 ? "🌿" : idx === 1 ? "🕯️" : "✨")}
                       </span>
                       <div>
@@ -150,7 +152,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
 
                 {/* Badge Flotante */}
                 <div className="absolute -bottom-5 -left-3 sm:-left-6 bg-white p-3.5 sm:p-4 rounded-2xl shadow-xl border border-[#ebdcca] flex items-center gap-3 animate-zen-float max-w-[260px]">
-                  <div className="w-10 h-10 rounded-xl bg-[#eaf2ec] text-[#3d5a4c] flex items-center justify-center font-bold text-lg shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#e3f5e0] text-[#2f9a3b] flex items-center justify-center font-bold text-lg shrink-0">
                     {tarjetaFlotanteIcono}
                   </div>
                   <div>
@@ -175,7 +177,7 @@ export const Hero: React.FC<HeroProps> = ({ config, section, garantiasSection, o
             }`}>
               {tarjetasGarantias.map((g, idx) => (
                 <div key={idx} className="flex items-center justify-center md:justify-start gap-3 p-2">
-                  <span className="w-8 h-8 rounded-full bg-[#f1f6f2] text-[#3d5a4c] flex items-center justify-center text-sm font-bold shrink-0">
+                  <span className="w-8 h-8 rounded-full bg-[#eefaec] text-[#2f9a3b] flex items-center justify-center text-sm font-bold shrink-0">
                     {g.icono || "✨"}
                   </span>
                   <div>
