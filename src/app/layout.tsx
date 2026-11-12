@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { SITE_URL } from "@/lib/site";
-import { Playfair_Display, Plus_Jakarta_Sans, Fontdiner_Swanky } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans, Aladin } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -19,7 +19,7 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const marca = Fontdiner_Swanky({
+const marca = Aladin({
   variable: "--font-marca",
   weight: "400",
   subsets: ["latin"],

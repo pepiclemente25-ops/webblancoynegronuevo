@@ -64,10 +64,10 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
             </div>
             <div className="min-w-0">
               {/* En móvil mostramos el nombre de marca conciso para evitar que ocupe múltiples líneas */}
-              <span className="sm:hidden font-[family-name:var(--font-marca)] text-lg tracking-wide text-[#212924] block leading-tight truncate">
+              <span className="sm:hidden font-[family-name:var(--font-marca)] text-xl tracking-wide text-[#212924] block leading-tight truncate">
                 Blanco y Negro
               </span>
-              <span className="hidden sm:block font-[family-name:var(--font-marca)] text-2xl sm:text-3xl tracking-wide text-[#212924] leading-tight truncate">
+              <span className="hidden sm:block font-[family-name:var(--font-marca)] text-3xl sm:text-4xl tracking-wide text-[#212924] leading-tight truncate">
                 {config.name}
               </span>
               <span className="text-[10px] sm:text-xs text-[#5e7065] tracking-wider uppercase font-medium hidden sm:block truncate max-w-xs sm:max-w-md">
