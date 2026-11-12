@@ -63,13 +63,15 @@ export const Navbar: React.FC<NavbarProps> = ({ config, sections, onOpenBooking 
               />
             </div>
             <div className="min-w-0">
-              {/* En móvil mostramos el nombre de marca conciso para evitar que ocupe múltiples líneas */}
-              <span className="sm:hidden font-[family-name:var(--font-marca)] text-base tracking-wide text-[#212924] block leading-tight truncate">
-                Blanco Negro
-              </span>
-              <span className="hidden sm:block font-[family-name:var(--font-marca)] text-xl sm:text-2xl tracking-wide text-[#212924] leading-tight truncate">
-                {config.name}
-              </span>
+              {/* Rótulo oficial en vector (SVG): nítido a cualquier tamaño */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/rotulo-negro.svg"
+                alt={config.name}
+                width={2048}
+                height={493}
+                className="h-7 sm:h-10 w-auto block"
+              />
               <span className="text-[10px] sm:text-xs text-[#5e7065] tracking-wider uppercase font-medium hidden sm:block truncate max-w-xs sm:max-w-md">
                 {config.tagline && !config.tagline.toLowerCase().includes("ticket") && !config.tagline.toLowerCase().includes("visita")
                   ? config.tagline

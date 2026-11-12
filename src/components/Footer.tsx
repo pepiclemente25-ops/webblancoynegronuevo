@@ -46,9 +46,14 @@ export const Footer: React.FC<FooterProps> = ({ config, section }) => {
                 />
               </div>
               <div>
-                <span className="font-[family-name:var(--font-marca)] text-2xl text-white tracking-wide block leading-tight">
-                  {nombre}
-                </span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/brand/rotulo-blanco.svg"
+                  alt={nombre}
+                  width={2048}
+                  height={493}
+                  className="h-9 w-auto block mb-1"
+                />
                 <span className="text-[11px] text-[#7fd6c2] tracking-wider uppercase font-medium block">
                   {tagline}
                 </span>
